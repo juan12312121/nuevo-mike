@@ -1,0 +1,205 @@
+<div id="add-checker-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Agregar Nuevo Checador</h3>
+            <button class="modal-close" onclick="closeModal('add-checker-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="add-checker-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-input" placeholder="Nombre y apellidos" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-input" placeholder="correo@ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-input" placeholder="Contraseña" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Área Asignada</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar área</option>
+                        <option value="edificio-a">Edificio A</option>
+                        <option value="edificio-b">Edificio B</option>
+                        <option value="edificio-c">Edificio C</option>
+                        <option value="edificio-d">Edificio D</option>
+                        <option value="laboratorios">Laboratorios</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Usuario Activo</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Permisos</label>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="perm-register" class="form-checkbox" checked>
+                        <label for="perm-register" class="form-checkbox-label">Registrar asistencias</label>
+                    </div>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="perm-view" class="form-checkbox" checked>
+                        <label for="perm-view" class="form-checkbox-label">Ver asistencias</label>
+                    </div>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="perm-export" class="form-checkbox">
+                        <label for="perm-export" class="form-checkbox-label">Exportar reportes</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('add-checker-modal')">Cancelar</button>
+            <button class="button button-primary" onclick="saveChecker()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="add-leader-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Agregar Jefe de Grupo</h3>
+            <button class="modal-close" onclick="closeModal('add-leader-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="add-leader-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-input" placeholder="Nombre y apellidos" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-input" placeholder="correo@ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-input" placeholder="Contraseña" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Semestre</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar semestre</option>
+                        <option value="1">1er Semestre</option>
+                        <option value="2">2do Semestre</option>
+                        <option value="3">3er Semestre</option>
+                        <option value="4">4to Semestre</option>
+                        <option value="5">5to Semestre</option>
+                        <option value="6">6to Semestre</option>
+                        <option value="7">7mo Semestre</option>
+                        <option value="8">8vo Semestre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Grupo</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar grupo</option>
+                        <option value="a">Grupo A</option>
+                        <option value="b">Grupo B</option>
+                        <option value="c">Grupo C</option>
+                        <option value="d">Grupo D</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Usuario Activo</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('add-leader-modal')">Cancelar</button>
+            <button class="button button-primary" onclick="saveLeader()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+
+ <!-- Modales -->
+    <!-- Modal para Agregar Profesor -->
+    <div id="add-professor-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Agregar Nuevo Profesor</h3>
+                <button class="modal-close" onclick="closeModal('add-professor-modal')">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-professor-form">
+                    <div class="form-group">
+                        <label class="form-label">Nombre completo</label>
+                        <input type="text" class="form-input" placeholder="Nombre y apellidos" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-input" placeholder="correo@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Contraseña</label>
+                        <input type="password" class="form-input" placeholder="Contraseña" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirmar contraseña</label>
+                        <input type="password" class="form-input" placeholder="Confirmar contraseña" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Carrera</label>
+                        <select class="form-select" required>
+                            <option value="">Seleccione una carrera</option>
+                            <option value="informatica">Informática</option>
+                            <option value="sistemas">Ingeniería en Sistemas</option>
+                            <option value="civil">Ingeniería Civil</option>
+                            <option value="mecatronica">Mecatrónica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nivel académico</label>
+                        <select class="form-select" required>
+                            <option value="bachelor">Licenciatura</option>
+                            <option value="master">Maestría</option>
+                            <option value="doctor">Doctorado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div class="switch-container">
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                            <span class="switch-label">Activo</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-secondary" onclick="closeModal('add-professor-modal')">Cancelar</button>
+                <button type="submit" form="add-professor-form" class="button button-primary">Guardar</button>
+            </div>
+        </div>
+    </div>

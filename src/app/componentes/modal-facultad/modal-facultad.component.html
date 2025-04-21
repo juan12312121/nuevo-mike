@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+<div class="modal-overlay" [ngClass]="{ 'active': visible }">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        <i class="fa-solid fa-building"></i>
+        {{ facultadAEditar ? 'Editar Facultad' : 'Agregar Nueva Facultad' }}
+      </h3>
+      <button class="modal-close" (click)="onClose()">
+        <i class="fa-solid fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <form (ngSubmit)="onSave()">
+        <div class="form-group">
+          <label for="nombre">Nombre de la Facultad</label>
+          <input id="nombre" type="text" name="nombre" class="form-input" required maxlength="100"
+                 [(ngModel)]="nuevaFacultad.nombre" />
+          <i class="fa-solid fa-building-columns"></i>
+        </div>
+        
+        <div class="form-group">
+          <label for="escuela">Escuela</label>
+          <select id="escuela" name="escuela_id" [(ngModel)]="nuevaFacultad.escuela_id" class="form-input" required>
+            <option value="" disabled selected>Selecciona una escuela</option>
+            <option *ngFor="let escuela of escuelas" [value]="escuela.id">
+              {{ escuela.id }} - {{ escuela.nombre }}
+            </option>
+          </select>
+          <i class="fa-solid fa-school"></i>
+        </div>
+        
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion" name="descripcion" class="form-input" rows="3"
+                    [(ngModel)]="nuevaFacultad.descripcion"></textarea>
+          <i class="fa-solid fa-align-left"></i>
+        </div>
+        
+        <div class="form-group">
+          <label for="email_contacto">Email de Contacto</label>
+          <input id="email_contacto" type="email" name="email_contacto" class="form-input" maxlength="100"
+                 [(ngModel)]="nuevaFacultad.email_contacto" />
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        
+        <div class="form-group">
+          <label for="telefono_contacto">Teléfono de Contacto</label>
+          <input id="telefono_contacto" type="tel" name="telefono_contacto" class="form-input" maxlength="20"
+                 [(ngModel)]="nuevaFacultad.telefono_contacto" />
+          <i class="fa-solid fa-phone"></i>
+        </div>
+      </form>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onClose()">Cancelar</button>
+      <button class="btn btn-primary" (click)="onSave()">
+        <i class="fa-solid fa-save btn-icon"></i>
+        {{ facultadAEditar ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </div>
+</div>

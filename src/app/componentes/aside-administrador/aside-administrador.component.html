@@ -1,0 +1,62 @@
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="logo-text">
+                <h2 class="sidebar-title">SisGestEdu</h2>
+                <p class="sidebar-subtitle">Sistema de Gestión Educativa</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="sidebar-menu">
+        <div class="menu-section">Principal</div>
+        
+        <a class="menu-item active" routerLink="/administrador" routerLinkActive="active">
+            <div class="menu-icon"><i class="fas fa-chart-line"></i></div>
+            <span>Dashboard</span>
+        </a>
+        
+        <div class="menu-section">Administración</div>
+        
+        <a class="menu-item" routerLink="/escuelas" routerLinkActive="active">
+            <div class="menu-icon"><i class="fas fa-school"></i></div>
+            <span>Escuelas</span>
+        </a>
+        
+        <a class="menu-item" routerLink="/facultades" routerLinkActive="active">
+            <div class="menu-icon"><i class="fas fa-university"></i></div>
+            <span>Facultades</span>
+           
+        </a>
+        
+        <a class="menu-item" routerLink="/jefe-de-carrera" routerLinkActive="active">
+            <div class="menu-icon"><i class="fas fa-user-tie"></i></div>
+            <span>Jefes de Carrera</span>
+        </a>
+        
+        <a class="menu-item" routerLink="/carreras" routerLinkActive="active">
+            <div class="menu-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span>Carreras</span>
+        </a>
+    </div>
+    
+    <div class="sidebar-footer">
+        <div class="admin-info">
+            <div class="admin-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <div>
+                <div class="admin-name">Admin Usuario</div>
+                <div class="admin-role">Administrador del Sistema</div>
+            </div>
+        </div>
+        
+        <button class="logout-button">
+            <span class="logout-icon"><i class="fas fa-sign-out-alt"></i></span>
+            <span>Cerrar Sesión</span>
+        </button>
+    </div>
+</div>

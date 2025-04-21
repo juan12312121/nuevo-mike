@@ -1,0 +1,86 @@
+<div class="body">
+  <div class="layout">
+    <!-- Sidebar Administrador -->
+    <app-aside-administrador></app-aside-administrador>
+
+    <div class="main">
+      <div class="content">
+        <!-- Card Principal -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Carreras Registradas</h2>
+            <!-- Botón para Agregar Carrera -->
+            <button class="btn btn-primary" (click)="abrirModal()">
+              <i class="fas fa-plus btn-icon"></i>
+              Agregar Carrera
+            </button>
+          </div>
+
+          <!-- Filtros de Búsqueda -->
+          <div class="filters">
+            <div class="filter-group">
+              <label class="filter-label">Buscar:</label>
+              <div class="search-input">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                  type="text"
+                  class="search-field"
+                  [(ngModel)]="busqueda"
+                  placeholder="Buscar por nombre, facultad o escuela..."
+                  (input)="filtrarCarreras()"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabla de Carreras -->
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Facultad</th>
+                  <th>Escuela</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let carrera of carrerasFiltradas">
+                  <td>{{ carrera.carrera_id }}</td>
+                  <td>{{ carrera.carrera_nombre }}</td>
+                  <td>{{ carrera.facultad_nombre }}</td>
+                  <td>{{ carrera.escuela_nombre }}</td>
+                  <td>
+                    <div class="table-actions">
+                      <!-- Botón de Edición -->
+                      <button class="btn-action btn-edit" title="Editar" (click)="abrirModal(carrera)">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <!-- Botón de Eliminación -->
+                      <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarCarrera(carrera)">
+
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Paginación -->
+          <app-paginacion-administrador></app-paginacion-administrador>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal para Agregar/Editar Carreras -->
+    <app-modal-carreras
+      *ngIf="mostrarModal"
+      [carreraSeleccionada]="carreraSeleccionada"
+      (cerrarModal)="cerrarModal()"
+      (carreraGuardada)="agregarCarrera()">
+    </app-modal-carreras>
+  </div>
+</div>

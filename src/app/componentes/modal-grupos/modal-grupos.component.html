@@ -1,0 +1,132 @@
+<div class="modal-overlay" id="add-group-modal">
+        <div class="modal animate__animated animate__fadeInUp">
+            <div class="modal-header">
+                <h3 class="modal-title">Agregar Nuevo Grupo</h3>
+                <button class="modal-close" onclick="closeModal('add-group-modal')">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="group-name">Nombre del Grupo</label>
+                    <input type="text" id="group-name" class="form-input" placeholder="Ej: Grupo A">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="group-code">Código del Grupo</label>
+                    <input type="text" id="group-code" class="form-input" placeholder="Ej: POO-A-2025">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="subject">Materia</label>
+                    <select id="subject" class="form-select">
+                        <option value="">Seleccionar Materia</option>
+                        <option value="poo">Programación Orientada a Objetos</option>
+                        <option value="bd">Bases de Datos</option>
+                        <option value="arqui">Arquitectura de Computadoras</option>
+                        <option value="redes">Redes de Computadoras</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="teacher">Profesor</label>
+                    <select id="teacher" class="form-select">
+                        <option value="">Seleccionar Profesor</option>
+                        <option value="ramirez">Dr. Ramírez López</option>
+                        <option value="mendoza">Mtra. Mendoza Pérez</option>
+                        <option value="ortega">Dr. Ortega Sánchez</option>
+                        <option value="flores">Ing. Flores Castro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="students-count">Número de Estudiantes</label>
+                    <input type="number" id="students-count" class="form-input" min="1" max="50" value="30">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="closeModal('add-group-modal')">Cancelar</button>
+                <button class="button button-primary" onclick="addGroup()">Guardar Grupo</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para editar grupo -->
+    <div class="modal-overlay" id="edit-group-modal">
+        <div class="modal animate__animated animate__fadeInUp">
+            <div class="modal-header">
+                <h3 class="modal-title">Editar Grupo</h3>
+                <button class="modal-close" onclick="closeModal('edit-group-modal')">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label" for="edit-group-name">Nombre del Grupo</label>
+                    <input type="text" id="edit-group-name" class="form-input" value="Grupo A">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-group-code">Código del Grupo</label>
+                    <input type="text" id="edit-group-code" class="form-input" value="POO-A-2025">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-subject">Materia</label>
+                    <select id="edit-subject" class="form-select">
+                        <option value="">Seleccionar Materia</option>
+                        <option value="poo" selected>Programación Orientada a Objetos</option>
+                        <option value="bd">Bases de Datos</option>
+                        <option value="arqui">Arquitectura de Computadoras</option>
+                        <option value="redes">Redes de Computadoras</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-teacher">Profesor</label>
+                    <select id="edit-teacher" class="form-select">
+                        <option value="">Seleccionar Profesor</option>
+                        <option value="ramirez" selected>Dr. Ramírez López</option>
+                        <option value="mendoza">Mtra. Mendoza Pérez</option>
+                        <option value="ortega">Dr. Ortega Sánchez</option>
+                        <option value="flores">Ing. Flores Castro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="edit-students-count">Número de Estudiantes</label>
+                    <input type="number" id="edit-students-count" class="form-input" min="1" max="50" value="32">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="closeModal('edit-group-modal')">Cancelar</button>
+                <button class="button button-primary" onclick="updateGroup()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación para eliminar -->
+    <div class="modal-overlay" id="confirm-delete-modal">
+        <div class="modal animate__animated animate__fadeInUp">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmar Eliminación</h3>
+                <button class="modal-close" onclick="closeModal('confirm-delete-modal')">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <p>¿Está seguro que desea eliminar este <span id="delete-item-type">elemento</span>? Esta acción no se puede deshacer.</p>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="button button-secondary" onclick="closeModal('confirm-delete-modal')">Cancelar</button>
+                <button class="button button-danger" onclick="deleteItem()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    

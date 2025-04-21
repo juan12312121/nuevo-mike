@@ -1,0 +1,55 @@
+<!-- src/app/login/login.component.html -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<div class="body">
+  <div class="login-container">
+    <div class="logo-container">
+      <div class="logo">
+        <i class="fa-solid fa-calendar-check"></i>
+      </div>
+    </div>
+
+    <div class="login-header">
+      <h1>Sistema de Asistencia</h1>
+      <p>Ingrese sus credenciales de acceso</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>{{ errorMessage }}. Intente nuevamente.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="correo">Correo</label>
+        <div class="input-group">
+          <input type="email" id="correo" class="form-control" placeholder="Ingrese su correo" formControlName="correo">
+          <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched" class="error">
+          Ingresa un correo válido.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contrasena">Contraseña</label>
+        <div class="input-group">
+          <input type="password" id="contrasena" class="form-control" placeholder="Ingrese su contraseña" formControlName="contrasena">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="error">
+          La contraseña es requerida.
+        </div>
+      </div>
+
+      <div class="remember-forgot">
+        <div class="remember-me">
+          <input type="checkbox" id="remember">
+          <label for="remember">Recordar mi sesión</label>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid" class="btn">Iniciar Sesión</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="body">
+
+    <app-aside-administrador></app-aside-administrador>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>Dashboard de Administración Educativa</h1>
+            <div class="header-actions">
+                <button class="header-button"><i class="fas fa-bell"></i></button>
+                <button class="header-button"><i class="fas fa-envelope"></i></button>
+                <button class="header-button"><i class="fas fa-user-circle"></i></button>
+            </div>
+        </div>
+        <div class="dashboard">
+            <div class="stats-container">
+                <div class="stats-card">
+                    <div class="stats-icon"><i class="fas fa-school"></i></div>
+                    <div class="stats-info">
+                        <h3 class="stats-number">24</h3>
+                        <p class="stats-label">Escuelas registradas</p>
+                    </div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon info-icon"><i class="fas fa-university"></i></div>
+                    <div class="stats-info">
+                        <h3 class="stats-number">12</h3>
+                        <p class="stats-label">Facultades</p>
+                    </div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon success-icon"><i class="fas fa-user-tie"></i></div>
+                    <div class="stats-info">
+                        <h3 class="stats-number">78</h3>
+                        <p class="stats-label">Jefes de carrera</p>
+                    </div>
+                </div>
+                <div class="stats-card">
+                    <div class="stats-icon warning-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="stats-info">
+                        <h3 class="stats-number">156</h3>
+                        <p class="stats-label">Carreras</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Distribución de Escuelas por Tipo</h3>
+                        <select class="chart-select">
+                            <option>Este año</option>
+                            <option>Último año</option>
+                            <option>Últimos 3 años</option>
+                        </select>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="schoolsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="chart-title">Carreras por Facultad</h3>
+                        <select class="chart-select">
+                            <option>Todas las facultades</option>
+                            <option>Facultad de Ingeniería</option>
+                            <option>Facultad de Ciencias</option>
+                        </select>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="careersChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-activity-card">
+                <div class="recent-activity-header">
+                    <h3 class="recent-activity-title">Actividad Reciente</h3>
+                    <a href="#" class="recent-activity-link">Ver todo</a>
+                </div>
+                <table class="recent-activity-table">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Institución</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nueva escuela registrada</td>
+                            <td>Universidad Tecnológica del Sur</td>
+                            <td>adminsistema.edu</td>
+                            <td><span class="status-badge status-activo">Completado</span></td>
+                            <td>15/04/2025</td>
+                        </tr>
+                        <tr>
+                            <td>Actualización de datos</td>
+                            <td>Instituto Politécnico Nacional</td>
+                            <td>jmarcosipn.edu</td>
+                            <td><span class="status-badge status-activo">Completado</span></td>
+                            <td>14/04/2025</td>
+                        </tr>
+                        <tr>
+                            <td>Solicitud de carrera</td>
+                            <td>Universidad Autónoma del Estado</td>
+                            <td>direccionuae.edu</td>
+                            <td><span class="status-badge status-pendiente">Pendiente</span></td>
+                            <td>13/04/2025</td>
+                        </tr>
+                        <tr>
+                            <td>Cambio de director</td>
+                            <td>Colegio Superior de Ciencias</td>
+                            <td>admincsc.edu</td>
+                            <td><span class="status-badge status-inactivo">Rechazado</span></td>
+                            <td>12/04/2025</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <h3 class="info-card-title">Facultades por Área</h3>
+                        <div class="info-card-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                    </div>
+                    <div class="info-card-content">
+                        <h4 class="info-card-stat">75%</h4>
+                        <p class="info-card-desc">Ciencias e Ingeniería</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-value progress-blue" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <h3 class="info-card-title">Tasa de Aprovación</h3>
+                        <div class="info-card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="info-card-content">
+                        <h4 class="info-card-stat">89%</h4>
+                        <p class="info-card-desc">Solicitudes aprobadas</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-value progress-green" style="width: 89%"></div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <h3 class="info-card-title">Revisiones Pendientes</h3>
+                        <div class="info-card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="info-card-content">
+                        <h4 class="info-card-stat">12</h4>
+                        <p class="info-card-desc">Requieren atención</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-value progress-red" style="width: 45%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

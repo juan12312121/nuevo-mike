@@ -1,0 +1,42 @@
+<div class="modal-overlay" (click)="cerrar()"> <!-- Al hacer clic en la superposición, se cierra el modal -->
+    <div class="modal" (click)="$event.stopPropagation()"> <!-- Evita que el clic en el modal cierre el modal -->
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-graduation-cap"></i>
+          {{ carreraSeleccionada ? 'Editar Carrera' : 'Agregar Carrera' }}
+        </h3>
+        <button class="modal-close" (click)="cerrar()"> <!-- Al hacer clic en el botón de cierre, se cierra el modal -->
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+  
+      <div class="modal-body">
+        <form [formGroup]="carreraForm" (ngSubmit)="guardarCarrera()">
+          <div class="form-group">
+            <label for="nombre_carrera">Nombre de Carrera</label>
+            <input id="nombre_carrera" type="text" formControlName="nombre" class="form-input" required maxlength="100">
+          </div>
+      
+          <div class="form-group">
+            <label for="facultad">Facultad</label>
+            <select id="facultad" formControlName="facultad_id" class="form-input" required>
+              <option value="" disabled selected>Selecciona una facultad</option>
+              <option *ngFor="let f of facultades" [value]="f.id">
+                {{ f.id }} - {{ f.nombre }}
+              </option>
+            </select>
+          </div>
+      
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" (click)="cerrar()">Cancelar</button>
+            <button class="btn btn-primary" type="submit" [disabled]="carreraForm.invalid">
+              <i class="fa-solid fa-save btn-icon"></i>
+              {{ carreraSeleccionada ? 'Actualizar' : 'Guardar' }}
+            </button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+  

@@ -1,0 +1,156 @@
+<div class="body">
+
+    <app-aside-jefecarrera></app-aside-jefecarrera>
+    
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="header">
+            <h1>Panel de Control</h1>
+           
+        </header>
+
+
+        <div class="stats-container">
+            <div class="stats-card">
+                <div class="stats-icon">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="stats-info">
+                    <h3 class="stats-number">87.5%</h3>
+                    <p class="stats-label">Asistencia hoy</p>
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stats-icon warning-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="stats-info">
+                    <h3 class="stats-number">3</h3>
+                    <p class="stats-label">Faltas sin justificar</p>
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stats-icon info-icon">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </div>
+                <div class="stats-info">
+                    <h3 class="stats-number">12</h3>
+                    <p class="stats-label">Clases pendientes hoy</p>
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stats-icon success-icon">
+                    <i class="fa-solid fa-calendar-check"></i>
+                </div>
+                <div class="stats-info">
+                    <h3 class="stats-number">142</h3>
+                    <p class="stats-label">Total registros esta semana</p>
+                </div>
+            </div>
+        </div>
+        
+
+        <!-- Dashboard Content -->
+        <main class="dashboard">
+            <div>
+                <h2 class="section-title">Asistencia de Profesores Recientes</h2>
+                
+                <!-- Filter and Search -->
+
+                
+                <!-- Log Table -->
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Profesor</th>
+                                <th>Materia</th>
+                                <th>Grupo</th>
+                                <th>Asistencia</th>
+                                <th>Registrado por</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>13/04/2025 09:15</td>
+                                <td>Dr. Martínez Sánchez</td>
+                                <td>Programación Avanzada</td>
+                                <td>5A</td>
+                                <td><span class="status-badge status-asistio">Asistió</span></td>
+                                <td><span class="registered-by registered-checador">Checador</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>13/04/2025 08:30</td>
+                                <td>Mtra. López Jiménez</td>
+                                <td>Cálculo Diferencial</td>
+                                <td>3B</td>
+                                <td><span class="status-badge status-asistio">Asistió</span></td>
+                                <td><span class="registered-by registered-mismo">Profesor</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>13/04/2025 07:45</td>
+                                <td>Dr. Rodríguez Pérez</td>
+                                <td>Redes de Computadoras</td>
+                                <td>7C</td>
+                                <td><span class="status-badge status-falta">No asistió</span></td>
+                                <td><span class="registered-by registered-jefe">Jefe de Grupo</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>12/04/2025 18:00</td>
+                                <td>Ing. Gutiérrez Hernández</td>
+                                <td>Sistemas Embebidos</td>
+                                <td>8A</td>
+                                <td><span class="status-badge status-justificado">Justificado</span></td>
+                                <td><span class="registered-by registered-mismo">Profesor</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>12/04/2025 16:30</td>
+                                <td>Dra. Fernández Torres</td>
+                                <td>Base de Datos Avanzadas</td>
+                                <td>6B</td>
+                                <td><span class="status-badge status-asistio">Asistió</span></td>
+                                <td><span class="registered-by registered-checador">Checador</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>12/04/2025 14:15</td>
+                                <td>Mtro. Gómez Flores</td>
+                                <td>Inteligencia Artificial</td>
+                                <td>9A</td>
+                                <td><span class="status-badge status-falta">No asistió</span></td>
+                                <td><span class="registered-by registered-jefe">Jefe de Grupo</span></td>
+                                <td>
+                                    <button class="action-button"><i class="fa-solid fa-eye"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+             
+            </div>
+        </main>
+    </div>
+
+
+</div>

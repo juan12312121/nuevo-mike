@@ -1,0 +1,119 @@
+<div class="body">
+  <div class="layout">
+    <!-- Sidebar Component -->
+    <app-aside-administrador></app-aside-administrador>
+
+    <div class="main">
+      <div class="content">
+        <!-- Card Section -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Facultades Registradas</h2>
+            <button
+              class="btn btn-primary"
+              id="btn-nueva-facultad"
+              (click)="openModal()"
+            >
+              <i class="fas fa-plus btn-icon"></i> Nueva Facultad
+            </button>
+          </div>
+
+          <!-- Filters Section -->
+          <div class="filters">
+            <div class="filter-group">
+              <div class="search-input">
+                <i class="fas fa-search search-icon"></i>
+                <input
+                  type="text"
+                  class="search-field"
+                  placeholder="Buscar facultad..."
+                />
+              </div>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Escuela:</span>
+              <select class="form-select" style="width: 200px;">
+                <option value="">Todas las escuelas</option>
+                <option value="1">Universidad Nacional</option>
+                <option value="2">Instituto Tecnológico</option>
+                <option value="3">Universidad Autónoma</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Loading and Error Messages -->
+          <div *ngIf="cargando" class="loading-message">Cargando facultades...</div>
+          <div *ngIf="error" class="error-message">{{ error }}</div>
+
+          <!-- Faculties Table Section -->
+          <div *ngIf="!cargando && facultades.length > 0" class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre de Facultad</th>
+                  <th>Escuela</th>
+                  <th>Descripción</th>
+                  <th>Email de Contacto</th>
+                  <th>Teléfono de Contacto</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let facultad of paginatedFacultades">
+                  <td>{{ facultad.id }}</td>
+                  <td>{{ facultad.nombre }}</td>
+                  <td>{{ facultad.escuela_nombre }}</td>
+                  <td>{{ facultad.descripcion }}</td>
+                  <td>{{ facultad.email_contacto }}</td>
+                  <td>{{ facultad.telefono_contacto }}</td>
+                  <td>
+                    <div class="table-actions">
+                      <button
+                        class="btn-action btn-edit"
+                        title="Editar"
+                        (click)="editFacultad(facultad)"
+                      >
+                        <i class="fas fa-pen"></i>
+                      </button>
+                      <button (click)="eliminarFacultad(facultad)"
+                        class="btn-action btn-delete"
+                        title="Eliminar"
+                      >
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- No Results Message -->
+          <div *ngIf="!cargando && facultades.length === 0" class="no-results">
+            No se encontraron facultades registradas.
+          </div>
+
+          <!-- Pagination Component -->
+          <app-paginacion-administrador
+            [data]="facultades"
+            [pageSize]="pageSize"
+            [dataLabel]="'facultades'"
+            (pageChanged)="onPageChange($event)"
+          >
+          </app-paginacion-administrador>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: edición / creación de facultad -->
+    <app-modal-facultad
+      [visible]="showModal"
+      [facultadAEditar]="facultadAEditar"
+      (close)="handleClose()"
+      (save)="handleSave($event)"
+    >
+    </app-modal-facultad>
+
+  </div>
+</div>

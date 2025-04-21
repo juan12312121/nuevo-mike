@@ -1,0 +1,121 @@
+<div class="body">
+    <app-aside-jefecarrera></app-aside-jefecarrera>
+
+
+    <div class="main-content">
+        <!-- Top Header -->
+        <header class="header">
+            <h1>Gestión de Profesores</h1>
+            <div class="header-actions">
+                <!-- Aquí pueden ir botones de acción generales si es necesario -->
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard">
+            <div class="section-title">
+                <span>Profesores</span>
+                <button class="add-button" onclick="openModal('add-professor-modal')">
+                    <i class="fa-solid fa-plus"></i> Agregar Profesor
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" class="search-input" placeholder="Buscar profesor por nombre, correo o carrera...">
+            </div>
+            
+                     
+            <div class="professors-grid fade-in-up">
+                <!-- Profesor 1 -->
+                <div class="professor-card">
+                    <div class="professor-card-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="professor-card-info">
+                        <div class="professor-card-name">Dr. Alejandro Ramírez</div>
+                        <div class="professor-card-email">aramirezexample.com</div>
+                        <div class="professor-card-career">Ingeniería en Sistemas</div>
+                        <span class="badge badge-success">Activo</span>
+                    </div>
+                    <div class="professor-card-actions">
+                        <button class="professor-card-button" onclick="openModal('edit-professor-modal')">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="professor-card-button delete" onclick="confirmDelete('Profesor')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profesor 2 -->
+                <div class="professor-card">
+                    <div class="professor-card-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="professor-card-info">
+                        <div class="professor-card-name">Dra. Mariana Hernández</div>
+                        <div class="professor-card-email">mhernandezexample.com</div>
+                        <div class="professor-card-career">Informática</div>
+                        <span class="badge badge-success">Activo</span>
+                    </div>
+                    <div class="professor-card-actions">
+                        <button class="professor-card-button" onclick="openModal('edit-professor-modal')">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="professor-card-button delete" onclick="confirmDelete('Profesor')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profesor 3 -->
+                <div class="professor-card">
+                    <div class="professor-card-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="professor-card-info">
+                        <div class="professor-card-name">Dr. Francisco Gutiérrez</div>
+                        <div class="professor-card-email">fgutierrezexample.com</div>
+                        <div class="professor-card-career">Ingeniería Civil</div>
+                        <span class="badge badge-danger">Inactivo</span>
+                    </div>
+                    <div class="professor-card-actions">
+                        <button class="professor-card-button" onclick="openModal('edit-professor-modal')">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="professor-card-button delete" onclick="confirmDelete('Profesor')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Profesor 4 -->
+                <div class="professor-card">
+                    <div class="professor-card-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="professor-card-info">
+                        <div class="professor-card-name">Mtro. José Luis Méndez</div>
+                        <div class="professor-card-email">jmendezexample.com</div>
+                        <div class="professor-card-career">Mecatrónica</div>
+                        <span class="badge badge-success">Activo</span>
+                    </div>
+                    <div class="professor-card-actions">
+                        <button class="professor-card-button" onclick="openModal('edit-professor-modal')">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button class="professor-card-button delete" onclick="confirmDelete('Profesor')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <app-paginacion></app-paginacion>
+        </main>
+    </div>
+
+       <!-- Contenedor de Toasts -->
+       <div class="toast-container" id="toast-container"></div>
+       
+</div>

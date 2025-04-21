@@ -1,0 +1,186 @@
+<div id="edit-checker-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Editar Checador</h3>
+            <button class="modal-close" onclick="closeModal('edit-checker-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-checker-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-input" value="Laura Méndez" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-input" value="laura.mendez@ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Área Asignada</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar área</option>
+                        <option value="edificio-a" selected>Edificio A</option>
+                        <option value="edificio-b">Edificio B</option>
+                        <option value="edificio-c">Edificio C</option>
+                        <option value="edificio-d">Edificio D</option>
+                        <option value="laboratorios">Laboratorios</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Usuario Activo</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Permisos</label>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="edit-perm-register" class="form-checkbox" checked>
+                        <label for="edit-perm-register" class="form-checkbox-label">Registrar asistencias</label>
+                    </div>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="edit-perm-view" class="form-checkbox" checked>
+                        <label for="edit-perm-view" class="form-checkbox-label">Ver asistencias</label>
+                    </div>
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="edit-perm-export" class="form-checkbox">
+                        <label for="edit-perm-export" class="form-checkbox-label">Exportar reportes</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('edit-checker-modal')">Cancelar</button>
+            <button class="button button-primary" onclick="updateChecker()">Actualizar</button>
+        </div>
+    </div>
+</div> 
+
+<div id="edit-leader-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Editar Jefe de Grupo</h3>
+            <button class="modal-close" onclick="closeModal('edit-leader-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-leader-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre Completo</label>
+                    <input type="text" class="form-input" value="Ana Torres" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico</label>
+                    <input type="email" class="form-input" value="ana.torres@ejemplo.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Semestre</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar semestre</option>
+                        <option value="1">1er Semestre</option>
+                        <option value="2">2do Semestre</option>
+                        <option value="3" selected>3er Semestre</option>
+                        <option value="4">4to Semestre</option>
+                        <option value="5">5to Semestre</option>
+                        <option value="6">6to Semestre</option>
+                        <option value="7">7mo Semestre</option>
+                        <option value="8">8vo Semestre</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Grupo</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccionar grupo</option>
+                        <option value="a" selected>Grupo A</option>
+                        <option value="b">Grupo B</option>
+                        <option value="c">Grupo C</option>
+                        <option value="d">Grupo D</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Usuario Activo</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('edit-leader-modal')">Cancelar</button>
+            <button class="button button-primary" onclick="updateLeader()">Actualizar</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Editar Profesor -->
+<div id="edit-professor-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Editar Profesor</h3>
+            <button class="modal-close" onclick="closeModal('edit-professor-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-professor-form">
+                <div class="form-group">
+                    <label class="form-label">Nombre completo</label>
+                    <input type="text" class="form-input" placeholder="Nombre y apellidos" value="Dr. Alejandro Ramírez" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-input" placeholder="correo@example.com" value="aramirez@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Carrera</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccione una carrera</option>
+                        <option value="informatica">Informática</option>
+                        <option value="sistemas" selected>Ingeniería en Sistemas</option>
+                        <option value="civil">Ingeniería Civil</option>
+                        <option value="mecatronica">Mecatrónica</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nivel académico</label>
+                    <select class="form-select" required>
+                        <option value="bachelor">Licenciatura</option>
+                        <option value="master">Maestría</option>
+                        <option value="doctor" selected>Doctorado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Estado</label>
+                    <div class="switch-container">
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="switch-label">Activo</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="button button-secondary" onclick="closeModal('edit-professor-modal')">Cancelar</button>
+            <button type="submit" form="edit-professor-form" class="button button-primary">Guardar Cambios</button>
+        </div>
+    </div>
+</div>

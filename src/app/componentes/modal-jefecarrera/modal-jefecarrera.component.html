@@ -1,0 +1,64 @@
+<div class="body">
+  <div class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          <i class="fa-solid fa-user-tie"></i> {{ esActualizar ? 'Actualizar' : 'Agregar' }} Jefe de Carrera
+        </h3>
+        <button class="modal-close" (click)="onCerrar()">
+          <i class="fa-solid fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="registrarOActualizarJefe()">
+          <ul class="form-list">
+            <li class="form-item">
+              <label for="nombre">Nombre Completo</label>
+              <div class="input-container">
+                <input id="nombre" type="text" name="nombre" class="form-input" [(ngModel)]="nombre" required maxlength="100" />
+                <i class="fa-solid fa-user input-icon"></i>
+              </div>
+            </li>
+
+            <li class="form-item">
+              <label for="correo">Correo Electrónico</label>
+              <div class="input-container">
+                <input id="correo" type="email" name="correo" class="form-input" [(ngModel)]="correo" required maxlength="100" />
+                <i class="fa-solid fa-envelope input-icon"></i>
+              </div>
+            </li>
+
+            <li class="form-item">
+              <label for="contrasena">Contraseña</label>
+              <div class="input-container">
+                <input id="contrasena" type="password" name="contrasena" class="form-input" [(ngModel)]="contrasena" maxlength="255" />
+                <i class="fa-solid fa-lock input-icon"></i>
+              </div>
+            </li>
+
+            <li class="form-item">
+              <label for="carrera">Carrera</label>
+              <div class="input-container">
+                <select id="carrera" name="carrera_id" class="form-input" [(ngModel)]="carrera_id" required>
+                  <option value="" disabled>Selecciona una carrera</option>
+                  <option *ngFor="let carrera of carreras" [value]="carrera.carrera_id">
+                    {{ carrera.carrera_id }} - {{ carrera.carrera_nombre }}
+                  </option>
+                </select>
+                <i class="fa-solid fa-graduation-cap input-icon"></i>
+              </div>
+            </li>
+          </ul>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" (click)="onCerrar()">Cancelar</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!nombre || !correo || !carrera_id" (click)="registrarOActualizarJefe()">
+          <i class="fa-solid fa-save btn-icon"></i> {{ esActualizar ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

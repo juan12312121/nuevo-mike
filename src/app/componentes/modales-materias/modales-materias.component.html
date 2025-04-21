@@ -1,0 +1,144 @@
+<div id="add-subject-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Agregar Nueva Materia</h3>
+            <button class="modal-close" onclick="closeModal('add-subject-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <form id="add-subject-form">
+                <div class="form-group">
+                    <label class="form-label">Folio</label>
+                    <input type="text" class="form-input" name="folio" placeholder="Ej. MAT-101" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nombre de la materia</label>
+                    <input type="text" class="form-input" name="nombre" placeholder="Nombre completo de la materia" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Carrera</label>
+                    <select class="form-select" name="carrera" required>
+                        <option value="">Seleccione una carrera</option>
+                        <option value="informatica">Informática</option>
+                        <option value="sistemas">Ingeniería en Sistemas</option>
+                        <option value="civil">Ingeniería Civil</option>
+                        <option value="mecatronica">Mecatrónica</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Semestre</label>
+                    <select class="form-select" name="semestre" required>
+                        <option value="1">1er Semestre</option>
+                        <option value="2">2do Semestre</option>
+                        <option value="3">3er Semestre</option>
+                        <option value="4">4to Semestre</option>
+                        <option value="5">5to Semestre</option>
+                        <option value="6">6to Semestre</option>
+                        <option value="7">7mo Semestre</option>
+                        <option value="8">8vo Semestre</option>
+                        <option value="9">9no Semestre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Horas teóricas</label>
+                    <input type="number" class="form-input" name="horas_teoricas" min="0" max="10" placeholder="Ej. 3" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Horas prácticas</label>
+                    <input type="number" class="form-input" name="horas_practicas" min="0" max="10" placeholder="Ej. 2" required>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="button button-secondary" onclick="closeModal('add-subject-modal')">Cancelar</button>
+                    <button type="submit" class="button button-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="edit-subject-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Editar Materia</h3>
+            <button class="modal-close" onclick="closeModal('edit-subject-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-subject-form">
+                <div class="form-group">
+                    <label class="form-label">Folio</label>
+                    <input type="text" class="form-input" placeholder="Ej. MAT-101" value="MAT-101" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nombre de la materia</label>
+                    <input type="text" class="form-input" placeholder="Nombre completo de la materia" value="Cálculo Diferencial" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Carrera</label>
+                    <select class="form-select" required>
+                        <option value="">Seleccione una carrera</option>
+                        <option value="informatica">Informática</option>
+                        <option value="sistemas" selected>Ingeniería en Sistemas</option>
+                        <option value="civil">Ingeniería Civil</option>
+                        <option value="mecatronica">Mecatrónica</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Semestre</label>
+                    <select class="form-select" required>
+                        <option value="1" selected>1er Semestre</option>
+                        <option value="2">2do Semestre</option>
+                        <option value="3">3er Semestre</option>
+                        <option value="4">4to Semestre</option>
+                        <option value="5">5to Semestre</option>
+                        <option value="6">6to Semestre</option>
+                        <option value="7">7mo Semestre</option>
+                        <option value="8">8vo Semestre</option>
+                        <option value="9">9no Semestre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Horas teóricas</label>
+                    <input type="number" class="form-input" min="0" max="10" placeholder="Ej. 3" value="3" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Horas prácticas</label>
+                    <input type="number" class="form-input" min="0" max="10" placeholder="Ej. 2" value="2" required>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('edit-subject-modal')">Cancelar</button>
+            <button class="button button-primary" onclick="updateSubject()">Actualizar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Confirmación de Eliminación -->
+<div id="delete-confirm-modal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirmar Eliminación</h3>
+            <button class="modal-close" onclick="closeModal('delete-confirm-modal')">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>¿Está seguro que desea eliminar esta materia? Esta acción no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="button button-secondary" onclick="closeModal('delete-confirm-modal')">Cancelar</button>
+            <button class="button button-danger" onclick="deleteSubject()">Eliminar</button>
+        </div>
+    </div>
+</div>

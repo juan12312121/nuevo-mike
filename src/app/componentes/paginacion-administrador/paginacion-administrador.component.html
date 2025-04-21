@@ -1,0 +1,33 @@
+<div class="pagination">
+  <div class="pagination-info">
+    Mostrando 
+    <span>{{ (currentPage - 1) * pageSize + 1 }}-{{ currentPage * pageSize > data.length ? data.length : currentPage * pageSize }}</span> 
+    de <span>{{ data.length }}</span> {{ dataLabel }}
+  </div>
+  
+  <div class="pagination-controls">
+    <button 
+      class="page-button" 
+      [class.disabled]="currentPage === 1" 
+      (click)="prevPage()" 
+      id="prevPage">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <button 
+      class="page-button" 
+      *ngFor="let page of pages" 
+      [class.active]="page === currentPage" 
+      (click)="setPage(page)">
+      {{ page }}
+    </button>
+    
+    <button 
+      class="page-button" 
+      [class.disabled]="currentPage === totalPages" 
+      (click)="nextPage()" 
+      id="nextPage">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+</div>
