@@ -268,4 +268,30 @@ export class UsuariosService {
       );
   }
   
+
+  actualizarProfesor(
+    id: number,
+    datos: {
+      nombre?: string;
+      correo?: string;
+      contrasena?: string;
+    }
+  ): Observable<any> {
+    console.log('Actualizando profesor ID:', id, 'con datos:', datos);
+
+    const token = this.getToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http
+      .put(`${this.baseUrl}/actualizar-profesor/${id}`, datos, { headers })
+      .pipe(
+        tap({
+          next: (res) => console.log('Profesor actualizado:', res),
+          error: (err) => console.error('Error al actualizar profesor:', err),
+        })
+      );
+  }
+
 }

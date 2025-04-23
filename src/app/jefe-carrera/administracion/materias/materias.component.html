@@ -21,125 +21,24 @@
             
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" class="search-input" placeholder="Buscar materia por folio, nombre o carrera...">
+                <input type="text" class="search-input" placeholder="Buscar materia por nombre o carrera...">
             </div>
             
             <div class="subjects-grid fade-in-up">
-                <!-- Materia 1 -->
-                <div class="subject-card">
+                <!-- Aquí iteramos sobre las materias y mostramos cada una -->
+                <div *ngFor="let materia of materias" class="subject-card">
+                    <!-- Colocamos el ID en la esquina superior derecha -->
+                    <div class="subject-card-id">
+                        {{ materia.id }}
+                    </div>
                     <div class="subject-card-icon">
                         <i class="fa-solid fa-book"></i>
                     </div>
                     <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: MAT-101</div>
-                        <div class="subject-card-name">Cálculo Diferencial</div>
-                        <div class="subject-card-career">Ingeniería en Sistemas</div>
-                        <span class="badge badge-primary">1er Semestre</span>
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" onclick="confirmDelete('Materia')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Materia 2 -->
-                <div class="subject-card">
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: INF-205</div>
-                        <div class="subject-card-name">Estructura de Datos</div>
-                        <div class="subject-card-career">Informática</div>
-                        <span class="badge badge-primary">3er Semestre</span>
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" onclick="confirmDelete('Materia')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Materia 3 -->
-                <div class="subject-card">
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: CIV-301</div>
-                        <div class="subject-card-name">Mecánica de Materiales</div>
-                        <div class="subject-card-career">Ingeniería Civil</div>
-                        <span class="badge badge-primary">5to Semestre</span>
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" onclick="confirmDelete('Materia')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Materia 4 -->
-                <div class="subject-card">
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: SIS-405</div>
-                        <div class="subject-card-name">Ingeniería de Software</div>
-                        <div class="subject-card-career">Ingeniería en Sistemas</div>
-                        <span class="badge badge-primary">6to Semestre</span>
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" onclick="confirmDelete('Materia')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Materia 5 -->
-                <div class="subject-card">
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: MEC-308</div>
-                        <div class="subject-card-name">Robótica Avanzada</div>
-                        <div class="subject-card-career">Mecatrónica</div>
-                        <span class="badge badge-primary">7mo Semestre</span>
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" onclick="confirmDelete('Materia')">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Materia 6 -->
-                <div class="subject-card">
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <div class="subject-card-folio">Folio: INF-410</div>
-                        <div class="subject-card-name">Inteligencia Artificial</div>
-                        <div class="subject-card-career">Informática</div>
-                        <span class="badge badge-primary">8vo Semestre</span>
+                        <!-- Mostramos los detalles de la materia -->
+                        <div class="subject-card-name">{{ materia.nombre }}</div> <!-- Nombre de la materia -->
+                        <div class="subject-card-career">{{ materia.carrera.nombre }}</div> <!-- Carrera de la materia -->
+                        <span class="badge badge-primary">{{ materia.semestre }} Semestre</span>
                     </div>
                     <div class="subject-card-actions">
                         <button class="subject-card-button" onclick="openModal('edit-subject-modal')">
@@ -152,11 +51,10 @@
                 </div>
             </div>
             
-            <!-- Pagination moved inside dashboard -->
+            <!-- Paginación -->
             <app-paginacion></app-paginacion>
         </main>
     </div>
 
-    <!-- Contenedor de Toasts -->
-    <div class="toast-container" id="toast-container"></div>
+    <app-modal-materias></app-modal-materias>
 </div>

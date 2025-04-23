@@ -12,12 +12,12 @@
     transition: opacity 0.4s ease, visibility 0.4s ease;
   }
 
-
   .modal-overlay.active {
     opacity: 1;
     visibility: visible;
   }
 
+  /* Modal */
   .modal {
     position: fixed;
     top: 50%;
@@ -35,7 +35,6 @@
     visibility: hidden;
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
   }
-
 
   .modal.active {
     transform: translate(-50%, -50%) scale(1);

@@ -1,1 +1,68 @@
-<p>modalprofesores works!</p>
+<div class="modal-overlay" [ngClass]="{ 'active': modalVisible }" (click)="cerrar()"></div>
+
+<div class="modal" [ngClass]="{ 'active': modalVisible }">
+  <form (ngSubmit)="registrarOActualizar()">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        <i class="fas fa-user-tie"></i>
+        {{ profesorToEdit ? 'Editar Profesor' : 'Agregar Profesor' }}
+      </h3>
+      <button type="button" class="modal-close" (click)="cerrar()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" for="nombre">Nombre completo</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          class="form-input"
+          [(ngModel)]="usuario.nombre"
+          placeholder="Ingrese nombre del profesor"
+          required
+        />
+        <i class="fas fa-user input-icon"></i>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Correo electrónico</label>
+        <input
+          type="email"
+          id="email"
+          name="correo"
+          class="form-input"
+          [(ngModel)]="usuario.correo"
+          placeholder="correo@ejemplo.com"
+          required
+        />
+        <i class="fas fa-envelope input-icon"></i>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          name="contrasena"
+          class="form-input"
+          [(ngModel)]="usuario.contrasena"
+          placeholder="{{ profesorToEdit ? 'Dejar vacío para mantener actual' : 'Ingrese contraseña' }}"
+        />
+        <i class="fas fa-lock input-icon"></i>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="button button-secondary" (click)="cerrar()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button type="submit" class="button button-primary">
+        <i class="fas fa-save"></i>
+        {{ profesorToEdit ? 'Actualizar' : 'Guardar' }}
+      </button>
+    </div>
+  </form>
+</div>

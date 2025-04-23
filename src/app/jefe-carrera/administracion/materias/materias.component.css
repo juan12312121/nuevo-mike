@@ -61,43 +61,62 @@
 }
 
 .subject-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
     display: flex;
     align-items: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.25s ease;
+    border: 1px solid #f1f5f9;
     cursor: pointer;
+    position: relative; /* Added for absolute positioning of ID */
 }
 
 .subject-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
 }
 
 .subject-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    background-color: #e5e7eb;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
-    color: #4b5563;
+    margin-right: 18px;
+    color: #4f46e5;
     font-size: 20px;
+    transition: all 0.2s ease;
 }
+
+.subject-card-id{
+    position: absolute;
+    top: 4px;
+    left: 7px;
+    font-size: 10px;
+    color: #64748b;
+    background-color: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.subject-card-icon:hover{
+    background-color: #4f46e5;
+    color: black;
+}
+
+
 
 .subject-card-info {
     flex: 1;
 }
 
-.subject-card-folio {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 4px;
-}
+
 
 .subject-card-name {
     font-size: 16px;
