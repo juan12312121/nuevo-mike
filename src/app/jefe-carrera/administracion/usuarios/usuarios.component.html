@@ -1,250 +1,120 @@
+<!-- usuarios.component.html -->
 <div class="body">
     <app-aside-jefecarrera></app-aside-jefecarrera>
-
+  
     <div class="main-content">
-        <!-- Top Header -->
-        <header class="header">
-            <h1>Gestión de Usuarios</h1>
-            <div class="header-actions">
-                <!-- Aquí pueden ir botones de acción generales si es necesario -->
+      <header class="header"><h1>Gestión de Usuarios</h1></header>
+      <main class="dashboard">
+        <div class="tabs-container">
+          <div class="tabs">
+            <div
+              class="tab"
+              [class.active]="activeTab === 'checadores'"
+              (click)="setActiveTab('checadores')"
+            >Checadores</div>
+            <div
+              class="tab"
+              [class.active]="activeTab === 'jefes-grupo'"
+              (click)="setActiveTab('jefes-grupo')"
+            >Jefes de Grupo</div>
+          </div>
+  
+          <!-- Checadores -->
+          <div
+            class="tab-content"
+            [class.active]="activeTab === 'checadores'"
+          >
+            <div class="section-title">
+              <span>Checadores del Sistema</span>
+              <button class="add-button" (click)="abrirModal('checador')">
+                <i class="fa-solid fa-plus"></i> Agregar Checador
+              </button>
             </div>
-        </header>
-
-        <!-- Dashboard Content -->
-        <main class="dashboard">
-            <!-- Tabs de Usuarios -->
-            <div class="tabs-container">
-                <div class="tabs">
-                    <div class="tab active" data-tab="checadores">Checadores</div>
-                    <div class="tab" data-tab="jefes-grupo">Jefes de Grupo</div>
-                </div>
-                
-                <!-- Tab de Checadores -->
-                <div id="checadores" class="tab-content active fade-in">
-                    <div class="section-title">
-                        <span>Checadores del Sistema</span>
-                        <button class="add-button" onclick="openModal('add-checker-modal')">
-                            <i class="fa-solid fa-plus"></i> Agregar Checador
-                        </button>
-                    </div>
-                    
-                    <div class="search-container">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Buscar checador por nombre, ID o área...">
-                    </div>
-                    
-                 
-                    <div class="users-grid fade-in-up">
-                        <!-- Checador 1 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Laura Méndez</div>
-                                <div class="user-card-role">Checador - Edificio A</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-checker-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Checador')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Checador 2 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Carlos Jiménez</div>
-                                <div class="user-card-role">Checador - Edificio B</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-checker-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Checador')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Checador 3 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Pedro Sánchez</div>
-                                <div class="user-card-role">Checador - Edificio C</div>
-                                <span class="badge badge-danger">Inactivo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-checker-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Checador')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Checador 4 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">María López</div>
-                                <div class="user-card-role">Checador - Edificio D</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-checker-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Checador')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">María López</div>
-                                <div class="user-card-role">Checador - Edificio D</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-checker-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Checador')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-
-                        
-                    </div>
-                    <app-paginacion></app-paginacion>
-                </div>
-                
-                <!-- Tab de Jefes de Grupo -->
-                <div id="jefes-grupo" class="tab-content">
-                    <div class="section-title">
-                        <span>Jefes de Grupo</span>
-                        <button class="add-button" onclick="openModal('add-leader-modal')">
-                            <i class="fa-solid fa-plus"></i> Agregar Jefe de Grupo
-                        </button>
-                    </div>
-                    
-                    <div class="search-container">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Buscar jefe de grupo por nombre, ID o grupo...">
-                    </div>
-                    
-                    <div class="filters-container">
-                        <select class="filter-select">
-                            <option value="">Todos los estados</option>
-                            <option value="active">Activos</option>
-                            <option value="inactive">Inactivos</option>
-                        </select>
-                        <select class="filter-select">
-                            <option value="">Todos los semestres</option>
-                            <option value="1">1er Semestre</option>
-                            <option value="2">2do Semestre</option>
-                            <option value="4">4to Semestre</option>
-                            <option value="5">5to Semestre</option>
-                            <option value="6">6to Semestre</option>
-                            <option value="7">7mo Semestre</option>
-                            <option value="8">8vo Semestre</option>
-                        </select>
-                    </div>
-                    
-                    <div class="users-grid fade-in-up">
-                        <!-- Jefe de Grupo 1 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Ana Torres</div>
-                                <div class="user-card-role">Jefe - 3er Semestre Grupo A</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-leader-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Jefe de Grupo')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Jefe de Grupo 2 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Roberto Vázquez</div>
-                                <div class="user-card-role">Jefe - 5to Semestre Grupo B</div>
-                                <span class="badge badge-success">Activo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-leader-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Jefe de Grupo')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Jefe de Grupo 3 -->
-                        <div class="user-card">
-                            <div class="user-card-avatar">
-                                <i class="fa-solid fa-user"></i>
-                            </div>
-                            <div class="user-card-info">
-                                <div class="user-card-name">Diana Martínez</div>
-                                <div class="user-card-role">Jefe - 7mo Semestre Grupo A</div>
-                                <span class="badge badge-danger">Inactivo</span>
-                            </div>
-                            <div class="user-card-actions">
-                                <button class="user-card-button" onclick="openModal('edit-leader-modal')">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </button>
-                                <button class="user-card-button delete" onclick="confirmDelete('Jefe de Grupo')">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                       
-                    </div>
-
-                    <app-paginacion></app-paginacion>
-                </div>
+            <div class="search-container">
+              <input type="text" class="search-input" placeholder="Buscar checador..." />
             </div>
-        </main>
+            <div class="users-grid">
+              <div *ngFor="let user of checadores" class="user-card">
+                <div class="user-card-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="user-card-info">
+                  <div class="user-card-name">{{ user.nombre }}</div>
+                  <div class="user-card-role">Checador</div>
+                  <div class="user-card-carrera">Carrera: {{ user.carrera }}</div>
+                </div>
+                <div class="user-card-actions">
+                  <button
+                    class="user-card-button"
+                    title="Editar Checador"
+                    (click)="editarUsuario(user)"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    class="user-card-button delete"
+                    title="Eliminar Checador"
+                    (click)="eliminarUsuario(user.id)"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Jefes de Grupo -->
+          <div
+            class="tab-content"
+            [class.active]="activeTab === 'jefes-grupo'"
+          >
+            <div class="section-title">
+              <span>Jefes de Grupo</span>
+              <button class="add-button" (click)="abrirModal('jefe')">
+                <i class="fa-solid fa-plus"></i> Agregar Jefe de Grupo
+              </button>
+            </div>
+            <div class="search-container">
+              <input type="text" class="search-input" placeholder="Buscar jefe..." />
+            </div>
+            <div class="users-grid">
+              <div *ngFor="let user of jefesGrupo" class="user-card">
+                <div class="user-card-avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="user-card-info">
+                  <div class="user-card-name">{{ user.nombre }}</div>
+                  <div class="user-card-role">
+                    Jefe – {{ user.carrera }} Semestre {{ user.grupo }}
+                  </div>
+                  <span class="badge">{{ user.activo ? 'Activo' : 'Inactivo' }}</span>
+                </div>
+                <div class="user-card-actions">
+                  <button
+                    class="user-card-button"
+                    title="Editar Jefe de Grupo"
+                    (click)="editarUsuario(user)"
+                  >
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    class="user-card-button delete"
+                    title="Eliminar Jefe de Grupo"
+                    (click)="eliminarUsuario(user.id)"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+  
+      <!-- Modal -->
+      <app-modal-usuarios
+        [visible]="modalVisible"
+        [tipo]="tipoModal"
+        [usuarioId]="usuarioIdParaEditar"
+        (modalClose)="onModalClosed()"
+        (usuarioGuardado)="onModalClosed()"
+      ></app-modal-usuarios>
     </div>
-
-
-       <!-- Contenedor de Toast Alerts -->
-       <div class="toast-container" id="toast-container">
-        <!-- Los toasts se añadirán dinámicamente aquí -->
-    </div>
-</div>
+  </div>
+  

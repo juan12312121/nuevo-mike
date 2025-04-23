@@ -1,0 +1,136 @@
+<!-- modal-usuarios.component.html -->
+<div>
+  <!-- Overlay -->
+  <div class="modal-overlay" [class.active]="visible" (click)="closeModal()"></div>
+
+  <!-- Modal -->
+  <div class="modal" [class.active]="visible" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <h3 class="modal-title">
+        <i [class]="
+            tipo === 'checador'
+              ? 'fas fa-user-check'
+              : 'fas fa-user-tie'
+          "></i>
+        {{ tipo === 'checador'
+            ? 'Agregar Nuevo Checador'
+            : 'Agregar Nuevo Jefe de Grupo'
+        }}
+      </h3>
+      <button class="modal-close" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <form *ngIf="tipo" #form="ngForm" (ngSubmit)="onSubmit(form)">
+        <!-- Nombre Completo -->
+        <div class="form-group">
+          <label for="nombre">Nombre Completo</label>
+          <input
+            id="nombre"
+            name="nombre"
+            class="form-input"
+            type="text"
+            placeholder="Ingresa el nombre completo"
+            required
+            [(ngModel)]="usuario.nombre"
+          />
+          <i class="fas fa-user input-icon"></i>
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div class="form-group">
+          <label for="correo">Correo Electrónico</label>
+          <input
+            id="correo"
+            name="correo"
+            class="form-input"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            required
+            [(ngModel)]="usuario.correo"
+          />
+          <i class="fas fa-envelope input-icon"></i>
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label for="contrasena">Contraseña</label>
+          <input
+            id="contrasena"
+            name="contrasena"
+            class="form-input"
+            type="password"
+            placeholder="Mínimo 6 caracteres"
+            required
+            minlength="6"
+            ngModel
+          />
+          <i class="fas fa-lock input-icon"></i>
+        </div>
+
+        <!-- Carrera -->
+        <div class="form-group">
+          <label for="carrera">Carrera</label>
+          <select
+            id="carrera"
+            name="carrera_id"
+            class="form-input"
+            required
+            [(ngModel)]="usuario.carrera_id"
+            *ngIf="!loadingCarreras && !errorCarreras"
+          >
+            <option value="" disabled>Selecciona una carrera</option>
+            <option
+              *ngFor="let c of carreras"
+              [value]="c.carrera_id"
+            >
+              {{ c.carrera_id }} – {{ c.carrera_nombre }}
+            </option>
+          </select>
+          <i class="fas fa-graduation-cap input-icon"></i>
+        </div>
+
+        <!-- Grupo (solo para Jefe de Grupo) -->
+        <div *ngIf="tipo === 'jefe'" class="form-group">
+          <label for="grupo">Grupo</label>
+          <select
+            id="grupo"
+            name="grupo_id"
+            class="form-input"
+            required
+            [(ngModel)]="usuario.grupo_id"
+          >
+            <option value="" disabled>Selecciona un grupo</option>
+            <option *ngFor="let g of grupos" [value]="g.id">
+              {{ g.id }} – {{ g.nombre }}
+            </option>
+          </select>
+          <i class="fas fa-users input-icon"></i>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="button button-secondary"
+            (click)="closeModal()"
+          >
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+          <button
+            type="submit"
+            class="button button-primary"
+            [disabled]="form.invalid"
+          >
+            <i class="fas fa-save"></i>
+            {{ tipo === 'checador' ? 'Guardar Checador' : 'Guardar Jefe de Grupo' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

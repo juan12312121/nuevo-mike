@@ -1,187 +1,69 @@
 <div class="body">
-    <app-aside-jefecarrera></app-aside-jefecarrera>
+  <app-aside-jefecarrera></app-aside-jefecarrera>
+
+  <div class="main-content">
+    <header class="header">
+      <h1>Gestión de Grupos</h1>
+    </header>
 
     <main class="dashboard">
-        <div class="section-title">
-            <span>Grupos</span>
-            <button class="add-button" onclick="openModal('add-group-modal')">
-                <i class="fa-solid fa-plus"></i> Agregar Grupo
-            </button>
-        </div>
-        
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" class="search-input" placeholder="Buscar grupo por código, materia o profesor...">
-        </div>
-        
-        <div class="filters-container">
-            <select class="filter-select">
-                <option value="">Todas las materias</option>
-                <option value="poo">Programación Orientada a Objetos</option>
-                <option value="bd">Bases de Datos</option>
-                <option value="arqui">Arquitectura de Computadoras</option>
-                <option value="redes">Redes de Computadoras</option>
-            </select>
-            
-            <select class="filter-select">
-                <option value="">Todos los profesores</option>
-                <option value="ramirez">Dr. Ramírez López</option>
-                <option value="mendoza">Mtra. Mendoza Pérez</option>
-                <option value="ortega">Dr. Ortega Sánchez</option>
-                <option value="flores">Ing. Flores Castro</option>
-            </select>
-        </div>
-                 
-        <div class="groups-grid fade-in-up">
-            <!-- Grupo 1 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo A</div>
-                    <div class="group-card-code">POO-A-2025</div>
-                    <div class="group-card-subject">Programación Orientada a Objetos</div>
-                    <div class="group-card-teacher">Dr. Ramírez López</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">32</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Grupo 2 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo B</div>
-                    <div class="group-card-code">POO-B-2025</div>
-                    <div class="group-card-subject">Programación Orientada a Objetos</div>
-                    <div class="group-card-teacher">Mtra. Mendoza Pérez</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">28</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Grupo 3 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo A</div>
-                    <div class="group-card-code">BD-A-2025</div>
-                    <div class="group-card-subject">Bases de Datos</div>
-                    <div class="group-card-teacher">Dr. Ortega Sánchez</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">35</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Grupo 4 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo B</div>
-                    <div class="group-card-code">BD-B-2025</div>
-                    <div class="group-card-subject">Bases de Datos</div>
-                    <div class="group-card-teacher">Dr. Ortega Sánchez</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">30</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Grupo 5 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo A</div>
-                    <div class="group-card-code">ARQUI-A-2025</div>
-                    <div class="group-card-subject">Arquitectura de Computadoras</div>
-                    <div class="group-card-teacher">Ing. Flores Castro</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">25</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Grupo 6 -->
-            <div class="group-card">
-                <div class="group-card-icon">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="group-card-info">
-                    <div class="group-card-name">Grupo A</div>
-                    <div class="group-card-code">REDES-A-2025</div>
-                    <div class="group-card-subject">Redes de Computadoras</div>
-                    <div class="group-card-teacher">Dr. Ramírez López</div>
-                    <div class="group-card-students">
-                        Estudiantes<span class="student-count">27</span>
-                    </div>
-                </div>
-                <div class="group-card-actions">
-                    <button class="group-card-button" onclick="openModal('edit-group-modal')">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </button>
-                    <button class="group-card-button delete" onclick="confirmDelete('Grupo')">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Paginación -->
-        <app-paginacion></app-paginacion>
+      <div class="section-title">
+        <span>Grupos</span>
+        <button class="add-button" (click)="abrirModalNuevo()">
+          <i class="fa-solid fa-plus"></i> Agregar Grupo
+        </button>
+      </div>
 
-        <div class="toast-container" id="toast-container"></div>
+      <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar grupo por nombre, carrera o semestre..."
+        />
+      </div>
+
+      <div class="groups-grid fade-in-up">
+        <div *ngFor="let grupo of grupos" class="group-card">
+          <div class="group-card-icon">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="group-card-info">
+            <div class="group-card-name">{{ grupo.nombre }}</div>
+            <div class="group-card-code">{{ grupo.id }}</div>
+            <div class="group-card-subject">{{ grupo.carrera_nombre }}</div>
+            <div class="group-card-semestre">
+              Semestre: {{ grupo.semestre }}
+            </div>
+          </div>
+          <div class="group-card-actions">
+            <button
+              class="group-card-button"
+              (click)="editarGrupo(grupo)"
+              title="Editar Grupo"
+            >
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button
+              class="group-card-button delete"
+              (click)="eliminarGrupo(grupo.id)"
+              title="Eliminar Grupo"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <app-paginacion></app-paginacion>
     </main>
-    
+  </div>
+
+  <!-- Bind de isOpen y de grupoAEditar -->
+  <app-modal-grupos
+    [isOpen]="modalOpen"
+    (isOpenChange)="modalOpen = $event"
+    [grupoSeleccionado]="grupoAEditar"
+    (grupoActualizado)="onModalClose()"
+  ></app-modal-grupos>
 </div>

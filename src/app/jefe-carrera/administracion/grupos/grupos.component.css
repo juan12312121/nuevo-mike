@@ -1,8 +1,10 @@
+/* Base Styles */
 .body {
-    background-color: #f3f4f6;
+    background-color: #f8fafc;
     display: flex;
     height: 100vh;
     overflow: hidden;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
 }
 
 .main-content {
@@ -13,76 +15,89 @@
 }
 
 .header {
-    background-color: white;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 16px 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    z-index: 10;
 }
 
 .header h1 {
-    font-size: 24px;
-    font-weight: bold;
-    color: #1f2937;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
 }
 
 .header-actions {
     display: flex;
     align-items: center;
+    gap: 12px;
 }
 
-/* Contenido del dashboard */
+/* Dashboard Content */
 .dashboard {
     flex: 1;
     overflow: auto;
-    padding: 24px;
+    padding: 28px 32px;
 }
 
 .section-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #1f2937;
-    margin-bottom: 16px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Estilos para cards de grupos */
+/* Group Cards Styling */
 .groups-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
 }
 
 .group-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    padding: 16px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
     display: flex;
     align-items: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.25s ease;
+    border: 1px solid #f1f5f9;
     cursor: pointer;
+    position: relative; /* Added for absolute positioning of ID */
 }
 
 .group-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: #e2e8f0;
 }
 
 .group-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    background-color: #e5e7eb;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: #f1f5f9;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
-    color: #4b5563;
+    margin-right: 18px;
+    color: #4f46e5;
     font-size: 20px;
+    transition: all 0.2s ease;
+}
+
+.group-card:hover .group-card-icon {
+    background-color: #4f46e5;
+    color: #ffffff;
 }
 
 .group-card-info {
@@ -92,14 +107,22 @@
 .group-card-name {
     font-size: 16px;
     font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 4px;
+    color: #1e293b;
+    margin-bottom: 6px;
+    padding-right: 60px; /* Added to make space for ID */
 }
 
+/* Repositioned ID code to top right */
 .group-card-code {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 4px;
+    position: absolute;
+    top: 4px;
+    left: 7px;
+    font-size: 13px;
+    color: #64748b;
+    background-color: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
 }
 
 .group-card-subject {
@@ -114,6 +137,12 @@
     margin-bottom: 4px;
 }
 
+.group-card-semestre {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 0;
+}
+
 .group-card-students {
     font-size: 14px;
     color: #6b7280;
@@ -124,7 +153,8 @@
 .group-card-actions {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
+    margin-left: 8px;
 }
 
 .group-card-button {
@@ -132,19 +162,27 @@
     background: none;
     font-size: 16px;
     cursor: pointer;
-    color: #6b7280;
-    transition: color 0.2s;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .group-card-button:hover {
-    color: #3b82f6;
+    background-color: #f1f5f9;
+    color: #4f46e5;
 }
 
 .group-card-button.delete:hover {
+    background-color: #fee2e2;
     color: #ef4444;
 }
 
-/* Botón de agregar grupo */
+/* Add Group Button */
 .add-button {
     padding: 8px 16px;
     background-color: #2563eb;
@@ -168,24 +206,30 @@
 }
 
 
+.add-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(79, 70, 229, 0.2);
+}
+
+/* Toast Notifications */
 .toast-container {
     position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 300px;
+    top: 24px;
+    right: 24px;
+    width: 320px;
     z-index: 2000;
 }
 
 .toast {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 12px;
     transform: translateX(110%);
-    transition: transform 0.3s;
-    animation: slideIn 0.3s forwards, fadeOut 0.5s 3s forwards;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    animation: slideIn 0.3s forwards, fadeOut 0.5s 3.5s forwards;
 }
 
 @keyframes slideIn {
@@ -197,18 +241,18 @@
 @keyframes fadeOut {
     to {
         opacity: 0;
-        margin-top: -50px;
+        margin-top: -60px;
         margin-bottom: 0;
         height: 0;
-        padding: 0 16px;
+        padding: 0 18px;
         pointer-events: none;
     }
 }
 
 .toast-success {
     background-color: #dcfce7;
-    border-left: 4px solid #22c55e;
-    color: #166534;
+    border-left: 4px solid #10b981;
+    color: #065f46;
 }
 
 .toast-error {
@@ -230,7 +274,7 @@
 }
 
 .toast-icon {
-    margin-right: 12px;
+    margin-right: 14px;
     font-size: 18px;
 }
 
@@ -245,7 +289,7 @@
 }
 
 .toast-message {
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .toast-close {
@@ -262,52 +306,95 @@
     opacity: 1;
 }
 
-/* Estilos para barra de búsqueda */
+/* Search Bar Styling */
 .search-container {
     position: relative;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .search-input {
     width: 100%;
-    padding: 10px 16px 10px 40px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
+    padding: 12px 18px 12px 44px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
 }
 
 .search-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     outline: none;
 }
 
 .search-icon {
     position: absolute;
-    left: 12px;
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: #9ca3af;
+    font-size: 16px;
 }
 
-/* Estilos para filtros */
+/* Filter Styling */
 .filters-container {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
 
 .filter-select {
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
+    padding: 10px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
     font-size: 14px;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: all 0.2s ease;
+    background-color: #ffffff;
+    color: #4b5563;
+    cursor: pointer;
+    min-width: 200px;
 }
 
 .filter-select:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Animation for content */
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .dashboard {
+        padding: 20px;
+    }
+    
+    .groups-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filters-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .filter-select {
+        width: 100%;
+    }
 }

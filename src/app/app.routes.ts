@@ -9,6 +9,7 @@ import { GruposComponent } from './jefe-carrera/administracion/grupos/grupos.com
 import { MateriasComponent } from './jefe-carrera/administracion/materias/materias.component';
 import { ProfesoresComponent } from './jefe-carrera/administracion/profesores/profesores.component';
 import { UsuariosComponent } from './jefe-carrera/administracion/usuarios/usuarios.component';
+import { AulasComponent } from './jefe-carrera/aulas/aulas.component';
 import { PrincipalComponent } from './jefe-carrera/principal/principal.component';
 import { RegistroAsistenciaComponent } from './jefe-carrera/registro-asistencia/registro-asistencia.component';
 
@@ -23,6 +24,7 @@ export const routes: Routes = [
   {path:'materias',component:MateriasComponent},
   {path:'grupos',component:GruposComponent},
   {path:'carreras',component:CarrerasComponent},
+  {path:'aulas', component:AulasComponent},
 
   {path:'administrador',component:PrincipalAdministradorComponent},
   {path:'escuelas',component:EscuelasComponent},

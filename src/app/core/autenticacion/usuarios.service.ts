@@ -98,19 +98,34 @@ export class UsuariosService {
       );
   }
 
-  actualizarUsuario(id: number, datosActualizados: { nombre?: string; correo?: string; contrasena?: string; rol_id?: number; carrera_id?: number }): Observable<any> {
+  actualizarUsuario(id: number, datosActualizados: { 
+    nombre?: string; 
+    correo?: string; 
+    contrasena?: string; 
+    rol_id?: number; 
+    carrera_id?: number; 
+    grupo_id?: number;  // Asegurando que el grupo_id sea parte de los datos
+  }): Observable<any> {
     console.log('Actualizando usuario con ID:', id);
     console.log('Datos enviados para actualización:', datosActualizados);
   
+    // Obtener el token desde el localStorage
     const token = this.getToken();
     if (!token) {
       console.warn('No se encontró token en localStorage');
     }
   
+    // Configurar los encabezados para la autenticación
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
   
+    // Verificar si el grupo_id está presente
+    if (datosActualizados.grupo_id) {
+      console.log('Grupo a actualizar:', datosActualizados.grupo_id);
+    }
+  
+    // Enviar los datos a través de la petición PUT
     return this.http.put(`${this.baseUrl}/actualizar/${id}`, datosActualizados, { headers })
       .pipe(
         tap({
@@ -123,6 +138,7 @@ export class UsuariosService {
         })
       );
   }
+  
 
   obtenerUsuarioPorId(id: number): Observable<any> {
     console.log(`Solicitando datos del usuario con ID: ${id}`);
@@ -161,6 +177,95 @@ export class UsuariosService {
         error: (err) => console.error('Error en eliminarUsuario:', err)
       })
     );
+  }
+  
+  obtenerUsuariosNivelPermitido(): Observable<{ usuarios: any[] }> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    console.log('Solicitando usuarios con rol_id permitido');
+    return this.http
+      .get<{ usuarios: any[] }>(`${this.baseUrl}/listar`, { headers })
+      .pipe(
+        tap({
+          next: (res) =>
+            console.log('Usuarios recibidos:', res.usuarios),
+          error: (err) =>
+            console.error('Error al obtener usuarios:', err)
+        })
+      );
+  }
+  
+
+  registrarChecadorYJefe(usuario: { nombre: string; correo: string; contrasena: string; carrera_id: number; rol_id: number }): Observable<any> {
+    console.log('Registrando Jefe de Carrera o Checador:', usuario);
+    const token = this.getToken();
+    if (!token) {
+      console.warn('No se encontró token en localStorage');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.post(`${this.baseUrl}/crear-checador-jefe`, usuario, { headers })
+      .pipe(
+        tap({
+          next: (res) => {
+            console.log('Respuesta de la solicitud de registro de Jefe de Carrera o Checador:', res);
+          },
+          error: (err) => {
+            console.error('Error al registrar el Jefe de Carrera o Checador:', err);
+          }
+        })
+      );
+  }
+
+  registrarProfesor(usuario: { nombre: string; correo: string; contrasena: string }): Observable<any> {
+    console.log('Registrando Profesor:', usuario);
+    const token = this.getToken();
+    if (!token) {
+      console.warn('No se encontró token en localStorage');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    // Enviamos solo nombre, correo y contrasena; el backend asigna rol_id = 1
+    return this.http.post(`${this.baseUrl}/crear-profesor`, usuario, { headers })
+      .pipe(
+        tap({
+          next: (res) => {
+            console.log('Respuesta de registro de Profesor:', res);
+          },
+          error: (err) => {
+            console.error('Error al registrar el Profesor:', err);
+          }
+        })
+      );
+  }
+
+
+  listarProfesores(): Observable<{ profesores: any[] }> {
+    console.log('Solicitando lista de profesores...');
+    const token = this.getToken();
+    if (!token) {
+      console.warn('No se encontró token en localStorage');
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+  
+    return this.http
+      .get<{ profesores: any[] }>(`${this.baseUrl}/listar-profesores`, { headers })
+      .pipe(
+        tap({
+          next: (res) => console.log('Profesores recibidos:', res.profesores),
+          error: (err) => console.error('Error al listar profesores:', err)
+        })
+      );
   }
   
 }
