@@ -1,0 +1,62 @@
+<div class="modal-overlay" [class.active]="show"></div>
+
+<div class="modal" [class.active]="show">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="modal-title">
+      <i class="fas fa-door-open"></i>
+      Agregar Nueva Aula
+    </div>
+    <button class="modal-close" (click)="close()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Mensajes -->
+  <div class="success-message" [class.show]="showSuccess">
+    <i class="fas fa-check-circle"></i>
+    Aula agregada exitosamente.
+  </div>
+  <div class="error-message" *ngIf="showError">
+    <i class="fas fa-exclamation-circle"></i>
+    Error al crear el aula.
+  </div>
+
+  <!-- Cuerpo del modal -->
+  <form (ngSubmit)="save()" class="modal-body">
+    <div class="form-group">
+      <label for="nombreAula" class="form-label">
+        <i class="fas fa-tag"></i>
+        Nombre del Aula
+      </label>
+      <input
+        id="nombreAula"
+        name="nombre"
+        type="text"
+        class="form-input"
+        [(ngModel)]="nombre"
+        placeholder="Ej: Aula 101"
+        required
+      />
+      <i class="fas fa-chalkboard input-icon"></i>
+    </div>
+  
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="button button-secondary"
+        (click)="close()"
+      >
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button
+        type="submit"
+        class="button button-primary pulse"
+        [disabled]="!nombre.trim()"
+      >
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </div>
+  </form>
+</div>

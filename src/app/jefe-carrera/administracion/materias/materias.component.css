@@ -66,6 +66,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     padding: 20px;
     display: flex;
+    height: 115px;
     align-items: center;
     transition: all 0.25s ease;
     border: 1px solid #f1f5f9;
@@ -81,7 +82,7 @@
 
 .subject-card-icon {
     width: 52px;
-    height: 52px;
+    height: 50px;
     border-radius: 10px;
     background-color: #f1f5f9;
     display: flex;
@@ -89,15 +90,15 @@
     justify-content: center;
     margin-right: 18px;
     color: #4f46e5;
-    font-size: 20px;
+    font-size: 15px;
     transition: all 0.2s ease;
 }
 
 .subject-card-id{
     position: absolute;
-    top: 4px;
+    top: 5px;
     left: 7px;
-    font-size: 10px;
+    font-size: 13px;
     color: #64748b;
     background-color: #f1f5f9;
     padding: 4px 8px;
@@ -142,15 +143,23 @@
     background: none;
     font-size: 16px;
     cursor: pointer;
-    color: #6b7280;
-    transition: color 0.2s;
-}
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    /* mejor usa padding en lugar de width/height fijos: */
+    padding: 0.5rem;        /* 8px arriba/abajo y a los lados */
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 .subject-card-button:hover {
-    color: #3b82f6;
+    background-color: #f1f5f9;
+    color: #4f46e5;
 }
 
 .subject-card-button.delete:hover {
+    background-color: #fee2e2;
     color: #ef4444;
 }
 

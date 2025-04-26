@@ -5,7 +5,9 @@ import { FacultadesComponent } from './administrador/facultades/facultades.compo
 import { JefesDeCarreraComponent } from './administrador/jefes-de-carrera/jefes-de-carrera.component';
 import { PrincipalAdministradorComponent } from './administrador/principal-administrador/principal-administrador.component';
 import { LoginComponent } from './autenticacion/login/login.component';
+import { CrearHorarioComponent } from './jefe-carrera/administracion/crear-horario/crear-horario.component';
 import { GruposComponent } from './jefe-carrera/administracion/grupos/grupos.component';
+import { HorariosComponent } from './jefe-carrera/administracion/horarios/horarios.component';
 import { MateriasComponent } from './jefe-carrera/administracion/materias/materias.component';
 import { ProfesoresComponent } from './jefe-carrera/administracion/profesores/profesores.component';
 import { UsuariosComponent } from './jefe-carrera/administracion/usuarios/usuarios.component';
@@ -25,9 +27,11 @@ export const routes: Routes = [
   {path:'grupos',component:GruposComponent},
   {path:'carreras',component:CarrerasComponent},
   {path:'aulas', component:AulasComponent},
+  {path:'horarios',component:HorariosComponent},
+  {path:'crear-horario',component:CrearHorarioComponent},
 
   {path:'administrador',component:PrincipalAdministradorComponent},
   {path:'escuelas',component:EscuelasComponent},
   {path:'facultades',component:FacultadesComponent},
-  {path:'jefe-de-carrera',component:JefesDeCarreraComponent}
+  {path:'jefe-de-carrera',component:JefesDeCarreraComponent},
 ];

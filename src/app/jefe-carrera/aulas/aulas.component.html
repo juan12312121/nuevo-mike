@@ -1,1 +1,66 @@
-<p>aulas works!</p>
+<!-- src/app/aulas/aulas.component.html -->
+<div class="body">
+  <app-aside-jefecarrera></app-aside-jefecarrera>
+
+  <div class="main-content">
+    <!-- Encabezado -->
+    <header class="header">
+      <h1>Gestión de Aulas</h1>
+      <div class="header-actions">
+        <button class="add-button" (click)="abrirModal()">
+          <i class="fas fa-plus"></i> Agregar Aula
+        </button>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <main class="dashboard">
+      <div class="section-title">
+        <span>Aulas</span>
+      </div>
+
+      <!-- Contenedor de búsqueda -->
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Buscar aula por ID o nombre..."
+          [(ngModel)]="searchQuery"
+          (ngModelChange)="buscarAulas()"
+        />
+      </div>
+
+      <!-- Aulas -->
+      <div class="classrooms-grid fade-in-up">
+        <div
+          *ngFor="let aula of filteredAulas"
+          class="classroom-card"
+        >
+          <div class="classroom-id">{{ aula.id }}</div>
+          <div class="classroom-name">{{ aula.nombre }}</div>
+          <!-- Botón de eliminar -->
+          <button
+            class="delete-button"
+            (click)="eliminarAula(aula.id)"
+            title="Eliminar aula"
+          >
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+
+        <div *ngIf="filteredAulas.length === 0" class="no-classrooms">
+          <p>No se encontraron aulas</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal de agregar aulas -->
+  <app-modalaulas
+    [show]="showModal"
+    (showChange)="onModalChange($event)"
+    (aulaCreada)="onAulaCreada($event)"
+  >
+  </app-modalaulas>
+</div>

@@ -29,4 +29,17 @@ export class MateriasService {
   obtenerMaterias(): Observable<any> {
     return this.http.get(this.apiUrl, { headers: this.getHeaders() });
   }
+
+  actualizarMateria(id: number, nombre: string, carrera_id: number): Observable<any> {
+    const materiaData = { nombre, carrera_id }; // Datos actualizados
+    return this.http.put(`${this.apiUrl}/${id}`, materiaData, {
+      headers: this.getHeaders()
+    });
+  }
+  
+  eliminarMateria(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      headers: this.getHeaders()
+    });
+  }
 }

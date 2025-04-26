@@ -1,63 +1,78 @@
-<div class="modal-overlay" id="modalOverlay"></div>
-<div class="modal" id="materiaModal">
-  <div class="modal-header">
-    <h3 class="modal-title">
-      <i class="fas fa-book"></i>
-      Agregar Nueva Materia
-    </h3>
-    <button class="modal-close" id="closeModalBtn">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  
-  <div class="modal-body">
-    <div class="success-message" id="successMessage">
-      <i class="fas fa-check-circle"></i>
-      Materia creada correctamente
+<div class="modal-overlay" [class.active]="show">
+  <div class="modal" [class.active]="show">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        <i class="fas fa-book"></i>
+        {{ materiaEditando ? 'Editar Materia' : 'Agregar Nueva Materia' }}
+      </h3>
+      <button class="modal-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-    
-    <form id="materiaForm">
-      <div class="form-group">
-        <label class="form-label" for="materiaName">
-          Nombre de la Materia
-          <i class="fas fa-info-circle" title="Ingrese el nombre completo de la materia"></i>
-        </label>
-        <input 
-          type="text" 
-          id="materiaName" 
-          name="nombre" 
-          class="form-input" 
-          placeholder="Ej: Matemáticas Discretas" 
-          required
-        >
-        <i class="fas fa-book input-icon"></i>
+
+    <form (ngSubmit)="guardarMateria()">
+      <div class="modal-body">
+        <div class="success-message" *ngIf="showSuccessMessage">
+          <i class="fas fa-check-circle"></i>
+          {{ materiaEditando ? 'Materia actualizada correctamente' : 'Materia creada correctamente' }}
+        </div>
+        <div class="error-message" *ngIf="showErrorMessage">
+          <i class="fas fa-exclamation-circle"></i>
+          Error al {{ materiaEditando ? 'actualizar' : 'crear' }} la materia. Intente de nuevo.
+        </div>
+
+        <div class="form-group">
+          <label for="materiaName" class="form-label">
+            Nombre de la Materia
+            <i class="fas fa-info-circle" title="Ingrese el nombre completo de la materia"></i>
+          </label>
+          <input
+            id="materiaName"
+            name="nombre"
+            type="text"
+            class="form-input"
+            [(ngModel)]="materia.nombre"
+            placeholder="Ej: Matemáticas Discretas"
+            required
+          />
+          <i class="fas fa-book input-icon"></i>
+        </div>
+
+        <div class="form-group">
+          <label for="carreraSelect" class="form-label">
+            Carrera
+            <i class="fas fa-info-circle" title="Seleccione la carrera a la que pertenece esta materia"></i>
+          </label>
+          <select
+            id="carreraSelect"
+            name="carrera"
+            class="form-select"
+            [(ngModel)]="materia.carrera"
+            required
+          >
+            <option [ngValue]="null">Seleccione una carrera</option>
+            <option *ngFor="let c of carreras" [ngValue]="c">
+              {{ c.carrera_id }} - {{ c.carrera_nombre }}
+            </option>
+          </select>
+          <i class="fas fa-graduation-cap input-icon"></i>
+        </div>
       </div>
-      
-      <div class="form-group">
-        <label class="form-label" for="carreraId">
-          Carrera
-          <i class="fas fa-info-circle" title="Seleccione la carrera a la que pertenece esta materia"></i>
-        </label>
-        <select id="carreraId" name="carrera_id" class="form-select" required>
-          <option value="">Seleccione una carrera</option>
-          <option value="1">Ingeniería en Sistemas</option>
-          <option value="2">Licenciatura en Informática</option>
-          <option value="3">Ingeniería en Computación</option>
-          <option value="4">Licenciatura en Matemáticas</option>
-        </select>
-        <i class="fas fa-graduation-cap input-icon"></i>
+
+      <div class="modal-footer">
+        <button type="button" class="button button-secondary" (click)="close()">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="button button-primary"
+          [disabled]="!materia.nombre || !materia.carrera"
+        >
+          <i class="fas fa-save"></i>
+          {{ materiaEditando ? 'Actualizar' : 'Guardar' }}
+        </button>
       </div>
     </form>
-  </div>
-  
-  <div class="modal-footer">
-    <button id="cancelBtn" class="button button-secondary">
-      <i class="fas fa-times"></i>
-      Cancelar
-    </button>
-    <button id="saveBtn" class="button button-primary">
-      <i class="fas fa-save"></i>
-      Guardar
-    </button>
   </div>
 </div>

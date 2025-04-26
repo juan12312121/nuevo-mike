@@ -1,1 +1,298 @@
-<p>horarios works!</p>
+<div class="body">
+    <app-aside-jefecarrera></app-aside-jefecarrera>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-calendar-week"></i> Horario Semanal - Aula 13</h1>
+            <div class="actions-container">
+                <div class="selector-container">
+                    <div class="selector">
+                        <label for="turno"><i class="fas fa-clock"></i> Turno:</label>
+                        <select id="turno">
+                            <option value="matutino">Matutino</option>
+                            <option value="vespertino">Vespertino</option>
+                            <option value="nocturno">Nocturno</option>
+                        </select>
+                    </div>
+                    <div class="selector">
+                        <label for="grupo"><i class="fas fa-users"></i> Grupo:</label>
+                        <select id="grupo">
+                            <option value="1">1° A - Primaria</option>
+                            <option value="2">1° B - Primaria</option>
+                            <option value="3">2° A - Primaria</option>
+                            <option value="4">2° B - Primaria</option>
+                            <option value="5">3° A - Primaria</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-crear">
+                    <i class="fas fa-plus-circle"></i> Crear Horario
+                </button>
+            </div>
+        </div>
+
+        <div class="horario-container">
+            <table class="horario-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-clock"></i> Hora</th>
+                        <th><i class="fas fa-calendar-day"></i> Lunes</th>
+                        <th><i class="fas fa-calendar-day"></i> Martes</th>
+                        <th><i class="fas fa-calendar-day"></i> Miércoles</th>
+                        <th><i class="fas fa-calendar-day"></i> Jueves</th>
+                        <th><i class="fas fa-calendar-day"></i> Viernes</th>
+                        <th><i class="fas fa-calendar-day"></i> Sábado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Primera hora: 8:00 - 9:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 8:00 - 9:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Matemáticas</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Español</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Matemáticas</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Español</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Ciencias</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Segunda hora: 9:00 - 10:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 9:00 - 10:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Español</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Matemáticas</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Ciencias</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Inglés</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. González</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Matemáticas</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Tercera hora: 10:00 - 11:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 10:00 - 11:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Ciencias</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Historia</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Sánchez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Español</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Matemáticas</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Historia</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Sánchez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Educación Física</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Cuarta hora: 11:00 - 12:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 11:00 - 12:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Historia</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Sánchez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Inglés</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. González</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Educación Física</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Ciencias</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Inglés</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. González</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Quinta hora: 12:00 - 13:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 12:00 - 13:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Inglés</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. González</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Ciencias</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Historia</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Sánchez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Educación Física</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Español</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Sexta hora: 13:00 - 14:00 -->
+                    <tr>
+                        <td class="hora-column"><i class="far fa-clock"></i> 13:00 - 14:00</td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Educación Física</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Inglés</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. González</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia">
+                                <div class="materia-nombre"><i class="fas fa-book"></i> Historia</div>
+                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Sánchez</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="materia vacio">
+                                <div class="materia-nombre"><i class="fas fa-minus-circle"></i> -</div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination">
+            <div class="page-nav" id="prev-page"><i class="fas fa-chevron-left"></i></div>
+            <div class="page-item active">1</div>
+            <div class="page-item">2</div>
+            <div class="page-item">3</div>
+            <div class="page-item">4</div>
+            <div class="page-item">5</div>
+            <div class="page-nav" id="next-page"><i class="fas fa-chevron-right"></i></div>
+        </div>
+    </div>
+
+
+</div>
