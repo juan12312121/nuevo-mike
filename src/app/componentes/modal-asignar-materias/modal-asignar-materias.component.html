@@ -1,0 +1,45 @@
+<div class="modal-overlay" [class.active]="visible" (click)="close()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <i class="fas fa-clipboard-list"></i>
+        {{ isEditMode ? 'Editar Asignación' : 'Nueva Asignación' }}
+      </h2>
+      <button class="modal-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="guardarAsignacion()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Profesor</label>
+          <select formControlName="profesorId" class="form-select">
+            <option [value]="null" disabled>Seleccionar profesor</option>
+            <option *ngFor="let p of profesores" [value]="p.id">
+              {{ p.id }} - {{ p.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Materia</label>
+          <select formControlName="materiaId" class="form-select">
+            <option [value]="null" disabled>Seleccionar materia</option>
+            <option *ngFor="let m of materias" [value]="m.id">
+              {{ m.id }} - {{ m.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">
+          {{ isEditMode ? 'Guardar Cambios' : 'Guardar Asignación' }}
+        </button>
+      </div>
+    </form>
+
+  </div>
+</div>

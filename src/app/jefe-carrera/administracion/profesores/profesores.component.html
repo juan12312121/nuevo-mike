@@ -1,19 +1,31 @@
 <div class="body">
   <app-aside-jefecarrera></app-aside-jefecarrera>
-
   <div class="main-content">
     <header class="header">
-      <h1>Gestión de Profesores</h1>
+      <h1>Gestión Académica</h1>
     </header>
+    
+    <!-- Tabs Navigation -->
+    <div class="tabs-container">
+      <div class="tab" [class.active]="activeTab === 'profesores'" (click)="cambiarTab('profesores')">
+        <i class="fa-solid fa-users"></i>
+        <span>Profesores</span>
+      </div>
+      <div class="tab" [class.active]="activeTab === 'asignaciones'" (click)="cambiarTab('asignaciones')">
+        <i class="fa-solid fa-book"></i>
+        <span>Asignación de Materias</span>
+      </div>
+    </div>
 
-    <main class="dashboard">
+    <!-- Tab Content: Profesores -->
+    <main class="dashboard" *ngIf="activeTab === 'profesores'">
       <div class="section-title">
         <span>Profesores</span>
         <button class="add-button" (click)="abrirModal()">
           <i class="fa-solid fa-plus"></i> Agregar Profesor
         </button>
       </div>
-
+      
       <div class="search-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
         <input
@@ -23,7 +35,7 @@
           placeholder="Buscar profesor por nombre, correo o carrera..."
         />
       </div>
-
+      
       <div class="professors-grid fade-in-up">
         <div
           *ngFor="let profesor of profesoresFiltrados; trackBy: trackById"
@@ -45,20 +57,81 @@
             <button class="professor-card-button" (click)="editarProfesor(profesor)">
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
-            <!-- Eliminar (sin implementar aquí) -->
-          <!-- Eliminar -->
-<button class="professor-card-button delete" (click)="eliminarProfesor(profesor.id)">
-  <i class="fa-solid fa-trash"></i>
-</button>
-
+            <!-- Eliminar -->
+            <button class="professor-card-button delete" (click)="eliminarProfesor(profesor.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
           </div>
         </div>
       </div>
-
+      
       <app-paginacion></app-paginacion>
     </main>
-  </div>
 
+    <!-- Tab Content: Asignación de Materias -->
+    <main class="dashboard" *ngIf="activeTab === 'asignaciones'">
+      <div class="section-title">
+        <span>Asignación de Materias</span>
+        <button class="add-button" (click)="abrirModalAsignacion()">
+          <i class="fa-solid fa-plus"></i> Asignar Materia
+        </button>
+      </div>
+    
+      <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          (input)="buscarAsignacion($event)"
+          placeholder="Buscar por nombre de profesor o materia..."
+        />
+      </div>
+    
+      <div class="groups-grid fade-in-up">
+        <div 
+          class="group-card"
+          *ngFor="let asignacion of asignacionesFiltradas; trackBy: trackById"
+        >
+          <div class="group-card-icon">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <div class="group-card-info">
+            <div class="group-card-teacher">
+              <i class="fa-solid fa-user"></i> {{ asignacion.profesorNombre }} (ID: {{ asignacion.id }})
+            </div>
+            <div class="group-card-name">
+              {{ asignacion.materiaNombre }}
+            </div>
+          </div>
+          <div class="group-card-actions">
+            <button class="group-card-button" (click)="editarAsignacion(asignacion)" title="Editar asignación">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            
+            
+            <button class="group-card-button delete" (click)="eliminarAsignacion(asignacion.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+          
+        </div>
+      </div>
+    
+      <div *ngIf="asignacionesFiltradas.length === 0" class="empty-state">
+        <div class="empty-state-icon">
+          <i class="fa-solid fa-book-open"></i>
+        </div>
+        <div class="empty-state-title">No hay materias asignadas</div>
+        <div class="empty-state-text">Agrega una nueva asignación o cambia la búsqueda</div>
+        <button class="add-button" (click)="abrirModalAsignacion()">
+          <i class="fa-solid fa-plus"></i> Asignar Materia
+        </button>
+      </div>
+    
+      <app-paginacion *ngIf="asignacionesFiltradas.length > 0"></app-paginacion>
+    </main>
+  </div>
+  
   <app-modalprofesores
     *ngIf="modalVisible"
     [modalVisible]="modalVisible"
@@ -66,4 +139,13 @@
     (cerrarModal)="cerrarModal()"
     (registroExitoso)="actualizarListaProfesor($event)"
   ></app-modalprofesores>
+
+  <app-modal-asignar-materias
+  [(visible)]="showAsignModal"
+  [asignacion] ="asignacionToEdit"
+  (asignar)    ="crearAsignacion($event.profesor_id, $event.materia_id)"
+  (editar)     ="actualizarAsignacion($event.profesor_id, $event.materia_id)"
+></app-modal-asignar-materias>
+
+
 </div>

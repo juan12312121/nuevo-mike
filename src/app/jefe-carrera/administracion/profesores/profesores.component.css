@@ -450,3 +450,156 @@ input:checked + .slider:before {
     font-size: 14px;
     margin-bottom: 16px;
 }
+
+
+.tabs-container {
+  display: flex;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 16px;
+}
+
+.tab {
+  padding: 15px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: #2563eb;
+  background-color: #f9fafb;
+}
+
+.tab.active {
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+  font-weight: 600;
+}
+
+.tab i {
+  font-size: 16px;
+}
+
+/* Estilos para la cuadrícula de grupos */
+.groups-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.group-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    transition: all 0.25s ease;
+    border: 1px solid #f1f5f9;
+    cursor: pointer;
+    position: relative;
+}
+
+.group-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.group-card-code {
+    position: absolute;
+    top: 4px;
+    left: 7px;
+    font-size: 13px;
+    color: #64748b;
+    background-color: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.group-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    background-color: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 18px;
+    color: #4f46e5;
+    font-size: 20px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.group-card-icon:hover {
+    background-color: #4f46e5;
+    color: #ffffff;
+}
+
+.group-card-info {
+    flex: 1;
+    margin-top: 8px;
+}
+
+.group-card-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.group-card-teacher {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.group-card-details {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.group-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-left: 12px;
+    margin-top: 8px;
+}
+
+.group-card-button {
+    border: none;
+    background: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: all 0.2s ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.group-card-button:hover {
+    background-color: #f1f5f9;
+    color: #4f46e5;
+}
+
+.group-card-button.delete:hover {
+    background-color: #fee2e2;
+    color: #ef4444;
+}

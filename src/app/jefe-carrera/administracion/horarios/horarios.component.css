@@ -70,6 +70,10 @@
     align-items: center;
 }
 
+.btn-crear a{
+    text-decoration: none;
+}
+
 .btn-crear:hover {
     background-color: #2ecc71;
 }
