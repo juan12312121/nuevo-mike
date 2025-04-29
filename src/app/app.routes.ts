@@ -14,6 +14,7 @@ import { UsuariosComponent } from './jefe-carrera/administracion/usuarios/usuari
 import { AulasComponent } from './jefe-carrera/aulas/aulas.component';
 import { PrincipalComponent } from './jefe-carrera/principal/principal.component';
 import { RegistroAsistenciaComponent } from './jefe-carrera/registro-asistencia/registro-asistencia.component';
+import { JefeHorarioComponent } from './jefe-grupo/jefe-horario/jefe-horario.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent }, // <-- Ruta base
@@ -34,4 +35,6 @@ export const routes: Routes = [
   {path:'escuelas',component:EscuelasComponent},
   {path:'facultades',component:FacultadesComponent},
   {path:'jefe-de-carrera',component:JefesDeCarreraComponent},
+
+  {path:'jefe-grupo',component:JefeHorarioComponent}
 ];

@@ -1,0 +1,54 @@
+<div class="body">
+    
+    <app-aside-jefe-grupo></app-aside-jefe-grupo>
+
+    <div class="main-content">
+        <div class="header">
+            <h1><i class="fas fa-calendar-alt"></i> Horario del Grupo</h1>
+            <div class="actions-container">
+                <button class="toggle-sidebar" id="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="view-container active" id="horario-view">
+            <div class="aula-info">
+                <div class="aula-info-item">
+                    <i class="fas fa-users"></i>
+                    <span>Grupo: <strong>5°A Ingeniería Informática</strong></span>
+                </div>
+                <div class="aula-info-item">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Jefe de Grupo: <strong>Carlos Méndez Fuentes</strong></span>
+                </div>
+            </div>
+            
+            <div class="horario-container">
+                <table class="horario-table" id="horario-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-clock"></i> Hora</th>
+                            <th><i class="fas fa-calendar-day"></i> Lunes</th>
+                            <th><i class="fas fa-calendar-day"></i> Martes</th>
+                            <th><i class="fas fa-calendar-day"></i> Miércoles</th>
+                            <th><i class="fas fa-calendar-day"></i> Jueves</th>
+                            <th><i class="fas fa-calendar-day"></i> Viernes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination">
+                <span class="page-nav" id="prev-page"><i class="fas fa-chevron-left"></i></span>
+                <div class="page-item active">1</div>
+                <div class="page-item">2</div>
+                <div class="page-item">3</div>
+                <span class="page-nav" id="next-page"><i class="fas fa-chevron-right"></i></span>
+            </div>
+        </div>
+</div>
+</div>

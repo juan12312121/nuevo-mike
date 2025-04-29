@@ -200,27 +200,43 @@
 
         <div class="form-group">
           <label for="grupo_id">Grupo:</label>
-          <select id="grupo_id" name="grupo_id" class="form-control">
-            <option value="">Selecciona un grupo</option>
-            <option value="1">1° A - Primaria</option>
-            <option value="2">1° B - Primaria</option>
-            <option value="3">2° A - Primaria</option>
-            <option value="4">2° B - Primaria</option>
-            <option value="5">3° A - Primaria</option>
+          <select
+            id="grupo_id"
+            name="grupo_id"
+            class="form-control"
+            [(ngModel)]="selectedGrupoId"
+            name="selectedGrupoId"
+          >
+            <option [value]="null" disabled>Selecciona un grupo</option>
+            <option
+              *ngFor="let g of grupos"
+              [value]="g.id"
+            >
+              {{ g.grupo_nombre }} – {{ g.carrera_nombre }}
+              
+            </option>
           </select>
         </div>
-
+        
         <div class="form-group">
           <label for="aula_id">Aula Principal:</label>
-          <select id="aula_id" name="aula_id" class="form-control">
-            <option value="">Selecciona un aula</option>
-            <option value="1">Aula 101</option>
-            <option value="2">Aula 102</option>
-            <option value="3">Aula 103</option>
-            <option value="4">Aula 104</option>
-            <option value="5">Aula 105</option>
+          <select
+            id="aula_id"
+            name="aula_id"
+            class="form-control"
+            [(ngModel)]="selectedAulaId"
+            name="selectedAulaId"
+          >
+            <option [value]="null" disabled>Selecciona un aula</option>
+            <option
+              *ngFor="let a of aulas"
+              [value]="a.id"
+            >
+              {{ a.nombre }}
+            </option>
           </select>
         </div>
+        
 
         <div class="actions-buttons">
             <button type="button" class="btn btn-primary" (click)="navegarTab('siguiente')">
