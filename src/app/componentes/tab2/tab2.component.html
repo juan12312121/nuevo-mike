@@ -1,0 +1,67 @@
+<div id="dias" class="tab-content" *ngIf="currentTab === 'dias'">
+
+  <div class="form-group">
+    <label>Selecciona los días de clase:</label>
+    <div class="days-selection">
+      <label class="day-checkbox" *ngFor="let dia of diasSemana">
+        <input
+          #chk
+          type="checkbox"
+          [value]="dia"
+          [checked]="diasSeleccionados.includes(dia)"
+          (change)="onCheckboxChange(dia, chk.checked)"
+        />
+        {{ dia }}
+      </label>
+    </div>
+  </div>
+  
+  <!-- Resumen dinámico de lo configurado en Tab 1 -->
+  <div class="horario-resumen">
+    <h4>Resumen de la configuración</h4>
+
+    <div class="resumen-item">
+      <span><strong>Turno:</strong></span>
+      <span>{{ resumen.turno }}</span>
+    </div>
+    <div class="resumen-item">
+      <span><strong>Horario:</strong></span>
+      <span>{{ resumen.horario }}</span>
+    </div>
+    <div class="resumen-item">
+      <span><strong>Tipo de duración:</strong></span>
+      <span>{{ resumen.tipoDuracion }}</span>
+    </div>
+    <div class="resumen-item">
+      <span><strong>Duración de clases:</strong></span>
+      <span>{{ resumen.duracionClases }} minutos</span>
+    </div>
+    <div class="resumen-item">
+      <span><strong>Grupo:</strong></span>
+      <span>{{ resumen.grupo }}</span>
+    </div>
+    <div class="resumen-item">
+      <span><strong>Aula:</strong></span>
+      <span>{{ resumen.aula }}</span>
+    </div>
+
+    <h4>Días seleccionados:</h4>
+    <div class="resumen-dias">
+      <!-- Ahora usamos diasSeleccionados en lugar de resumen.dias -->
+      <span class="resumen-dia" *ngFor="let d of diasSeleccionados">
+        {{ d }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="actions-buttons">
+    <button type="button" class="btn btn-secondary" (click)="navegarTab('anterior')">
+      Anterior
+    </button>
+    <button type="button" class="btn btn-primary" (click)="navegarTab('siguiente')">
+      Siguiente
+    </button>
+  </div>
+
+</div>

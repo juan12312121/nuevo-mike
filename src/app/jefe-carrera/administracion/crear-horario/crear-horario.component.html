@@ -8,767 +8,198 @@
 
     <!-- Tabs de navegación -->
     <div class="tabs">
-        <button class="tab-btn" [class.active]="currentTab === 'formato'" (click)="selectTab('formato')">
-          1. Formato del Horario
-        </button>
-        <button class="tab-btn" [class.active]="currentTab === 'dias'" (click)="selectTab('dias')">
-          2. Días Escolares
-        </button>
-        <button class="tab-btn" [class.active]="currentTab === 'diseno'" (click)="selectTab('diseno')">
-          3. Diseño del Horario
-        </button>
-      </div>
+      <button class="tab-btn" [class.active]="currentTab === 'formato'" (click)="selectTab('formato')">
+        1. Formato del Horario
+      </button>
+      <button class="tab-btn" [class.active]="currentTab === 'dias'" (click)="selectTab('dias')">
+        2. Días Escolares
+      </button>
+      <button class="tab-btn" [class.active]="currentTab === 'diseno'" (click)="selectTab('diseno')">
+        3. Diseño del Horario
+      </button>
+    </div>
 
-    <!-- Contenido de los tabs -->
     <!-- Tab 1: Formato del Horario -->
-    <div id="formato" class="tab-content" *ngIf="currentTab === 'formato'">
+    <div *ngIf="currentTab === 'formato'" class="tab-content" id="formato">
+      <div class="two-column-layout">
 
-      <form id="horario-form">
-        <input
-          type="hidden"
-          id="asignacion_id"
-          name="asignacion_id"
-          value="1"
-        />
+        <!-- Left Column: Controles -->
+        <div class="left-column">
+          <div class="card">
+            <h3 class="card-title">Configuración del Horario</h3>
 
-        <div class="form-group">
-          <label>Selecciona el turno:</label>
-          <div class="radio-group">
-            <div class="radio-option">
-              <input
-                type="radio"
-                id="turno-matutino"
-                name="turno"
-                value="Matutino"
-                checked
-              />
-              <label for="turno-matutino">Matutino</label>
-            </div>
-            <div class="radio-option">
-              <input
-                type="radio"
-                id="turno-vespertino"
-                name="turno"
-                value="Vespertino"
-              />
-              <label for="turno-vespertino">Vespertino</label>
-            </div>
-            <div class="radio-option">
-              <input
-                type="radio"
-                id="turno-nocturno"
-                name="turno"
-                value="Nocturno"
-              />
-              <label for="turno-nocturno">Nocturno</label>
-            </div>
-            <div class="radio-option">
-              <input
-                type="radio"
-                id="turno-personalizado"
-                name="turno"
-                value="Personalizado"
-              />
-              <label for="turno-personalizado">Personalizado</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Horario predeterminado según turno -->
-        <div class="horario-predeterminado">
-          <h4>
-            Horario predeterminado para el turno:
-            <span id="turno-seleccionado">Matutino</span>
-          </h4>
-          <div class="daypart-explanation">
-            <h4>Información del turno</h4>
-            <div id="turno-info">
-              <p><strong>Matutino:</strong> 8:00 AM a 14:00 PM</p>
-              <p><strong>Clases:</strong> 6 periodos de 60 minutos</p>
-            </div>
-          </div>
-
-          <div class="tipo-duracion">
-            <label>Tipo de duración de clases:</label>
-            <div class="duracion-options">
-              <label class="duracion-option">
-                <input
-                  type="radio"
-                  name="tipo_duracion"
-                  value="Estandar"
-                  checked
-                />
-                Estándar (60 minutos)
-              </label>
-              <label class="duracion-option">
-                <input
-                  type="radio"
-                  name="tipo_duracion"
-                  value="Personalizada"
-                />
-                Personalizada
-              </label>
-            </div>
-          </div>
-
-          <!-- Opciones para duración personalizada -->
-          <div class="duracion-personalizada" style="display: none">
+            <!-- Selección de turno -->
             <div class="form-group">
-              <label for="duracion_clase"
-                >Duración estándar de cada clase (minutos):</label
-              >
-              <div class="time-inputs">
-                <input
-                  type="number"
-                  id="duracion_clase"
-                  name="duracion_clase"
-                  min="30"
-                  max="120"
-                  value="60"
-                />
-                <span class="tooltip">
-                  <span class="info-icon">?</span>
-                  <span class="tooltiptext"
-                    >Ingrese la duración en minutos de cada periodo de
-                    clase</span
-                  >
-                </span>
+              <label>Selecciona el turno:</label>
+              <div class="radio-group">
+                <div *ngFor="let turno of turnos" class="radio-option">
+                  <input
+                    type="radio"
+                    [id]="'turno-' + turno"
+                    name="turno"
+                    [value]="turno"
+                    [(ngModel)]="selectedTurno"
+                    (ngModelChange)="onTurnoChange()"
+                  />
+                  <label [for]="'turno-' + turno">{{ turno }}</label>
+                </div>
               </div>
             </div>
+
+               <!-- Información del turno estándar -->
+               <div
+               *ngIf="selectedTurno !== 'Personalizado' && getInfoTurno() as info"
+               class="info-turno"
+             >
+               <h4 class="info-titulo">Información del turno</h4>
+               <div class="info-item">
+                 <i class="fa-solid fa-clock info-icono"></i>
+                 <span><strong>Horario:</strong> {{ info.horario }}</span>
+               </div>
+               <div class="info-item">
+                 <i class="fa-solid fa-book-open info-icono"></i>
+                 <span><strong>Descripción:</strong> {{ info.descripcion }}</span>
+               </div>
+             </div>
+
+<br>
+
+            <!-- Clases por día -->
             <div class="form-group">
-              <label for="tiempo_descanso"
-                >Tiempo de descanso entre clases (minutos):</label
-              >
-              <div class="time-inputs">
+              <label for="clasesPorDia">Clases por día (1–6):</label>
+              <input
+                type="number"
+                id="clasesPorDia"
+                name="clasesPorDia"
+                class="form-control"
+                min="1"
+                max="6"
+                [(ngModel)]="clasesPorDia"
+                (ngModelChange)="onClasesPorDiaChange()"
+              />
+            </div>
+
+            <!-- Rango y duración personalizado -->
+            <ng-container *ngIf="selectedTurno === 'Personalizado'">
+              <div class="form-group">
+                <label>Rango personalizado:</label>
+                <div class="time-group">
+                  <input
+                    type="time"
+                    class="form-control"
+                    name="horaInicio"
+                    [(ngModel)]="horaInicio"
+                  />
+                  <span>a</span>
+                  <input
+                    type="time"
+                    class="form-control"
+                    name="horaFin"
+                    [(ngModel)]="horaFin"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="minutosPorClase">Duración cada clase (50–60 min):</label>
                 <input
                   type="number"
-                  id="tiempo_descanso"
-                  name="tiempo_descanso"
-                  min="0"
-                  max="30"
-                  value="10"
+                  id="minutosPorClase"
+                  name="minutosPorClase"
+                  class="form-control"
+                  min="50"
+                  max="60"
+                  step="5"
+                  [(ngModel)]="minutosPorClase"
                 />
-                <span class="tooltip">
-                  <span class="info-icon">?</span>
-                  <span class="tooltiptext"
-                    >Ingrese los minutos de descanso entre cada periodo</span
-                  >
-                </span>
               </div>
+              <div class="form-group">
+                <button class="btn btn-secondary" (click)="generateCustomSchedule()">
+                  Generar Horario
+                </button>
+              </div>
+            </ng-container>
+
+            <!-- Selección de grupo -->
+            <div class="form-group">
+              <label for="grupo_id">Selecciona el grupo:</label>
+              <select
+                id="grupo_id"
+                name="grupoId"
+                class="form-control"
+                [(ngModel)]="grupoSeleccionado"
+              >
+                <option value="" disabled>Selecciona un grupo</option>
+                <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                  {{ grupo.grupo_nombre }} • {{ grupo.semestre }}
+                </option>
+              </select>
             </div>
-          </div>
-        </div>
 
-        <!-- Opciones para horario personalizado -->
-        <div class="horario-personalizado" style="display: none">
-          <div class="form-group">
-            <label>Define las horas del horario:</label>
-            <div class="time-inputs">
-              <input
-                type="time"
-                id="hora_inicio"
-                name="hora_inicio"
-                value="08:00"
-              />
-              <span>a</span>
-              <input type="time" id="hora_fin" name="hora_fin" value="09:00" />
-              <span class="add-hora-btn">Agregar</span>
+            <div class="form-group">
+              <label for="aula_id">Aula Principal:</label>
+              <select
+                id="aula_id"
+                name="aulaId"
+                class="form-control"
+                [(ngModel)]="aulaSeleccionada"
+              >
+                <option value="" disabled>Selecciona un aula</option>
+                <option *ngFor="let aula of aulas" [value]="aula.id">
+                  {{ aula.nombre }}
+                </option>
+              </select>
             </div>
-            <div class="horas-lista">
-              <!-- Aquí se agregarán dinámicamente las horas -->
-            </div>
-          </div>
 
-          <!-- Vista previa del horario personalizado -->
-          <div class="horario-vista-previa">
-            <h4>Vista previa del horario personalizado</h4>
-            <table class="horario-vista-previa-tabla">
-              <thead>
-                <tr>
-                  <th>Periodo</th>
-                  <th>Hora de inicio</th>
-                  <th>Hora de fin</th>
-                  <th>Duración</th>
-                </tr>
-              </thead>
-              <tbody id="horario-vista-previa-body">
-                <!-- Las horas personalizadas aparecerán aquí -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="grupo_id">Grupo:</label>
-          <select
-            id="grupo_id"
-            name="grupo_id"
-            class="form-control"
-            [(ngModel)]="selectedGrupoId"
-            name="selectedGrupoId"
-          >
-            <option [value]="null" disabled>Selecciona un grupo</option>
-            <option
-              *ngFor="let g of grupos"
-              [value]="g.id"
-            >
-              {{ g.grupo_nombre }} – {{ g.carrera_nombre }}
-              
-            </option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="aula_id">Aula Principal:</label>
-          <select
-            id="aula_id"
-            name="aula_id"
-            class="form-control"
-            [(ngModel)]="selectedAulaId"
-            name="selectedAulaId"
-          >
-            <option [value]="null" disabled>Selecciona un aula</option>
-            <option
-              *ngFor="let a of aulas"
-              [value]="a.id"
-            >
-              {{ a.nombre }}
-            </option>
-          </select>
-        </div>
-        
-
-        <div class="actions-buttons">
-            <button type="button" class="btn btn-primary" (click)="navegarTab('siguiente')">
-              Siguiente
-            </button>
-          </div>
-      </form>
-    </div>
-
-    <!-- Tab 2: Días Escolares -->
-    <div id="dias" class="tab-content" *ngIf="currentTab === 'dias'">
-
-      <div class="form-group">
-        <label>Selecciona los días de clase:</label>
-        <div class="days-selection">
-          <label class="day-checkbox">
-            <input type="checkbox" name="dia_semana[]" value="Lunes" checked />
-            Lunes
-          </label>
-          <label class="day-checkbox">
-            <input type="checkbox" name="dia_semana[]" value="Martes" checked />
-            Martes
-          </label>
-          <label class="day-checkbox">
-            <input
-              type="checkbox"
-              name="dia_semana[]"
-              value="Miércoles"
-              checked
-            />
-            Miércoles
-          </label>
-          <label class="day-checkbox">
-            <input type="checkbox" name="dia_semana[]" value="Jueves" checked />
-            Jueves
-          </label>
-          <label class="day-checkbox">
-            <input
-              type="checkbox"
-              name="dia_semana[]"
-              value="Viernes"
-              checked
-            />
-            Viernes
-          </label>
-          <label class="day-checkbox">
-            <input type="checkbox" name="dia_semana[]" value="Sábado" />
-            Sábado
-          </label>
-        </div>
-      </div>
-
-      <!-- Resumen del horario configurado -->
-      <div class="horario-resumen">
-        <h4>Resumen de la configuración</h4>
-        <div class="resumen-item">
-          <span><strong>Turno:</strong></span>
-          <span id="resumen-turno">Matutino</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Horario:</strong></span>
-          <span id="resumen-horario">8:00 AM - 14:00 PM</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Tipo de duración:</strong></span>
-          <span id="resumen-tipo-duracion">Estandar</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Duración de clases:</strong></span>
-          <span id="resumen-duracion">60 minutos</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Tiempo de descanso:</strong></span>
-          <span id="resumen-descanso">No aplicable</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Grupo:</strong></span>
-          <span id="resumen-grupo">No seleccionado</span>
-        </div>
-        <div class="resumen-item">
-          <span><strong>Aula:</strong></span>
-          <span id="resumen-aula">No seleccionada</span>
-        </div>
-
-        <h4>Días seleccionados:</h4>
-        <div class="resumen-dias" id="resumen-dias">
-          <span class="resumen-dia">Lunes</span>
-          <span class="resumen-dia">Martes</span>
-          <span class="resumen-dia">Miércoles</span>
-          <span class="resumen-dia">Jueves</span>
-          <span class="resumen-dia">Viernes</span>
-        </div>
-      </div>
-
-      <div class="actions-buttons">
-        <button type="button" class="btn btn-secondary" (click)="navegarTab('anterior')">
-          Anterior
-        </button>
-        <button type="button" class="btn btn-primary" (click)="navegarTab('siguiente')">
-          Siguiente
-        </button>
-      </div>
       
-    </div>
-
-    <!-- Tab 3: Diseño del Horario -->
-    <div id="diseno" class="tab-content" *ngIf="currentTab === 'diseno'">
-
-
-      <div class="horario-configuracion">
-        <!-- Lista de profesores con materias -->
-        <div class="profesores-container">
-          <h3>Profesores y Materias</h3>
-          <p>Arrastre una materia al horario para asignarla</p>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="1"
-            data-materia="Matemáticas"
-          >
-            <div class="profesor-nombre">Prof. García Martínez</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Matemáticas</span>
-            </div>
-          </div>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="2"
-            data-materia="Español"
-          >
-            <div class="profesor-nombre">Prof. Rodríguez López</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Español</span>
-            </div>
-          </div>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="3"
-            data-materia="Ciencias"
-          >
-            <div class="profesor-nombre">Prof. Sánchez Torres</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Ciencias</span>
-            </div>
-          </div>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="4"
-            data-materia="Historia"
-          >
-            <div class="profesor-nombre">Prof. Hernández Gómez</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Historia</span>
-            </div>
-          </div>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="5"
-            data-materia="Inglés"
-          >
-            <div class="profesor-nombre">Prof. Wilson Smith</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Inglés</span>
-            </div>
-          </div>
-
-          <div
-            class="profesor-item"
-            draggable="true"
-            data-id="6"
-            data-materia="Educación Física"
-          >
-            <div class="profesor-nombre">Prof. Torres Vázquez</div>
-            <div class="profesor-materias">
-              <span class="materia-tag">Educación Física</span>
-            </div>
           </div>
         </div>
 
-        <!-- Horario en blanco para configurar -->
-        <div class="horario-preview">
-          <h3>
-            Diseño del Horario - <span id="grupo-seleccionado">1° A</span> -
-            <span id="aula-seleccionada">Aula 101</span>
-          </h3>
+        <!-- Right Column: Vista Previa -->
+        <div class="right-column">
+          <div class="card">
+            <h3 class="card-title">Vista Previa del Horario</h3>
+            <div class="horario-vista-previa">
+              <table class="horario-tabla">
+                <thead>
+                  <tr>
+                    <th>Periodo</th>
+                    <th>Hora de inicio</th>
+                    <th>Hora de fin</th>
+                    <th>Duración (min)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let h of horasGeneradas; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ h.horaInicio }}</td>
+                    <td>{{ h.horaFin }}</td>
+                    <td>{{ h.duracion }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="actions-buttons">
+            <button class="btn btn-primary" (click)="nextTab()">Siguiente</button>
 
-          <table class="horario-table" id="horario-editable">
-            <thead>
-              <tr>
-                <th>Hora</th>
-                <th>Lunes</th>
-                <th>Martes</th>
-                <th>Miércoles</th>
-                <th>Jueves</th>
-                <th>Viernes</th>
-                <th>Sábado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Horas predefinidas para turno matutino -->
-              <tr>
-                <td class="hora-column">8:00 - 9:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="08:00"
-                    data-hora-fin="09:00"
-                  ></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="hora-column">9:00 - 10:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="09:00"
-                    data-hora-fin="10:00"
-                  ></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="hora-column">10:00 - 11:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="10:00"
-                    data-hora-fin="11:00"
-                  ></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="hora-column">11:00 - 12:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="11:00"
-                    data-hora-fin="12:00"
-                  ></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="hora-column">12:00 - 13:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="12:00"
-                    data-hora-fin="13:00"
-                  ></div>
-                </td>
-              </tr>
-              <tr>
-                <td class="hora-column">13:00 - 14:00</td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Lunes"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Martes"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Miércoles"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Jueves"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Viernes"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-                <td>
-                  <div
-                    class="celda-horario"
-                    data-dia="Sábado"
-                    data-hora="13:00"
-                    data-hora-fin="14:00"
-                  ></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          </div>
         </div>
       </div>
-
-      <div class="actions-buttons">
-        <button type="button" class="btn btn-secondary" (click)="navegarTab('anterior')">
-          Anterior
-        </button>
-        <button type="button" class="btn btn-success" id="guardar-horario">
-          Guardar Horario
-        </button>
-      </div>
     </div>
-  </div>
+
+   <!-- Sólo muestro Tab2 cuando diasSemana ya está definido -->
+<app-tab2
+*ngIf="diasSemana?.length"
+[resumen]="resumen"
+[currentTab]="currentTab"
+[diasSeleccionados]="diasSeleccionados"
+(diasSeleccionadosChange)="onDiasSeleccionadosChange($event)"
+[diasSemana]="diasSemana"
+(tabChange)="selectTab($event)"
+></app-tab2>
 
   
+
+    <app-tab3 [currentTab]="currentTab" (tabChange)="selectTab($event)"></app-tab3>
+  </div>
 </div>
-
-
