@@ -7,14 +7,12 @@
     </div>
     <div class="sidebar-content">
         <div class="sidebar-section">
-            
             <div class="sidebar-menu">
                 <a href="#" class="active" data-view="horario-view"><i class="fas fa-calendar-alt"></i> Horario</a>
                 <a href="#" data-view="asistencias-view"><i class="fas fa-clipboard-check"></i> Asistencias <span class="badge" id="asistencias-count">0</span></a>
                 <a href="#" data-view="temas-view"><i class="fas fa-book"></i> Temas Registrados</a>
             </div>
         </div>
-     
     </div>
     <div class="sidebar-footer">
         <div class="user-info">
@@ -26,5 +24,7 @@
                 <div class="user-role">Jefe de Grupo</div>
             </div>
         </div>
+        <!-- Cerrar sesión -->
+        <button (click)="cerrarSesion()" class="cerrar-sesion-btn">Cerrar sesión</button>
     </div>
 </aside>

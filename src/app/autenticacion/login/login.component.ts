@@ -34,51 +34,28 @@ export class LoginComponent {
   
     this.usuariosService.login(this.loginForm.value).subscribe({
       next: ({ token, usuario }) => {
-        console.log('Usuario recibido:', usuario);  // Verifica la respuesta
+        console.log('Usuario recibido:', usuario);
   
         if (!usuario || !usuario.rol_id) {
           this.errorMessage = 'La respuesta del servidor no es válida.';
           return;
         }
   
-        // Mapea el rol_id a un rol
-        let rol: string;
+        // Redirección según el rol_id
         switch (usuario.rol_id) {
           case 5:
-            rol = 'administrador';
-            break;
-          case 4:
-            rol = 'jefe de carrera';
-            break;
-          case 3:
-            rol = 'jefe de grupo';
-            break;
-          case 2:
-            rol = 'checador';
-            break;
-          case 1:
-            rol = 'profesor';
-            break;
-          default:
-            rol = 'desconocido';
-            break;
-        }
-  
-        // Redirección según el rol
-        switch (rol.toLowerCase()) {
-          case 'administrador':
             this.router.navigate(['/administrador']);
             break;
-          case 'jefe de carrera':
+          case 4:
             this.router.navigate(['/jefe-carrera']);
             break;
-          case 'jefe de grupo':
-            this.router.navigate(['/grupos']);
+          case 3:
+            this.router.navigate(['/jefe-grupo']); // Asegúrate que esta ruta existe
             break;
-          case 'checador':
+          case 2:
             this.router.navigate(['/registro-asistencia']);
             break;
-          case 'profesor':
+          case 1:
             this.router.navigate(['/profes']);
             break;
           default:
@@ -92,5 +69,6 @@ export class LoginComponent {
       }
     });
   }
+  
   
 }

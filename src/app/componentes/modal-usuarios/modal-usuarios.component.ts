@@ -1,7 +1,9 @@
-// modal-usuarios.component.ts
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  Component, EventEmitter, Input, OnChanges,
+  OnInit, Output, SimpleChanges
+} from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 import { CarrerasService } from '../../core/carreras/carreras.service';
@@ -44,12 +46,26 @@ export class ModalUsuariosComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if ((changes['visible']?.currentValue === true) || changes['tipo']) {
-      if (this.tipo === 'jefe' && this.visible) this.obtenerGrupos();
-      if (this.usuarioId) this.obtenerUsuarioPorId(this.usuarioId);
+    if (changes['visible']?.currentValue === true) {
+      this.usuario = {}; // Reinicia usuario para evitar valores previos
+      this.obtenerCarreras();
+  
+      if (this.tipo === 'jefe') {
+        this.obtenerGrupos();
+        this.usuario.grupo_id = ''; // Evita que sea null
+      }
+  
+      if (this.usuarioId) {
+        this.obtenerUsuarioPorId(this.usuarioId);
+      }
+    }
+  
+    if (changes['tipo']?.currentValue === 'jefe' && this.visible) {
+      this.obtenerGrupos();
+      this.usuario.grupo_id = '';
     }
   }
-
+  
   private obtenerCarreras() {
     this.loadingCarreras = true;
     this.errorCarreras = null;
@@ -88,19 +104,38 @@ export class ModalUsuariosComponent implements OnInit, OnChanges {
 
   private obtenerUsuarioPorId(id: number) {
     this.usuariosService.obtenerUsuarioPorId(id).subscribe({
-      next: res => this.usuario = res.usuario,
+      next: res => {
+        this.usuario = res.usuario;
+
+        // Establecer tipo si no viene desde el padre
+        if (!this.tipo && this.usuario.rol_id) {
+          this.tipo = this.usuario.rol_id === 3 ? 'jefe' : 'checador';
+        }
+
+        // Si es jefe, carga los grupos
+        if (this.tipo === 'jefe') {
+          this.obtenerGrupos();
+        }
+      },
       error: (err: HttpErrorResponse) => console.error(err)
     });
   }
 
   onSubmit(form: NgForm) {
     if (form.invalid) return;
-    const payload = {
+  
+    // Construye el payload base
+    const payload: any = {
       ...form.value,
       rol_id: this.tipo === 'checador' ? 2 : 3,
-      grupo_id: this.tipo === 'jefe' ? form.value.grupo_id : null
+      // Si es jefe, convierte el grupo_id de string a number; si no, lo deja null
+      grupo_id: this.tipo === 'jefe'
+        ? Number(form.value.grupo_id)
+        : null
     };
-
+  
+    console.log('Payload final:', payload);
+  
     if (this.usuarioId) {
       this.usuariosService.actualizarUsuario(this.usuarioId, payload)
         .subscribe({
@@ -121,6 +156,7 @@ export class ModalUsuariosComponent implements OnInit, OnChanges {
         });
     }
   }
+  
 
   closeModal() {
     this.modalClose.emit();

@@ -41,9 +41,19 @@ export class UsuariosService {
 
   logout(): void {
     console.log('Cerrando sesión y eliminando token y usuario de localStorage');
+    if (localStorage.getItem('token')) {
+      console.log('Token encontrado:', localStorage.getItem('token'));
+    }
+    if (localStorage.getItem('usuario')) {
+      console.log('Usuario encontrado:', localStorage.getItem('usuario'));
+    }
+    
+    // Eliminar los datos
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
+    console.log('Sesión cerrada');
   }
+  
 
   // Nueva función para obtener jefes de carrera (rol_id = 4)
   obtenerJefesDeCarrera(): Observable<any> {
@@ -197,29 +207,37 @@ export class UsuariosService {
   }
   
 
-  registrarChecadorYJefe(usuario: { nombre: string; correo: string; contrasena: string; carrera_id: number; rol_id: number }): Observable<any> {
+  registrarChecadorYJefe(usuario: { 
+    nombre: string; 
+    correo: string; 
+    contrasena: string; 
+    carrera_id: number; 
+    rol_id: number; 
+    grupo_id?: number; // ← añade este campo opcional
+  }): Observable<any> {
     console.log('Registrando Jefe de Carrera o Checador:', usuario);
+  
     const token = this.getToken();
     if (!token) {
       console.warn('No se encontró token en localStorage');
     }
-
+  
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-
-    return this.http.post(`${this.baseUrl}/crear-checador-jefe`, usuario, { headers })
-      .pipe(
-        tap({
-          next: (res) => {
-            console.log('Respuesta de la solicitud de registro de Jefe de Carrera o Checador:', res);
-          },
-          error: (err) => {
-            console.error('Error al registrar el Jefe de Carrera o Checador:', err);
-          }
-        })
-      );
+  
+    return this.http.post(`${this.baseUrl}/crear-checador-jefe`, usuario, { headers }).pipe(
+      tap({
+        next: (res) => {
+          console.log('Respuesta del backend:', res);
+        },
+        error: (err) => {
+          console.error('Error en el registro:', err);
+        }
+      })
+    );
   }
+  
 
   registrarProfesor(usuario: { nombre: string; correo: string; contrasena: string }): Observable<any> {
     console.log('Registrando Profesor:', usuario);
@@ -245,6 +263,8 @@ export class UsuariosService {
         })
       );
   }
+
+
 
 
   listarProfesores(): Observable<{ profesores: any[] }> {

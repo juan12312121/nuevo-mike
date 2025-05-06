@@ -180,20 +180,21 @@ selectTab(tab: TabKey) {
   if (tab === 'dias') {
     const info = this.getInfoTurno();
     if (info && info.horario) {
-      // Extraemos horas
       const [hi, hf] = info.horario.split(' a ');
-      // Reconstruimos el resumen
       this.resumen = {
         turno:          this.selectedTurno  || '',
         horario:        `${hi} - ${hf}`,
         tipoDuracion:   this.selectedTurno === 'Personalizado' ? 'Personalizada' : 'Estandar',
         duracionClases: this.minutosPorClase,
-        grupo:          this.grupos.find(g => g.id === +this.grupoSeleccionado!)?.grupo_nombre || 'No seleccionado',
-        aula:           this.aulas.find(a => a.id === +this.aulaSeleccionada!)?.nombre      || 'No seleccionada',
+        grupo:          this.grupos.find(g => g.id === this.grupoSeleccionado!)?.grupo_nombre || 'No seleccionado',
+        grupoId:        this.grupoSeleccionado,            // ← aquí
+        aula:           this.aulas.find(a => a.id === +this.aulaSeleccionada!)?.nombre || 'No seleccionada',
+        aulaId:         +this.aulaSeleccionada!,           // ← y aquí
         dias:           this.diasSeleccionados
       };
     }
   }
+  
 
   this.currentTab = tab;
 }
@@ -281,7 +282,7 @@ nextTab() {
 
   getInfoTurno() {
     switch (this.selectedTurno) {
-      case 'Matutino':   return { horario: '08:00 a 13:00', descripcion: 'Clases en la mañana.' };
+      case 'Matutino':   return { horario: '07:00 a 13:00', descripcion: 'Clases en la mañana.' };
       case 'Vespertino': return { horario: '12:00 a 18:00', descripcion: 'Clases en la tarde.' };
       case 'Nocturno':   return { horario: '17:00 a 22:00', descripcion: 'Clases en la noche.' };
       default:           return null;
@@ -315,7 +316,9 @@ nextTab() {
     tipoDuracion: string;
     duracionClases: number;
     grupo: string;
+    grupoId: number | null;    // ← agregado
     aula: string;
+    aulaId: number | null;     // ← agregado
     dias: string[];
   } = {
     turno: '',
@@ -323,9 +326,12 @@ nextTab() {
     tipoDuracion: '',
     duracionClases: 0,
     grupo: 'No seleccionado',
+    grupoId: null,
     aula: 'No seleccionada',
+    aulaId: null,
     dias: []
   };
+  
 
   onDiasSeleccionadosChange(dias: string[]) {
     this.diasSeleccionados = dias;

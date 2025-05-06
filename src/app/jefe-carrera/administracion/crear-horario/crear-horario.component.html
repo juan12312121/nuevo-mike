@@ -130,7 +130,7 @@
               >
                 <option value="" disabled>Selecciona un grupo</option>
                 <option *ngFor="let grupo of grupos" [value]="grupo.id">
-                  {{ grupo.grupo_nombre }} • {{ grupo.semestre }}
+                  {{ grupo.id }} — {{ grupo.grupo_nombre }} • {{ grupo.semestre }}
                 </option>
               </select>
             </div>
@@ -145,7 +145,7 @@
               >
                 <option value="" disabled>Selecciona un aula</option>
                 <option *ngFor="let aula of aulas" [value]="aula.id">
-                  {{ aula.nombre }}
+                  {{ aula.id }} — {{ aula.nombre }}
                 </option>
               </select>
             </div>
@@ -200,6 +200,13 @@
 
   
 
-    <app-tab3 [currentTab]="currentTab" (tabChange)="selectTab($event)"></app-tab3>
+<app-tab3
+*ngIf="currentTab === 'diseno'"
+[resumen]="resumen"
+[diasSeleccionados]="diasSeleccionados"
+(tabChange)="selectTab($event)"
+[currentTab]="currentTab">
+</app-tab3>
+
   </div>
 </div>

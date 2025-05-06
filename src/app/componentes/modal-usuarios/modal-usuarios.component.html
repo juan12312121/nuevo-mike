@@ -1,4 +1,3 @@
-<!-- modal-usuarios.component.html -->
 <div>
   <!-- Overlay -->
   <div class="modal-overlay" [class.active]="visible" (click)="closeModal()"></div>
@@ -14,8 +13,8 @@
               : 'fas fa-user-tie'
           "></i>
         {{ tipo === 'checador'
-            ? 'Agregar Nuevo Checador'
-            : 'Agregar Nuevo Jefe de Grupo'
+            ? (usuarioId ? 'Editar Checador' : 'Agregar Nuevo Checador')
+            : (usuarioId ? 'Editar Jefe de Grupo' : 'Agregar Nuevo Jefe de Grupo')
         }}
       </h3>
       <button class="modal-close" (click)="closeModal()">
@@ -56,8 +55,8 @@
           <i class="fas fa-envelope input-icon"></i>
         </div>
 
-        <!-- Contraseña -->
-        <div class="form-group">
+        <!-- Contraseña (solo al crear) -->
+        <div *ngIf="!usuarioId" class="form-group">
           <label for="contrasena">Contraseña</label>
           <input
             id="contrasena"
@@ -67,7 +66,7 @@
             placeholder="Mínimo 6 caracteres"
             required
             minlength="6"
-            ngModel
+            [(ngModel)]="usuario.contrasena"
           />
           <i class="fas fa-lock input-icon"></i>
         </div>
@@ -81,36 +80,39 @@
             class="form-input"
             required
             [(ngModel)]="usuario.carrera_id"
-            *ngIf="!loadingCarreras && !errorCarreras"
           >
-            <option value="" disabled>Selecciona una carrera</option>
+            <option [ngValue]="null" disabled>Selecciona una carrera</option>
             <option
               *ngFor="let c of carreras"
-              [value]="c.carrera_id"
+              [ngValue]="c.carrera_id"
             >
               {{ c.carrera_id }} – {{ c.carrera_nombre }}
             </option>
           </select>
           <i class="fas fa-graduation-cap input-icon"></i>
+          <div *ngIf="errorCarreras" class="error">{{ errorCarreras }}</div>
         </div>
 
         <!-- Grupo (solo para Jefe de Grupo) -->
-        <div *ngIf="tipo === 'jefe'" class="form-group">
-          <label for="grupo">Grupo</label>
-          <select
-            id="grupo"
-            name="grupo_id"
-            class="form-input"
-            required
-            [(ngModel)]="usuario.grupo_id"
-          >
-            <option value="" disabled>Selecciona un grupo</option>
-            <option *ngFor="let g of grupos" [value]="g.id">
-              {{ g.id }} – {{ g.nombre }}
-            </option>
-          </select>
-          <i class="fas fa-users input-icon"></i>
-        </div>
+    <!-- Grupo (solo para Jefe de Grupo) -->
+<div *ngIf="tipo === 'jefe'" class="form-group">
+  <label for="grupo">Grupo</label>
+  <select
+    id="grupo"
+    name="grupo_id"
+    class="form-input"
+    required
+    [(ngModel)]="usuario.grupo_id"
+  >
+    <option value="" disabled selected>Selecciona un grupo</option>
+    <option *ngFor="let g of grupos" [value]="g.id">
+      {{ g.id }} – {{ g.nombre }}
+    </option>
+  </select>
+  <i class="fas fa-users input-icon"></i>
+  <div *ngIf="errorGrupos" class="error">{{ errorGrupos }}</div>
+</div>
+
 
         <!-- Footer -->
         <div class="modal-footer">
@@ -127,7 +129,10 @@
             [disabled]="form.invalid"
           >
             <i class="fas fa-save"></i>
-            {{ tipo === 'checador' ? 'Guardar Checador' : 'Guardar Jefe de Grupo' }}
+            {{ usuarioId
+                ? (tipo === 'checador' ? 'Actualizar Checador' : 'Actualizar Jefe')
+                : (tipo === 'checador' ? 'Guardar Checador' : 'Guardar Jefe')
+            }}
           </button>
         </div>
       </form>

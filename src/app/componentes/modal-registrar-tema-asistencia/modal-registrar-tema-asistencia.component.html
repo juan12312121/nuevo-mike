@@ -1,0 +1,85 @@
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal">
+    <!-- Header -->
+    <div class="modal-header">
+      <h2><i class="fas fa-clipboard-check"></i> Registro de Asistencia y Tema</h2>
+      <button class="close-btn" (click)="onCancel()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body">
+      <!-- Información Rápida -->
+      <div class="info-box">
+        <div class="info-item">
+          <div class="info-label"><i class="fas fa-book"></i> Materia:</div>
+          <div class="info-value">{{ materia }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label"><i class="fas fa-user"></i> Profesor:</div>
+          <div class="info-value">{{ profesor }}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label"><i class="fas fa-calendar"></i> Fecha:</div>
+          <div class="info-value">{{ fecha }}</div>
+        </div>
+      </div>
+
+      <!-- Sección de Asistencia -->
+      <div class="section asistencia-section">
+        <h3><i class="fas fa-user-check"></i> Asistencia</h3>
+        <label>Estatus de asistencia:</label>
+        <div class="status-options">
+          <div
+            class="status-option"
+            [class.selected]="asistio === 'Asistió'"
+            (click)="asistio = 'Asistió'"
+          >
+            <div class="status-icon status-present"><i class="fas fa-check-circle"></i></div>
+            <div class="status-label">Asistió</div>
+          </div>
+          <div
+            class="status-option"
+            [class.selected]="asistio === 'No Asistió'"
+            (click)="asistio = 'No Asistió'"
+          >
+            <div class="status-icon status-absent"><i class="fas fa-times-circle"></i></div>
+            <div class="status-label">No Asistió</div>
+          </div>
+         
+        </div>
+      </div>
+
+      <!-- Sección de Tema -->
+      <div class="section tema-section">
+        <h3><i class="fas fa-book-open"></i> Tema de clase</h3>
+        <div class="topic-container">
+          <textarea
+            id="topicTextarea"
+            class="topic-textarea"
+            [(ngModel)]="tema"
+            (ngModelChange)="updateCharCount()"
+            maxlength="500"
+            placeholder="Describe el tema visto en clase..."
+          ></textarea>
+          <div class="topic-footer">
+            <span class="char-count">{{ charCount }}/500</span>
+          </div>
+        </div>
+       
+        
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="onCancel()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button class="btn btn-primary" (click)="onSave()">
+        <i class="fas fa-save"></i> Guardar
+      </button>
+    </div>
+  </div>
+</div>

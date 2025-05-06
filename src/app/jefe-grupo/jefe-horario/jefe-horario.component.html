@@ -1,54 +1,94 @@
+<!-- jefe-horario.component.html -->
 <div class="body">
-    
-    <app-aside-jefe-grupo></app-aside-jefe-grupo>
+  <app-aside-jefe-grupo></app-aside-jefe-grupo>
+      
+  <div class="main-content">
+    <div class="header">
+      <h1><i class="fas fa-calendar-alt"></i> Horario del Grupo</h1>
+      <div class="actions-container">
+        <!-- acciones si las hay -->
+      </div>
+    </div>
+        
+    <div class="view-container active" id="horario-view">
+      <div class="aula-info">
+        <div class="aula-info-left">
+          <div class="aula-info-item">
+            <i class="fas fa-user"></i>
+            <span>Usuario: <strong>{{ nombreUsuario }}</strong></span>
+          </div>
+        </div>  
+      </div>
+        
+      <!-- Horario -->
+      <div class="horario-container" *ngIf="franjas.length > 0; else emptyState">
+        <table class="horario-table" id="horario-table">
+          <thead>
+            <tr>
+              <th class="hora-column"><i class="fas fa-clock"></i> Hora</th>
+              <th *ngFor="let dia of dias">
+                <i class="fas fa-calendar-day"></i> {{ dia }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hora of franjas">
+              <td class="hora-column">{{ hora }}</td>
+              <td *ngFor="let dia of dias">
+                <ng-container *ngIf="schedule[hora]?.[dia]; else vacio">
+                  <div class="materia bg-teoria">
+                    <!-- Span con el ID, casi invisible -->
+                    <span class="horario-id">{{ schedule[hora][dia].id }}</span>
 
-    <div class="main-content">
-        <div class="header">
-            <h1><i class="fas fa-calendar-alt"></i> Horario del Grupo</h1>
-            <div class="actions-container">
-                <button class="toggle-sidebar" id="mobile-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
+                    <div class="materia-nombre">
+                      <i class="fas fa-book"></i> {{ schedule[hora][dia].materia_nombre }}
+                    </div>
+                    <div class="materia-profesor">
+                      <i class="fas fa-user"></i> {{ schedule[hora][dia].profesor_nombre }}
+                    </div>
+                    <div class="class-actions">
+<!-- jefe-horario.component.html -->
+<button class="btn-open-modal" (click)="openModal(schedule[hora][dia])">
+  <i class="fas fa-user-check"></i> Asistencia
+</button>
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-template #vacio>
+                  <div class="vacio">—</div>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+        
+      <ng-template #emptyState>
+        <div class="empty-state">
+          <i class="fas fa-calendar-times"></i>
+          <h3>No hay horarios disponibles</h3>
+          <p>El grupo aún no tiene horarios asignados.</p>
         </div>
-
-        <div class="view-container active" id="horario-view">
-            <div class="aula-info">
-                <div class="aula-info-item">
-                    <i class="fas fa-users"></i>
-                    <span>Grupo: <strong>5°A Ingeniería Informática</strong></span>
-                </div>
-                <div class="aula-info-item">
-                    <i class="fas fa-user-tie"></i>
-                    <span>Jefe de Grupo: <strong>Carlos Méndez Fuentes</strong></span>
-                </div>
-            </div>
-            
-            <div class="horario-container">
-                <table class="horario-table" id="horario-table">
-                    <thead>
-                        <tr>
-                            <th><i class="fas fa-clock"></i> Hora</th>
-                            <th><i class="fas fa-calendar-day"></i> Lunes</th>
-                            <th><i class="fas fa-calendar-day"></i> Martes</th>
-                            <th><i class="fas fa-calendar-day"></i> Miércoles</th>
-                            <th><i class="fas fa-calendar-day"></i> Jueves</th>
-                            <th><i class="fas fa-calendar-day"></i> Viernes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Se llenará dinámicamente con JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="pagination">
-                <span class="page-nav" id="prev-page"><i class="fas fa-chevron-left"></i></span>
-                <div class="page-item active">1</div>
-                <div class="page-item">2</div>
-                <div class="page-item">3</div>
-                <span class="page-nav" id="next-page"><i class="fas fa-chevron-right"></i></span>
-            </div>
-        </div>
-</div>
+      </ng-template>
+        
+      <!-- Paginación -->
+      <div class="pagination">
+        <span class="page-nav disabled" id="prev-page"><i class="fas fa-chevron-left"></i></span>
+        <div class="page-item active">1</div>
+        <div class="page-item">2</div>
+        <div class="page-item">3</div>
+        <span class="page-nav" id="next-page"><i class="fas fa-chevron-right"></i></span>
+      </div>
+        
+    </div>
+  </div>
+  <app-modal-registrar-tema-asistencia
+      *ngIf="showModal"
+      [asignacionId]="modalData.asignacionId"
+      [materia]="modalData.materia"
+      [profesor]="modalData.profesor"
+      [fecha]="modalData.fecha"
+      (saved)="onSave($event)"
+      (cancel)="onCancel()"
+    ></app-modal-registrar-tema-asistencia>
 </div>
