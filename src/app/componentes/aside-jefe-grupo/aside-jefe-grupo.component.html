@@ -7,13 +7,20 @@
     </div>
     <div class="sidebar-content">
         <div class="sidebar-section">
-            <div class="sidebar-menu">
-                <a href="#" class="active" data-view="horario-view"><i class="fas fa-calendar-alt"></i> Horario</a>
-                <a href="#" data-view="asistencias-view"><i class="fas fa-clipboard-check"></i> Asistencias <span class="badge" id="asistencias-count">0</span></a>
-                <a href="#" data-view="temas-view"><i class="fas fa-book"></i> Temas Registrados</a>
-            </div>
+          <div class="sidebar-menu">
+            <a #menuLink (click)="navegar('jefe-grupo')" class="active">
+              <i class="fas fa-calendar-alt"></i> Horario
+            </a>
+            <a #menuLink (click)="navegar('mis-asistencias')">
+              <i class="fas fa-clipboard-check"></i> Asistencias
+              <span class="badge" id="asistencias-count">0</span>
+            </a>
+            <a #menuLink (click)="navegar('temas-vistos2')">
+              <i class="fas fa-book"></i> Temas Registrados
+            </a>
+          </div>
         </div>
-    </div>
+      </div>
     <div class="sidebar-footer">
         <div class="user-info">
             <div class="user-avatar">
@@ -24,7 +31,9 @@
                 <div class="user-role">Jefe de Grupo</div>
             </div>
         </div>
-        <!-- Cerrar sesión -->
-        <button (click)="cerrarSesion()" class="cerrar-sesion-btn">Cerrar sesión</button>
+        <!-- Botón de Cerrar sesión estilizado -->
+        <button (click)="cerrarSesion()" class="cerrar-sesion-btn">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
     </div>
 </aside>

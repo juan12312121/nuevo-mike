@@ -1,0 +1,51 @@
+<div class="dashboard-container">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <canvas #statusChart></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <canvas #registrationTypeChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <canvas #weekdayChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <canvas #bestTeachersChart></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <canvas #worstTeachersChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mensaje cuando no hay datos -->
+    <div class="no-data" *ngIf="!dataReady">
+      <i class="fa-solid fa-chart-simple"></i>
+      <p>No hay datos suficientes para mostrar gráficas</p>
+    </div>
+  </div>

@@ -13,15 +13,16 @@ import { ProfesoresComponent } from './jefe-carrera/administracion/profesores/pr
 import { UsuariosComponent } from './jefe-carrera/administracion/usuarios/usuarios.component';
 import { AulasComponent } from './jefe-carrera/aulas/aulas.component';
 import { PrincipalComponent } from './jefe-carrera/principal/principal.component';
-import { RegistroAsistenciaComponent } from './jefe-carrera/registro-asistencia/registro-asistencia.component';
+import { TemasVistosComponent } from './jefe-carrera/temas-vistos/temas-vistos.component';
+import { AsistenciaRegistradasComponent } from './jefe-grupo/asistencia-registradas/asistencia-registradas.component';
 import { JefeHorarioComponent } from './jefe-grupo/jefe-horario/jefe-horario.component';
+import { TemasRegistradosComponent } from './jefe-grupo/temas-registrados/temas-registrados.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent }, // <-- Ruta base
   { path: 'login', component: LoginComponent },
 
   { path: 'jefe-carrera', component: PrincipalComponent },
-  {path: 'registro-asistencia', component:RegistroAsistenciaComponent},
   {path: 'usuarios', component:UsuariosComponent},
   {path:'profes', component:ProfesoresComponent},
   {path:'materias',component:MateriasComponent},
@@ -30,11 +31,14 @@ export const routes: Routes = [
   {path:'aulas', component:AulasComponent},
   {path:'horarios',component:HorariosComponent},
   {path:'crear-horario',component:CrearHorarioComponent},
+  {path:'temas-vistos',component:TemasVistosComponent},
 
   {path:'administrador',component:PrincipalAdministradorComponent},
   {path:'escuelas',component:EscuelasComponent},
   {path:'facultades',component:FacultadesComponent},
   {path:'jefe-de-carrera',component:JefesDeCarreraComponent},
 
-  {path:'jefe-grupo',component:JefeHorarioComponent}
+  {path:'jefe-grupo',component:JefeHorarioComponent},
+  {path:'mis-asistencias',component:AsistenciaRegistradasComponent},
+  {path:'temas-vistos2',component:TemasRegistradosComponent}
 ];

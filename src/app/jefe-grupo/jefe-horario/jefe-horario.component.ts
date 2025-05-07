@@ -33,7 +33,16 @@ export class JefeHorarioComponent implements OnInit {
     this.nombreUsuario = u.nombre;
     this.carreraNombre = `Carrera ID ${u.carrera_id}`;
     this.loadHorarios();
+  
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('📦 Payload del token JWT:', payload);
+    } else {
+      console.warn('⚠️ No se encontró el token en localStorage');
+    }
   }
+  
 
   private loadHorarios(): void {
     this.horariosService.getHorariosPorUsuario(this.usuarioId)

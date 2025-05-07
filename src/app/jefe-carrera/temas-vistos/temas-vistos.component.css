@@ -1,0 +1,211 @@
+/* Usa los mismos estilos que has proporcionado en el componente de asistencia */
+.body {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9fafb;
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    color: #374151;
+    overflow-x: hidden;
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+  }
+  
+  .container {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .header {
+    background-color: #1f2937;
+    color: white;
+    padding: 24px;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h1 {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .header-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .btn:hover {
+    background-color: #1d4ed8;
+  }
+  
+  .panel {
+    background-color: white;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+  }
+  
+  .filters {
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .filter-control {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    outline: none;
+    transition: all 0.2s;
+    min-width: 140px;
+  }
+  
+  .search-box {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+  }
+  
+  .search-box input {
+    padding-left: 40px;
+    width: 100%;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 16px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  
+  thead {
+    background-color: #f9fafb;
+  }
+  
+  th {
+    padding: 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #4b5563;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  td {
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  
+  .status-badge {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .status-completo {
+    background-color: #10b981;
+    color: white;
+  }
+  
+  .status-en-progreso {
+    background-color: #f59e0b;
+    color: white;
+  }
+  
+  .status-no-iniciado {
+    background-color: #d1d5db;
+    color: white;
+  }
+  
+  .pagination {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pagination-info {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .pagination-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .page-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .page-btn.active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .page-btn:hover {
+    background-color: #e5e7eb;
+  }
+  
+  .page-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  

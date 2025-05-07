@@ -1,0 +1,93 @@
+<div class="body">
+    <!-- Componente aside existente -->
+    <app-aside-jefecarrera></app-aside-jefecarrera>
+    
+    <div class="main-content">
+      <div class="container">
+        <div class="header">
+          <h1>Temas Vistos</h1>
+          <div class="header-actions">
+            <!-- Aquí puedes agregar botones u otros controles si es necesario -->
+          </div>
+        </div>
+  
+        <div class="panel">
+        
+          
+          <div class="table-container">
+            <table #tablaExport id="temasVistosTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha</th>
+                  <th>Tema</th>
+                  <th>Profesor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tema of obtenerTemasPaginados()">
+                  <td>{{ tema.id }}</td>
+                  <td>{{ tema.fecha }}</td>
+                  <td>{{ tema.tema }}</td> <!-- Corregido a tema.tema -->
+                  <td>{{ tema.registrado_por_nombre }}</td>
+                  <td>
+                    <span
+                      class="status-badge"
+                      [ngClass]="{
+                        'status-completo': tema.estado === 'Completo',
+                        'status-en-progreso': tema.estado === 'En Progreso',
+                        'status-no-iniciado': tema.estado === 'No Iniciado'
+                      }"
+                    >
+                      <i
+                        class="fa-solid"
+                        [ngClass]="{
+                          'fa-check': tema.estado === 'Completo',
+                          'fa-clock': tema.estado === 'En Progreso',
+                          'fa-times': tema.estado === 'No Iniciado'
+                        }"
+                      ></i>
+                      {{ tema.estado || 'No Disponible' }} <!-- Aquí puede poner un valor por defecto -->
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div class="pagination">
+            <span class="pagination-info">
+              Página {{ paginaActual }} de {{ totalPaginas() }}
+            </span>
+            <div class="pagination-buttons">
+              <button
+                class="page-btn"
+                [disabled]="paginaActual === 1"
+                (click)="cambiarPagina(-1)"
+              >
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+              
+              <button
+                class="page-btn"
+                *ngFor="let page of [].constructor(totalPaginas()); let i = index"
+                [class.active]="paginaActual === i + 1"
+                (click)="paginaActual = i + 1"
+              >
+                {{ i + 1 }}
+              </button>
+              
+              <button
+                class="page-btn"
+                [disabled]="paginaActual === totalPaginas()"
+                (click)="cambiarPagina(1)"
+              >
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

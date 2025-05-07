@@ -1,1 +1,125 @@
-<p>asistencia-registradas works!</p>
+<div class="body">
+
+    <!-- Sidebar -->
+    <app-aside-jefe-grupo></app-aside-jefe-grupo>
+  
+    <div class="container">
+      <div class="main-content">
+  
+        <!-- Cabecera -->
+        <div class="header">
+          <h1>Mis Asistencias Registradas</h1>
+          <div class="header-actions">
+            
+          </div>
+        </div>
+  
+        <!-- Filtros -->
+        <div class="panel">
+          <div class="filters">
+            <div class="filter-group">
+              <div class="filter-item">
+                <select class="filter-control" [(ngModel)]="asistio" (change)="aplicarFiltros()">
+                  <option value="">Todos los estados</option>
+                  <option value="Asistió">Asistió</option>
+                  <option value="No Asistió">No asistió</option>
+                </select>
+              </div>
+              <div class="filter-item">
+                <input type="date" class="filter-control" [(ngModel)]="fechaInicio" (change)="aplicarFiltros()" />
+              </div>
+              <div class="filter-item">
+                <input type="date" class="filter-control" [(ngModel)]="fechaFin" (change)="aplicarFiltros()" />
+              </div>
+            </div>
+            <div class="search-box">
+              <i class="fa-solid fa-search search-icon"></i>
+              <input
+                type="text"
+                class="filter-control"
+                [(ngModel)]="searchTerm"
+                (input)="aplicarFiltros()"
+                placeholder="Buscar por materia..."
+              />
+            </div>
+          </div>
+  
+          <!-- Tabla -->
+          <div class="table-container">
+            <table id="misAsistenciasTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Día</th>
+                  <th>Fecha y Hora</th>
+                  <th>Materia</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let a of asistenciasPaginadas()">
+                  <td>{{ a.id }}</td>
+                  <td>{{ a.dia_semana }}</td>
+                  <td>{{ a.fecha }} {{ a.hora }}</td>
+                  <td>{{ a.materia_nombre }}</td>
+                  <td>
+                    <span 
+                      class="status-badge"
+                      [ngClass]="{
+                        'status-asistio': a.asistio === 'Asistió',
+                        'status-falta': a.asistio === 'No Asistió',
+                        'status-justificado': a.asistio === 'Justificado'
+                      }">
+                      <i class="fa-solid"
+                        [ngClass]="{
+                          'fa-check': a.asistio === 'Asistió',
+                          'fa-xmark': a.asistio === 'No Asistió',
+                          'fa-exclamation': a.asistio === 'Justificado'
+                        }"></i>
+                      {{ a.asistio }}
+                    </span>
+                  </td>
+                
+                </tr>
+              </tbody>
+            </table>
+          </div>
+  
+          <!-- Paginación -->
+          <div class="pagination">
+            <span class="pagination-info">
+              Mostrando {{ (paginaActual - 1) * registrosPorPagina + 1 }}
+              -
+              {{ Math.min(paginaActual * registrosPorPagina, asistenciasFiltradas.length) }}
+              de {{ asistenciasFiltradas.length }} registros
+            </span>
+            <div class="pagination-buttons">
+              <button
+                class="page-btn"
+                [disabled]="paginaActual === 1"
+                (click)="cambiarPagina(-1)">
+                <i class="fa-solid fa-chevron-left"></i>
+              </button>
+  
+              <button
+                class="page-btn"
+                *ngFor="let _ of [].constructor(totalPaginas()); let i = index"
+                [class.active]="paginaActual === i + 1"
+                (click)="paginaActual = i + 1">
+                {{ i + 1 }}
+              </button>
+  
+              <button
+                class="page-btn"
+                [disabled]="paginaActual === totalPaginas()"
+                (click)="cambiarPagina(1)">
+                <i class="fa-solid fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
