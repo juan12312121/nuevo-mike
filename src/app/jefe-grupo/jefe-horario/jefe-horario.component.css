@@ -30,6 +30,7 @@
 .header h1 i {
     margin-right: 14px;
     color: #3b82f6;
+    padding: 5px 5px  5px;
 }
 
 .actions-container {
@@ -504,6 +505,7 @@
     margin-left: 55px;
     padding: 8px 12px;
     font-size: 13px;
+    
     font-weight: 600;
     border: none;
     border-radius: 8px;

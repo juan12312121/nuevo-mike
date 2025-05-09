@@ -1,0 +1,37 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2><i class="fas fa-graduation-cap"></i> Jefe de Grupo</h2>
+        <button class="toggle-sidebar" id="toggle-sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+    <div class="sidebar-content">
+        <div class="sidebar-section">
+          <div class="sidebar-menu">
+            <a #menuLink (click)="navegar('checador')" class="active">
+              <i class="fas fa-calendar-alt"></i> Horario
+            </a>
+            <a #menuLink (click)="navegar('mis-asistencias3') " class="active">
+              <i class="fas fa-clipboard-check"></i> Asistencias
+              <span class="badge" id="asistencias-count">0</span>
+            </a>
+          
+          </div>
+        </div>
+      </div>
+    <div class="sidebar-footer">
+        <div class="user-info">
+            <div class="user-avatar">
+                CM
+            </div>
+            <div>
+                <div class="user-name">Carlos Méndez</div>
+                <div class="user-role">Jefe de Grupo</div>
+            </div>
+        </div>
+        <!-- Botón de Cerrar sesión estilizado -->
+        <button (click)="cerrarSesion()" class="cerrar-sesion-btn">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    </div>
+</aside>

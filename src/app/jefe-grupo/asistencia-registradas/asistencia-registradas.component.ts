@@ -28,7 +28,7 @@ export class AsistenciaRegistradasComponent implements OnInit {
 
   // Paginación
   paginaActual: number = 1;
-  registrosPorPagina: number = 5;
+  registrosPorPagina: number = 15;
 
   constructor(private asistenciaService: AsistenciaTemaService) {}
 

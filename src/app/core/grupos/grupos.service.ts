@@ -1,13 +1,22 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 
 export interface RawGrupo {
-  id: number;
+  id: number;               // ID interno de base de datos
+  grupo_id: number;         // ID real del grupo (por ejemplo, el que viene de la API)
   grupo_nombre: string;
   carrera_nombre: string;
   semestre: string;
+}
+
+
+export interface RawGrupoApi {
+  grupo_id:      number;
+  grupo_nombre:  string;
+  carrera_nombre:string;
+  grupo_semestre:string;
 }
 
 export interface Grupo {
@@ -69,4 +78,19 @@ export class GruposService {
   eliminarGrupo(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+// grupos.service.ts
+getGruposPorUsuario(usuarioId: number): Observable<RawGrupo[]> {
+  return this.http
+    .get<{ success: boolean; data: RawGrupo[] }>(`${this.apiUrl}/usuario/${usuarioId}`)
+    .pipe(
+      map(res => res.data),     // <-- aquí extraes únicamente el array
+      tap({
+        next: data => console.log('✅ getGruposPorUsuario datos:', data),
+        error: err  => console.error('❌ Error:', err)
+      })
+    );
+}
+
+
 }

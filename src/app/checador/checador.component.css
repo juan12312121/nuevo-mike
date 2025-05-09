@@ -1,0 +1,390 @@
+.body{
+    display: flex;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    padding: 30px;
+    margin-left: 300px;
+    width: 1600px;
+}
+
+.horario-titulo {
+    color: #1a4b8c;
+    margin-bottom: 20px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+   
+.horario-titulo h2 {
+    display: flex;
+    align-items: center;
+}
+
+.horario-titulo h2 i {
+    margin-right: 12px;
+    color: #3b82f6;
+}
+
+.horario-container {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    border: 1px solid #f1f5f9;
+}
+
+.horario-tabla {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.horario-tabla th, .horario-tabla td {
+    border: 1px solid #f1f5f9;
+    padding: 16px 12px;
+    text-align: center;
+}
+
+.horario-tabla th {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px;
+}
+
+.horario-tabla th i {
+    margin-right: 10px;
+}
+
+.horario-tabla tr:nth-child(even) td:not(.hora-column) {
+    background-color: #fafbff;
+}
+
+.hora-column {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #334155;
+    width: 130px;
+}
+
+.hora-column i {
+    margin-right: 10px;
+    color: #3b82f6;
+}
+
+.materia {
+    padding: 16px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #eff6ff;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.materia:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+.materia.bg-teoria {
+    background-color: #eff6ff;
+    border-top: 3px solid #3b82f6;
+}
+
+.materia.bg-practica {
+    background-color: #ecfdf5;
+    border-top: 3px solid #10b981;
+}
+
+.materia.bg-laboratorio {
+    background-color: #fff7ed;
+    border-top: 3px solid #f97316;
+}
+
+.materia.bg-seminario {
+    background-color: #f5f3ff;
+    border-top: 3px solid #8b5cf6;
+}
+
+.materia-nombre {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+}
+
+.materia-nombre i {
+    margin-right: 6px;
+    color: #3b82f6;
+}
+
+.materia-profesor {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.materia-profesor i {
+    margin-right: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.botones-asistencia {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-asistencia, .btn-no-asistencia {
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-asistencia {
+    background-color: #3b82f6;
+    color: white;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+}
+
+.btn-no-asistencia {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-asistencia:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
+}
+
+.btn-no-asistencia:hover {
+    background-color: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.btn-asistencia i, .btn-no-asistencia i {
+    margin-right: 6px;
+}
+
+.btn-asistencia.selected {
+    background-color: #2563eb;
+}
+
+.btn-no-asistencia.selected {
+    background-color: #e2e8f0;
+}
+
+@media (max-width: 1024px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    aside {
+        width: 100%;
+        height: auto;
+        position: static;
+        margin-top: 80px;
+    }
+    
+    main {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .horario-tabla {
+        font-size: 13px;
+    }
+    
+    .materia {
+        padding: 12px 8px;
+        min-height: 100px;
+    }
+}
+
+/* CSS: añade a tu checador.component.css */
+
+
+  
+  .grupo-select {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .grupo-select label {
+    font-weight: 600;
+    color: #1a4b8c;
+    margin-bottom: 10px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .grupo-select label i {
+    margin-right: 8px;
+    color: #3b82f6;
+  }
+  
+  .select-grupo-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .select-grupo {
+    width: 100%;
+    padding: 14px 45px 14px 15px;
+    font-size: 15px;
+    color: #334155;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  
+  .select-grupo:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  .select-grupo:hover {
+    border-color: #3b82f6;
+  }
+  
+  .select-grupo-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #3b82f6;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  
+  .select-grupo-wrapper:hover .select-grupo-icon {
+    transform: translateY(-50%) translateY(-2px);
+  }
+  
+  .select-grupo:focus + .select-grupo-icon {
+    transform: translateY(-50%) rotate(180deg);
+  }
+  
+  /* Estilizando las opciones dentro del select */
+  .select-grupo option {
+    padding: 10px;
+    font-weight: 500;
+  }
+  
+  /* Añadiendo un borde de acento al select */
+  .select-grupo-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    pointer-events: none;
+    border-top: 3px solid #3b82f6;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .select-grupo-wrapper:hover::after {
+    opacity: 1;
+  }
+  
+  /* Estilos para el contenedor del select con label */
+  .grupo-select-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .grupo-select-label {
+    font-weight: 600;
+    color: #1a4b8c;
+    margin-bottom: 10px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .grupo-select-label i {
+    margin-right: 8px;
+    color: #3b82f6;
+  }
+  
+  /* Estilos específicos para mostrar mejor el ID y nombre del grupo */
+  .select-grupo option {
+    display: flex;
+    padding: 8px 12px;
+  }
+  
+  /* Haciendo que las opciones sean más distinguibles en navegadores que lo soportan */
+  @supports (-moz-appearance:none) {
+    .select-grupo option {
+      padding: 10px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .select-grupo option:hover {
+      background-color: #eff6ff;
+    }
+  }
+  
+  /* Media queries para responsividad */
+  @media (max-width: 768px) {
+    .select-grupo {
+      padding: 12px 40px 12px 12px;
+      font-size: 14px;
+    }
+    
+    .grupo-select-label {
+      font-size: 14px;
+    }
+    
+    .select-grupo-icon {
+      font-size: 12px;
+      right: 12px;
+    }
+  }

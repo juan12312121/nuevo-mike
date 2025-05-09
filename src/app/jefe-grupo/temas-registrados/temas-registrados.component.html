@@ -12,43 +12,7 @@
         <!-- Panel principal -->
         <div class="panel">
           <!-- Filtros -->
-          <div class="filters">
-            <div class="filter-group">
-              <div class="filter-item">
-                <select class="filter-control" [(ngModel)]="estadoTema" (change)="aplicarFiltros()">
-                  <option value="">Todos los estados</option>
-                  <option value="Visto">Visto</option>
-                  <option value="No Visto">No Visto</option>
-                </select>
-              </div>
-              <div class="filter-item">
-                <input
-                  type="date"
-                  class="filter-control"
-                  [(ngModel)]="fechaInicio"
-                  (change)="aplicarFiltros()"
-                />
-              </div>
-              <div class="filter-item">
-                <input
-                  type="date"
-                  class="filter-control"
-                  [(ngModel)]="fechaFin"
-                  (change)="aplicarFiltros()"
-                />
-              </div>
-            </div>
-            <div class="search-box">
-              <i class="fa-solid fa-search search-icon"></i>
-              <input
-                type="text"
-                class="filter-control"
-                [(ngModel)]="searchTerm"
-                (input)="aplicarFiltros()"
-                placeholder="Buscar por tema..."
-              />
-            </div>
-          </div>
+        
   
           <!-- Tabla -->
           <div class="table-container">
@@ -56,38 +20,24 @@
               <thead>
                 <tr>
                   <th>ID</th>
+                  <th>Asignación</th>
                   <th>Fecha</th>
-                  <th>Materia</th>
+                  <th>Hora</th>
                   <th>Tema</th>
-                  <th>Estado</th>
+                  <th>Registrado por</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let tema of temasPaginados()">
-                  <td>{{ tema.id }}</td>
-                  <td>{{ tema.fecha }}</td>
-                  <td>{{ tema.materia_nombre }}</td>
-                  <td>{{ tema.nombre_tema }}</td>
-                  <td>
-                    <span
-                      class="status-badge"
-                      [ngClass]="{
-                        'status-visto': tema.estado === 'Visto',
-                        'status-no-visto': tema.estado === 'No Visto'
-                      }"
-                    >
-                      <i
-                        class="fa-solid"
-                        [ngClass]="{
-                          'fa-check': tema.estado === 'Visto',
-                          'fa-xmark': tema.estado === 'No Visto'
-                        }"
-                      ></i>
-                      {{ tema.estado }}
-                    </span>
-                  </td>
+                <tr *ngFor="let t of temasPaginados(); let i = index" [ngClass]="{'row-odd': i % 2 !== 0}">
+                  <td>{{ t.id }}</td>
+                  <td>{{ t.asignacion_id }}</td>
+                  <td>{{ t.fecha | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ t.hora }}</td>
+                  <td class="nombre-tema">{{ t.tema }}</td>
+                  <td>{{ t.registrado_por_nombre }}</td>
                 </tr>
               </tbody>
+              
             </table>
           </div>
   

@@ -50,10 +50,10 @@ export class LoginComponent {
             this.router.navigate(['/jefe-carrera']);
             break;
           case 3:
-            this.router.navigate(['/jefe-grupo']); // Asegúrate que esta ruta existe
+            this.router.navigate(['/jefe-grupo']); // Asegúrate que esta ruta exista
             break;
           case 2:
-            this.router.navigate(['/registro-asistencia']);
+            this.router.navigate(['/checador']); // Redirigir al checador (ruta actualizada)
             break;
           case 1:
             this.router.navigate(['/profes']);
@@ -69,6 +69,4 @@ export class LoginComponent {
       }
     });
   }
-  
-  
 }

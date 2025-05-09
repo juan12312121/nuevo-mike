@@ -9,7 +9,7 @@
   /* Container principal - anchura optimizada */
   .container {
     width: 100%;
-    max-width: 1350px; /* Limitar el ancho máximo */
+    max-width: 1400px; /* Limitar el ancho máximo */
     margin: 0 auto; /* Centrar el contenido */
     flex: 1;
     padding: 32px;

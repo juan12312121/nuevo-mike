@@ -1,0 +1,94 @@
+<app-aside-checador></app-aside-checador>
+<div class="main-container">
+  <main>
+    <!-- Header con información -->
+    <div class="header-info">
+      <div class="user-info">
+        <i class="fas fa-user"></i>
+        <span>{{ userLogin }}</span>
+      </div>
+      <div class="current-time">
+        <i class="far fa-clock"></i>
+        <span>{{ currentDateTime | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+      </div>
+    </div>
+
+    <!-- Título principal -->
+    <div class="horario-titulo">
+      <h2><i class="fas fa-calendar-week"></i> Horario Grupo {{ selectedGrupoNombre }}</h2>
+    </div>
+
+    <!-- Selector de grupo -->
+    <div class="grupo-selector">
+      <label for="grupoSelect">
+        <i class="fas fa-users"></i> 
+        Seleccionar Grupo:
+      </label>
+      <select 
+      id="grupoSelect" 
+      [(ngModel)]="selectedGrupoId" 
+      (ngModelChange)="onGrupoSeleccionado()"
+      class="grupo-select">
+      <option [ngValue]="undefined" disabled>Seleccione un grupo</option>
+      <option *ngFor="let grupo of gruposCarrera" [ngValue]="grupo.grupo_id">
+        {{ grupo.grupo_nombre }}
+      </option>
+    </select>
+     
+
+    </div>
+
+    <!-- Lista de horarios -->
+    <ng-container *ngIf="paginadosDias.length > 0; else sinHorarios">
+      <div *ngFor="let dia of paginadosDias" class="dia-bloque">
+        <h3>
+          <i class="fas fa-calendar-day"></i>
+          {{ dia.dia_semana }}
+        </h3>
+        <div class="horarios-dia">
+          <div *ngFor="let horario of dia.horarios_del_dia" 
+               class="horario-item"
+               [class.horario-actual]="isCurrentHorario(horario)">
+            <div class="materia" [ngClass]="getClaseMateria(horario)">
+              <div class="materia-hora">
+                <i class="far fa-clock"></i> 
+                {{ horario.hora_inicio | slice:0:5 }} – {{ horario.hora_fin | slice:0:5 }}
+              </div>
+              <div class="materia-nombre">
+                <i class="fas fa-book"></i> 
+                {{ horario.materia }}
+              </div>
+              <div class="materia-profesor">
+                <i class="fas fa-user"></i> 
+                {{ horario.profesor }}
+              </div>
+              <div class="materia-aula">
+                <i class="fas fa-door-open"></i>
+                {{ horario.aula }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles de paginación -->
+      <div class="paginacion">
+        <button (click)="irPaginaAnterior()" [disabled]="currentPage <= 1">
+          <i class="fas fa-chevron-left"></i> Anterior
+        </button>
+        <span>Página {{ currentPage }} de {{ totalPages }}</span>
+        <button (click)="irPaginaSiguiente()" [disabled]="currentPage >= totalPages">
+          Siguiente <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Cuando no hay horarios -->
+    <ng-template #sinHorarios>
+      <div class="sin-horarios">
+        <i class="fas fa-calendar-times"></i>
+        <p>No hay horarios disponibles para este grupo.</p>
+      </div>
+    </ng-template>
+  </main>
+</div>

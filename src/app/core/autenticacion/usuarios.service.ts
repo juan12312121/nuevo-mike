@@ -7,6 +7,16 @@ interface LoginResponse {
   token: string;
 }
 
+export interface Usuario {
+  id: number;
+  nombre: string;
+  correo: string;
+  rol_id: number;       // ← agrégalo
+  carrera_id: number;   // ← ya lo tenías
+  grupo_id: number | null;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
