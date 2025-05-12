@@ -1,0 +1,305 @@
+<div class="body">
+  <app-aside-profesores></app-aside-profesores>
+
+  <div class="main-content">
+    <!-- Sección de Materias Asignadas -->
+    <section
+      id="courses-section"
+      class="section"
+      [class.active]="seccionActiva === 'courses-section'"
+    >
+      <div class="header">
+        <h1 class="title">Materias Asignadas</h1>
+        <div class="actions">
+         
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div
+          class="tab"
+          [class.active]="grupoSeleccionado === 'all'"
+          (click)="cambiarGrupo('all')"
+        >
+          Todos los grupos
+        </div>
+        <div
+          class="tab"
+          *ngFor="let grupo of gruposUnicos"
+          [class.active]="grupoSeleccionado === grupo"
+          (click)="cambiarGrupo(grupo)"
+        >
+          {{ grupo }}
+        </div>
+      </div>
+
+      <h2 style="margin: 30px 0 20px; color: #2c3e50">Horario Semanal</h2>
+
+      <div class="calendar">
+        <div class="day" *ngFor="let dia of diasSemana">
+          <div class="day-title">{{ dia }}</div>
+
+          <div
+            class="course"
+            *ngFor="let horario of getHorariosPorDia(dia)"
+            [class]="horario.turno.toLowerCase()"
+            [attr.data-course]="horario.materia"
+            [attr.data-time]="horario.hora_inicio + ' - ' + horario.hora_fin"
+            [attr.data-group]="horario.grupo"
+            [attr.data-day]="dia"
+            [attr.data-status]="'pending'"
+            [attr.data-turno]="horario.turno"
+          >
+            <div class="course-header">
+              <div class="course-name">{{ horario.materia }}</div>
+              <div class="course-time">
+                {{ formatearHora(horario.hora_inicio) }} -
+                {{ formatearHora(horario.hora_fin) }}
+              </div>
+            </div>
+
+            <div class="course-details">
+              <div class="course-group">
+                <i class="fas fa-users"></i>
+                {{ horario.grupo }}
+              </div>
+              <div class="course-aula">
+                <i class="fas fa-door-open"></i>
+                {{ horario.aula }}
+              </div>
+              <div class="course-turno" [class]="horario.turno.toLowerCase()">
+                <i
+                  [class]="
+                    'fas ' +
+                    (horario.turno === 'Nocturno' ? 'fa-moon' : 'fa-sun')
+                  "
+                ></i>
+                {{ horario.turno }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Registrar Asistencia -->
+    <section
+      id="attendance-section"
+      class="section"
+      [class.active]="seccionActiva === 'attendance-section'"
+    >
+      <div class="header">
+        <h1 class="title">Registrar Asistencia</h1>
+        <div class="actions">
+          <button class="btn btn-primary" (click)="registrarAsistenciaMasiva()">
+            <i class="fas fa-clipboard-list"></i>
+            Asistencia Masiva
+          </button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div
+          class="tab"
+          [class.active]="estadoAsistencia === 'pending'"
+          (click)="cambiarEstadoAsistencia('pending')"
+        >
+          Clases Pendientes
+        </div>
+        <div
+          class="tab"
+          [class.active]="estadoAsistencia === 'registered'"
+          (click)="cambiarEstadoAsistencia('registered')"
+        >
+          Asistencia Registrada
+        </div>
+      </div>
+
+      <h2 style="margin: 30px 0 20px; color: #2c3e50">
+        {{
+          estadoAsistencia === "pending"
+            ? "Clases con Asistencia Pendiente"
+            : "Clases con Asistencia Registrada"
+        }}
+      </h2>
+
+      <div class="calendar">
+        <div class="day" *ngFor="let dia of diasSemana">
+          <div class="day-title">{{ dia }}</div>
+
+          <div
+            class="course"
+            *ngFor="
+              let horario of getHorariosPorDiaYEstado(dia, estadoAsistencia)
+            "
+            [class]="horario.turno.toLowerCase()"
+            [attr.data-course]="horario.materia"
+            [attr.data-time]="horario.hora_inicio + ' - ' + horario.hora_fin"
+            [attr.data-group]="horario.grupo"
+            [attr.data-day]="dia"
+            [attr.data-status]="estadoAsistencia"
+            [attr.data-turno]="horario.turno"
+          >
+            <!-- Mismo contenido que en la sección anterior -->
+            <div class="course-header">
+              <div class="course-name">{{ horario.materia }}</div>
+              <div class="course-time">
+                {{ formatearHora(horario.hora_inicio) }} -
+                {{ formatearHora(horario.hora_fin) }}
+              </div>
+            </div>
+
+            <div class="course-details">
+              <div class="course-group">
+                <i class="fas fa-users"></i>
+                {{ horario.grupo }}
+              </div>
+              <div class="course-turno" [class]="horario.turno.toLowerCase()">
+                <i
+                  [class]="
+                    'fas ' +
+                    (horario.turno === 'Nocturno' ? 'fa-moon' : 'fa-sun')
+                  "
+                ></i>
+                {{ horario.turno }}
+              </div>
+            </div>
+
+            <div class="course-status">
+              <span
+                class="status-indicator"
+                [class]="'status-' + estadoAsistencia"
+              ></span>
+              <span class="status-text">
+                {{
+                  estadoAsistencia === "pending"
+                    ? "Asistencia pendiente"
+                    : "Asistencia registrada"
+                }}
+              </span>
+            </div>
+
+            <!-- Agregar botón de registro solo para pendientes -->
+            <button
+              *ngIf="estadoAsistencia === 'pending'"
+              class="btn btn-success btn-sm"
+              (click)="registrarAsistencia(horario)"
+            >
+              <i class="fas fa-check"></i>
+              Registrar Asistencia
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección de Mis Grupos -->
+    <section
+      id="groups-section"
+      class="section"
+      [class.active]="seccionActiva === 'groups-section'"
+    >
+      <div class="header">
+        <h1 class="title">Mis Grupos</h1>
+        <div class="actions">
+          <button class="btn btn-primary" (click)="exportarListas()">
+            <i class="fas fa-file-export"></i>
+            Exportar Listas
+          </button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div
+          class="tab"
+          *ngFor="let grupo of gruposUnicos"
+          [class.active]="grupoSeleccionadoLista === grupo"
+          (click)="cambiarGrupoLista(grupo)"
+        >
+          {{ grupo }}
+        </div>
+      </div>
+
+      <h2 style="margin: 30px 0 20px; color: #2c3e50">Alumnos del Grupo</h2>
+
+      <div class="students-list" *ngIf="alumnosGrupo.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nombre</th>
+              <th>Asistencias</th>
+              <th>Faltas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alumno of alumnosGrupo">
+              <td>{{ alumno.matricula }}</td>
+              <td>{{ alumno.nombre }}</td>
+              <td>{{ alumno.asistencias }}</td>
+              <td>{{ alumno.faltas }}</td>
+              <td>
+                <button
+                  class="btn btn-info btn-sm"
+                  (click)="verDetallesAlumno(alumno)"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  Detalles
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="no-data" *ngIf="alumnosGrupo.length === 0">
+        <p>No hay alumnos registrados en este grupo.</p>
+      </div>
+    </section>
+
+    <!-- Sección de Horario Completo -->
+    <section
+      id="schedule-section"
+      class="section"
+      [class.active]="seccionActiva === 'schedule-section'"
+    >
+      <div class="header">
+        <h1 class="title">Horario Completo</h1>
+      </div>
+
+      <h2 style="margin: 30px 0 20px; color: #2c3e50">
+        Vista General del Semestre
+      </h2>
+
+      <div class="schedule-view">
+        <div class="calendar-header">
+          <div class="week-nav">
+            <button class="btn btn-outline-primary" (click)="semanaAnterior()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <span>{{ obtenerRangoSemana() }}</span>
+            <button class="btn btn-outline-primary" (click)="semanaSiguiente()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Aquí va el calendario completo con la misma estructura que las secciones anteriores -->
+        <div class="calendar">
+          <!-- Similar a las secciones anteriores pero con vista semanal -->
+          <div class="day" *ngFor="let dia of diasSemana">
+            <div class="day-title">{{ dia }}</div>
+            <div
+              class="course"
+              *ngFor="let horario of getHorariosPorDia(dia)"
+              [class]="horario.turno.toLowerCase()"
+            >
+              <!-- Mismo contenido que en las secciones anteriores -->
+              <!-- ... -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

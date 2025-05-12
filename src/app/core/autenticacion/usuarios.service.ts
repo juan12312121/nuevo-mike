@@ -324,4 +324,32 @@ export class UsuariosService {
       );
   }
 
+ obtenerHorariosProfesores(id?: number): Observable<any> {
+  const token = this.getToken();
+
+  const headers = token
+    ? new HttpHeaders({ Authorization: `Bearer ${token}` })
+    : new HttpHeaders(); // Headers vacíos si no hay token
+
+  const url = id
+    ? `${this.baseUrl}/horarios-profesores/${id}`
+    : `${this.baseUrl}/horarios-profesores`;
+
+  return this.http.get(url, { headers }).pipe(
+    tap({
+      next: (res) => {
+        console.log('📥 Respuesta de horarios de profesores:', res);
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener los horarios de los profesores:', {
+          status: err.status,
+          message: err.error?.message || err.message,
+          token: token ? '✅ Present' : '❌ Missing'
+        });
+      }
+    })
+  );
+}
+
+
 }

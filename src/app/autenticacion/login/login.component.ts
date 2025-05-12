@@ -56,7 +56,7 @@ export class LoginComponent {
             this.router.navigate(['/checador']); // Redirigir al checador (ruta actualizada)
             break;
           case 1:
-            this.router.navigate(['/profes']);
+            this.router.navigate(['/profes-asignacion']);
             break;
           default:
             this.router.navigate(['/']);
