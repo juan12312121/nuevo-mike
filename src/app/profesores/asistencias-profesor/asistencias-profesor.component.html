@@ -1,1 +1,183 @@
-<p>asistencias-profesor works!</p>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+<div class="body">
+  <div class="container">
+    <app-aside-profesores></app-aside-profesores>
+
+    <main>
+      <header>
+        <div>
+          <h1>Mis Asistencias</h1>
+        </div>
+      </header>
+
+      <div class="section-header">
+        <h2>Registro de Asistencias</h2>
+      </div>
+
+      <!-- Loading spinner -->
+      <div *ngIf="loading" class="loading-message">
+        <span class="spinner"></span>
+        Cargando asistencias...
+      </div>
+
+      <!-- Error message -->
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <!-- Table with data -->
+      <div class="table-container" *ngIf="!loading && !error">
+        <table>
+          <thead>
+            <tr>
+              <th>ID de Asistencia</th>
+              <th>Asignatura</th>
+              <th>Turno</th>
+              <th>Aula</th>
+              <th>Fecha</th>
+              <th>Horario</th>
+              <th>Status</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asistencia of asistencias">
+              <td>{{ asistencia.asistencia_id }}</td>
+              <td>{{ asistencia.materia }}</td>
+              <td>{{ asistencia.turno }}</td>
+              <td>{{ asistencia.aula }}</td>
+              <td>{{ asistencia.fecha_registro | date : "dd/MM/yyyy" }}</td>
+              <td>{{ asistencia.hora_inicio }} - {{ asistencia.hora_fin }}</td>
+              <td>
+                <span
+                  class="status"
+                  [ngClass]="{
+                    present: asistencia.estado_asistencia === 'Asistió',
+                    absent: asistencia.estado_asistencia === 'No Asistió',
+                    justified: asistencia.estado_asistencia === 'Justificado'
+                  }"
+                >
+                  {{ asistencia.estado_asistencia }}
+                </span>
+              </td>
+              <td>
+                <ng-container [ngSwitch]="asistencia.estado_asistencia">
+                  <button
+                    *ngSwitchCase="'No Asistió'"
+                    class="btn btn-outline"
+                    (click)="openJustificacionModal(asistencia)"
+                  >
+                    Justificar
+                  </button>
+                  <button
+                    *ngSwitchCase="'Justificado'"
+                    class="btn btn-outline"
+                    (click)="verJustificante(asistencia.asistencia_id)"
+                  >
+                    Ver justificante
+                  </button>
+
+                  <span *ngSwitchDefault>--</span>
+                </ng-container>
+              </td>
+            </tr>
+
+            <tr *ngIf="asistencias.length === 0">
+              <td colspan="8" class="no-data">
+                No hay registros de asistencias disponibles.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal para justificar falta -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Registrar Justificación</h5>
+        <button (click)="closeJustificacionModal()" class="close-btn">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input type="hidden" [value]="selectedAsistencia?.asistencia_id" />
+          <div class="form-group">
+            <label for="motivo">Motivo</label>
+            <textarea
+              id="motivo"
+              [(ngModel)]="justificacion.motivo"
+              name="motivo"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="archivo_prueba">Archivo de Prueba</label>
+            <input
+              type="file"
+              id="archivo_prueba"
+              (change)="onFileChange($event)"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeJustificacionModal()" class="cancel-btn">
+          Cancelar
+        </button>
+        <button (click)="saveJustificacion()" class="save-btn">Guardar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="isViewModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5><i class="fas fa-file-alt"></i> Detalles de Justificación</h5>
+      <button (click)="closeViewJustificacionModal()" class="close-btn">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="justification-details">
+        <div class="detail-group">
+          <label>
+            <i class="far fa-calendar-alt"></i> Fecha de Registro:
+          </label>
+          <p class="detail-value">
+            {{ selectedJustificacion?.fecha_asistencia | date:'dd/MM/yyyy HH:mm' }}
+          </p>
+        </div>
+        <div class="detail-group">
+          <label>
+            <i class="fas fa-comment-alt"></i> Motivo:
+          </label>
+          <p class="detail-value">{{ selectedJustificacion?.motivo }}</p>
+        </div>
+        <div class="detail-group" *ngIf="selectedJustificacion?.archivo_prueba">
+          <label>
+            <i class="fas fa-paperclip"></i> Archivo Adjunto:
+          </label>
+          <div class="image-container">
+            <img [src]="'http://localhost:4000/uploads/' + selectedJustificacion?.archivo_prueba" 
+                 alt="Justificante"
+                 class="justification-image">
+            <div class="image-overlay">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeViewJustificacionModal()" class="cancel-btn">
+        <i class="fas fa-times"></i> Cerrar
+      </button>
+    </div>
+  </div>
+</div>
+</div>

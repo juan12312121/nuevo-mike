@@ -352,4 +352,65 @@ export class UsuariosService {
 }
 
 
+obtenerAsistenciasProfesor(profesor_id: number): Observable<any> {
+    console.log('📊 Solicitando asistencias para el profesor:', profesor_id);
+    
+    const token = this.getToken();
+    if (!token) {
+      console.warn('⚠️ No se encontró token en localStorage');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http
+      .get(`${this.baseUrl}/asistencias-profesor/${profesor_id}`, { headers })
+      .pipe(
+        tap({
+          next: (res) => {
+            console.log('✅ Asistencias recibidas:', res);
+          },
+          error: (err) => {
+            console.error('❌ Error al obtener asistencias:', {
+              status: err.status,
+              message: err.error?.message || err.message,
+              profesorId: profesor_id
+            });
+          }
+        })
+      );
+  }
+
+  // También podemos agregar un método para obtener todas las asistencias
+  obtenerTodasAsistencias(): Observable<any> {
+    console.log('📊 Solicitando todas las asistencias de profesores');
+    
+    const token = this.getToken();
+    if (!token) {
+      console.warn('⚠️ No se encontró token en localStorage');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http
+      .get(`${this.baseUrl}/asistencias-profesor`, { headers })
+      .pipe(
+        tap({
+          next: (res) => {
+            console.log('✅ Todas las asistencias recibidas:', res);
+          },
+          error: (err) => {
+            console.error('❌ Error al obtener todas las asistencias:', {
+              status: err.status,
+              message: err.error?.message || err.message
+            });
+          }
+        })
+      );
+  }
 }
+
+

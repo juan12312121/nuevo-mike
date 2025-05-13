@@ -18,6 +18,7 @@ import { TemasVistosComponent } from './jefe-carrera/temas-vistos/temas-vistos.c
 import { AsistenciaRegistradasComponent } from './jefe-grupo/asistencia-registradas/asistencia-registradas.component';
 import { JefeHorarioComponent } from './jefe-grupo/jefe-horario/jefe-horario.component';
 import { TemasRegistradosComponent } from './jefe-grupo/temas-registrados/temas-registrados.component';
+import { AsistenciasProfesorComponent } from './profesores/asistencias-profesor/asistencias-profesor.component';
 import { MateriasAsignadasProfeComponent } from './profesores/materias-asignadas-profe/materias-asignadas-profe.component';
 
 export const routes: Routes = [
@@ -45,6 +46,7 @@ export const routes: Routes = [
   {path:'temas-vistos2',component:TemasRegistradosComponent},
 
   {path:'profes-asignacion',component:MateriasAsignadasProfeComponent},
+  {path:'asistencias-profesorm',component:AsistenciasProfesorComponent},
 
   {path:'checador',component:ChecadorComponent}
 ];
