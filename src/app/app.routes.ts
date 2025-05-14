@@ -5,6 +5,7 @@ import { FacultadesComponent } from './administrador/facultades/facultades.compo
 import { JefesDeCarreraComponent } from './administrador/jefes-de-carrera/jefes-de-carrera.component';
 import { PrincipalAdministradorComponent } from './administrador/principal-administrador/principal-administrador.component';
 import { LoginComponent } from './autenticacion/login/login.component';
+import { AsistenciasRegistradasChecadorComponent } from './checador/asistencias-registradas-checador/asistencias-registradas-checador.component';
 import { ChecadorComponent } from './checador/checador.component';
 import { CrearHorarioComponent } from './jefe-carrera/administracion/crear-horario/crear-horario.component';
 import { GruposComponent } from './jefe-carrera/administracion/grupos/grupos.component';
@@ -48,5 +49,6 @@ export const routes: Routes = [
   {path:'profes-asignacion',component:MateriasAsignadasProfeComponent},
   {path:'asistencias-profesorm',component:AsistenciasProfesorComponent},
 
-  {path:'checador',component:ChecadorComponent}
+  {path:'checador',component:ChecadorComponent},
+  {path:'checador-asistencias',component:AsistenciasRegistradasChecadorComponent}
 ];

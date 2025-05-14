@@ -128,73 +128,18 @@ export class HorariosService {
       );
   }
 
-  private groupByGrupo(horarios: HorarioDetalle[]): GrupoHorarios[] {
-    const mapa = new Map<number, GrupoHorarios>();
-    const diasOrdenados = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-  
-    // Primero, agrupar por grupo y día
-    horarios.forEach(h => {
-      // Asumimos que todos los horarios son del mismo grupo en este caso
-      const gid = 1; // O podrías usar algún identificador del grupo si lo tienes
-      
-      // Verifica si el grupo ya existe, si no, lo crea
-      if (!mapa.has(gid)) {
-        mapa.set(gid, {
-          grupo_id: gid,
-          grupo_nombre: h.carrera || '',
-          horarios: diasOrdenados.map(dia => ({
-            dia_semana: dia,
-            horarios_del_dia: []
-          }))
-        });
-      }
-      
-      // Obtén el grupo correspondiente
-      const grupo = mapa.get(gid)!;
-      
-      // Encuentra el día correspondiente basado en orden_dia
-      const diaIndex = h.orden_dia - 1; // orden_dia es 1-based
-      if (diaIndex >= 0 && diaIndex < grupo.horarios.length) {
-        grupo.horarios[diaIndex].horarios_del_dia.push(h);
-      }
-    });
-  
-    // Procesar cada grupo
-    const grupos = Array.from(mapa.values());
-    grupos.forEach(grupo => {
-      // Filtrar días sin horarios
-      grupo.horarios = grupo.horarios.filter(dia => dia.horarios_del_dia.length > 0);
-  
-      // Ordenar horarios por hora_inicio dentro de cada día
-      grupo.horarios.forEach(dia => {
-        dia.horarios_del_dia.sort((a, b) => 
-          a.hora_inicio.localeCompare(b.hora_inicio)
-        );
-      });
-    });
-  
-    return grupos;
-  }
-
-  getHorariosPorChecador(usuarioId: number): Observable<GrupoHorarios[]> {
+  getGruposPorChecador(usuarioId: number): Observable<GrupoHorarios[]> {
     return this.http
-      .get<{ success: boolean; data: HorarioDetalle[] }>(`${this.API_URL}/checador/${usuarioId}`)
+      .get<{ success: boolean; data: GrupoHorarios[] }>(`${this.API_URL}/checador/${usuarioId}`)
       .pipe(
-        map(res => {
-          console.log('Datos recibidos del servidor:', res.data);
-          const grupos = this.groupByGrupo(res.data);
-          console.log('Datos procesados:', grupos);
-          return grupos;
-        }),
-        catchError(error => {
-          console.error('Error al obtener horarios:', error);
-          return of([]);
+        map(res => res.data),
+        catchError(err => {
+          console.error('Error al obtener grupos por checador:', err);
+          return of([] as GrupoHorarios[]);
         })
       );
   }
   
   
-  
-  /** Agrupa un array de Horario por su grupo_id y grupo_nombre */
 }
 

@@ -1,5 +1,188 @@
 <div class="body">
-
   <app-aside-checador></app-aside-checador>
+  <div class="main-content">
+    <header class="header">
+      <button class="toggle-menu"><i class="fas fa-bars"></i></button>
+      <h1><i class="fas fa-calendar-week"></i> Horarios</h1>
 
+      <div class="actions-container">
+        <!-- SELECT GRUPO -->
+        <div class="selector">
+          <label for="grupo"><i class="fas fa-users"></i> Grupo:</label>
+          <select
+            id="grupo"
+            [(ngModel)]="selectedGrupoId"
+            (ngModelChange)="onGrupoChange()"
+          >
+            <option [ngValue]="null">— Seleccione un grupo —</option>
+            <option *ngFor="let g of grupos" [ngValue]="g.grupo_id">
+              {{ g.grupo_id }} – {{ g.grupo_nombre }}
+            </option>
+          </select>
+        </div>
+
+        <!-- SELECT TURNO -->
+        <div class="selector">
+          <label for="turno"><i class="fas fa-clock"></i> Turno:</label>
+          <select
+            id="turno"
+            [(ngModel)]="selectedTurno"
+            (ngModelChange)="onGrupoChange()"
+          >
+            <option value="">— Seleccione un turno —</option>
+            <option value="Matutino">Matutino</option>
+            <option value="Vespertino">Vespertino</option>
+            <option value="Nocturno">Nocturno</option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <div class="horario-container" *ngIf="slots.length > 0">
+      <div style="overflow-x: auto;">
+        <table class="horario-table">
+          <thead>
+            <tr>
+              <th class="sticky-col hora-column"><i class="fas fa-clock"></i> Hora</th>
+              <th *ngFor="let d of diasSemana">
+                <i class="fas fa-calendar-day"></i> {{ d }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of slots">
+              <td class="sticky-col hora-column">
+                {{ s.inicio | slice:0:5 }} - {{ s.fin | slice:0:5 }}
+              </td>
+              <td *ngFor="let d of diasSemana">
+                <ng-container *ngIf="getCell(d, s.inicio) as cell; else empty">
+                  <div class="celda-info" [ngClass]="'materia-' + cell.materia_id">
+                    <div>
+                      <i class="fas fa-book"></i>
+                      <strong>{{ cell.materia }}</strong>
+                    </div>
+                    <div><i class="fas fa-chalkboard-teacher"></i> {{ cell.profesor }}</div>
+                    <div><i class="fas fa-school"></i> Aula {{ cell.aula }}</div>
+
+                    <!-- ID de asignación en pequeño -->
+                    <div style="font-size: 11px; color: #888; margin-top: 2px;">
+                      ID Asignación: {{ cell.asignacion_id }}
+                    </div>
+
+                    <button
+                      class="btn-asistencia-clase"
+                      (click)="marcarAsistenciaClase(cell)"
+                      title="Marcar asistencia para esta clase (Asignación {{ cell.asignacion_id }})"
+                    >
+                      <i class="fas fa-user-check"></i> Asistencia
+                    </button>
+                  </div>
+                </ng-container>
+                <ng-template #empty>
+                  <span class="celda-vacia">--</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div *ngIf="slots.length === 0" class="empty-state">
+      Selecciona un grupo y un turno para ver el horario.
+    </div>
+  </div>
+</div>
+
+<!-- Modal de asistencia -->
+<div class="modal-overlay" *ngIf="showAsistenciaModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2><i class="fas fa-clipboard-check"></i> Marcar Asistencia</h2>
+      <button class="btn-close" (click)="toggleAsistenciaModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="clase-info" *ngIf="selectedClase">
+        <h3>{{ selectedClase.materia }}</h3>
+
+        <!-- ID de asignación en el modal -->
+        <div class="info-row">
+          <div class="info-label"><i class="fas fa-hashtag"></i> ID Asignación:</div>
+          <div class="info-value" style="font-weight: bold; color: #2c3e50;">
+            {{ selectedClase.asignacion_id }}
+          </div>
+        </div>
+
+        <div class="info-rows">
+          <div class="info-row">
+            <div class="info-label"><i class="fas fa-users"></i> Grupo:</div>
+            <div class="info-value">{{ selectedGrupoId }}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label"><i class="fas fa-calendar-day"></i> Día:</div>
+            <div class="info-value">{{ selectedClase.dia_semana }}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label"><i class="fas fa-clock"></i> Horario:</div>
+            <div class="info-value">
+              {{ selectedClase.hora_inicio | slice:0:5 }} - {{ selectedClase.hora_fin | slice:0:5 }}
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-label"><i class="fas fa-chalkboard-teacher"></i> Profesor:</div>
+            <div class="info-value">{{ selectedClase.profesor }}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label"><i class="fas fa-school"></i> Aula:</div>
+            <div class="info-value">{{ selectedClase.aula }}</div>
+          </div>
+        </div>
+      </div>
+
+      <form *ngIf="selectedClase" class="form-asistencia">
+        <div class="form-group">
+          <label for="fecha">Fecha:</label>
+          <input
+            #fechaInput
+            type="date"
+            id="fecha"
+            class="form-control"
+            [value]="getCurrentDate()"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="tipo-asistencia">Tipo de registro:</label>
+          <select #tipoSelect id="tipo-asistencia" class="form-control">
+            <option *ngFor="let t of asistenciaTipos" [value]="t">
+              {{ t }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="observaciones">Tema / Observaciones:</label>
+          <textarea
+            #temaTextarea
+            id="observaciones"
+            rows="3"
+            placeholder="Opcional"
+            class="form-control"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancelar" (click)="toggleAsistenciaModal()">
+        <i class="fas fa-times"></i> Cancelar
+      </button>
+      <button class="btn-guardar" [disabled]="!selectedClase" (click)="guardarAsistencia()">
+        <i class="fas fa-save"></i> Guardar registro
+      </button>
+    </div>
+  </div>
 </div>
