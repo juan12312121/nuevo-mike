@@ -6,6 +6,8 @@ import * as fs from 'file-saver';
 import { AsideJefecarreraComponent } from '../../componentes/aside-jefecarrera/aside-jefecarrera.component';
 import { DashboardGraficasComponent } from '../../componentes/graficas/graficas.component';
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
+import { JustificacionesService } from '../../core/justificaciones/justificaciones.service';
+
 
 @Component({
   selector: 'app-principal',
@@ -25,6 +27,9 @@ export class PrincipalComponent implements OnInit {
   asistencias: any[] = [];
   asistenciasFiltradas: any[] = [];
 
+isModalOpen = false;
+  justificacionActual: any = null;
+
   // Filtros
   tipoRegistroFilter = '';
   asistioFilter = '';
@@ -43,7 +48,7 @@ export class PrincipalComponent implements OnInit {
   error: string | null = null;
   public Math = Math;
 
-  constructor(private asistenciaService: AsistenciaTemaService) {}
+  constructor(private asistenciaService: AsistenciaTemaService,  private justificacionesService: JustificacionesService ) {}
 
   ngOnInit(): void {
     console.log('Inicializando PrincipalComponent...');
@@ -61,6 +66,9 @@ export class PrincipalComponent implements OnInit {
       }
     });
   }
+
+
+  
 
   aplicarFiltros(): void {
     console.log('Aplicando filtros:', {
@@ -96,6 +104,47 @@ export class PrincipalComponent implements OnInit {
     this.asistenciasFiltradas = datos;
     console.log('Datos filtrados:', this.asistenciasFiltradas);
   }
+
+verJustificante(asistenciaId: number) {
+  console.log('Iniciando solicitud de justificación:', {
+    asistenciaId,
+    timestamp: new Date().toISOString()
+  });
+
+  this.justificacionesService.obtenerJustificacionPorAsistencia(asistenciaId).subscribe({
+    next: (response) => {
+      console.log('Respuesta completa:', response);
+      
+      if (response) {
+        this.justificacionActual = response;
+        this.isModalOpen = true;
+        console.log('Justificación cargada exitosamente:', {
+          justificacionId: this.justificacionActual.justificacion_id,
+          asistenciaId: this.justificacionActual.asistencia_id,
+          fecha: this.justificacionActual.fecha_asistencia
+        });
+      } else {
+        console.log('No se encontró la justificación:', {
+          asistenciaId,
+          response
+        });
+      }
+    },
+    error: (error) => {
+      console.error('Error al obtener justificación:', {
+        asistenciaId,
+        status: error.status,
+        message: error.message,
+        timestamp: new Date().toISOString()
+      });
+    }
+  });
+}
+  closeModal() {
+    this.isModalOpen = false;
+    this.justificacionActual = null;
+  }
+
 
   obtenerRegistrosPaginados(): any[] {
     const inicio = (this.paginaActual - 1) * this.registrosPorPagina;

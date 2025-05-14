@@ -1,246 +1,85 @@
+<!-- Asegúrate de tener Font Awesome cargado -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- src/app/pages/horarios/horarios.component.html -->
 <div class="body">
-    <app-aside-jefecarrera></app-aside-jefecarrera>
-    
-    <div class="main-content">
-        <div class="header">
-            <h1><i class="fas fa-calendar-week"></i> Horario Semanal - Grupo 6</h1>
-            <div class="actions-container">
-                <div class="selector-container">
-                    <div class="selector">
-                        <label for="turno"><i class="fas fa-clock"></i> Turno:</label>
-                        <select id="turno">
-                            <option value="matutino">Matutino</option>
-                            <option value="vespertino" selected>Vespertino</option>
-                            <option value="nocturno">Nocturno</option>
-                        </select>
-                    </div>
-                    <div class="selector">
-                        <label for="grupo"><i class="fas fa-users"></i> Grupo:</label>
-                        <select id="grupo">
-                            <option value="6" selected>Grupo 6</option>
-                            <option value="7">Grupo 7</option>
-                            <option value="8">Grupo 8</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn-crear" (click)="irACrearHorario()">
-                    <i class="fas fa-plus-circle"></i> Crear Horario
-                  </button>
-                  
-            </div>
+  <app-aside-jefecarrera></app-aside-jefecarrera>
+
+  <div class="main-content">
+    <div class="header">
+      <h1><i class="fas fa-calendar-week"></i> Horario Semanal</h1>
+
+      <div class="actions-container">
+        <!-- Grupo -->
+        <div class="selector">
+          <label for="grupo"><i class="fas fa-users"></i> Grupo:</label>
+          <select id="grupo"
+                  [(ngModel)]="selectedGrupo"
+                  (change)="onFiltroChange()">
+            <option [ngValue]="null"><i class="fas fa-chevron-down"></i> -- Seleccione Grupo --</option>
+            <option *ngFor="let g of gruposList" [ngValue]="g.id">
+              <i class="fas fa-user-graduate"></i> {{ g.nombre }}
+            </option>
+          </select>
         </div>
 
-        <div class="aula-info">
-            <div class="aula-info-item">
-                <i class="fas fa-chalkboard"></i> <strong>Aula:</strong> Aula 4
-            </div>
-            <div class="aula-info-item">
-                <i class="fas fa-users"></i> <strong>Grupo:</strong> 6
-            </div>
-            <div class="aula-info-item">
-                <i class="fas fa-clock"></i> <strong>Turno:</strong> Vespertino
-            </div>
-            <div class="aula-info-item">
-                <i class="fas fa-calendar-alt"></i> <strong>Ciclo Escolar:</strong> 2024-2025
-            </div>
+        <!-- Turno -->
+        <div class="selector">
+          <label for="turno"><i class="fas fa-clock"></i> Turno:</label>
+          <select id="turno"
+                  [(ngModel)]="selectedTurno"
+                  (change)="onFiltroChange()">
+            <option [ngValue]="null"><i class="fas fa-chevron-down"></i> -- Seleccione Turno --</option>
+            <option *ngFor="let t of turnosList" [ngValue]="t">
+              <i class="fas fa-business-time"></i> {{ t }}
+            </option>
+          </select>
         </div>
 
-        <div class="horario-container">
-            <table class="horario-table">
-                <thead>
-                    <tr>
-                        <th><i class="fas fa-clock"></i> Hora</th>
-                        <th><i class="fas fa-calendar-day"></i> Lunes</th>
-                        <th><i class="fas fa-calendar-day"></i> Martes</th>
-                        <th><i class="fas fa-calendar-day"></i> Miércoles</th>
-                        <th><i class="fas fa-calendar-day"></i> Jueves</th>
-                        <th><i class="fas fa-calendar-day"></i> Viernes</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Primera hora: 12:00 - 13:00 -->
-                    <tr>
-                        <td class="hora-column"><i class="far fa-clock"></i> 12:00 - 13:00</td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Segunda hora: 13:00 - 14:00 -->
-                    <tr>
-                        <td class="hora-column"><i class="far fa-clock"></i> 13:00 - 14:00</td>
-                        <td>
-                            <div class="materia materia-24">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 24</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Gómez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-24">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 24</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Gómez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-24">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 24</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Gómez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-22">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 22</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Rodríguez</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Tercera hora: 14:00 - 15:00 -->
-                    <tr>
-                        <td class="hora-column"><i class="far fa-clock"></i> 14:00 - 15:00</td>
-                        <td>
-                            <div class="materia materia-18">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 18</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-18">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 18</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-18">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 18</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-18">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 18</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-18">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 18</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. López</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Cuarta hora: 15:00 - 16:00 -->
-                    <tr>
-                        <td class="hora-column"><i class="far fa-clock"></i> 15:00 - 16:00</td>
-                        <td>
-                            <div class="materia materia-20">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 20</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-20">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 20</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-20">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 20</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-20">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 20</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-20">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 20</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. García</div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Quinta hora: 16:00 - 17:00 -->
-                    <tr>
-                        <td class="hora-column"><i class="far fa-clock"></i> 16:00 - 17:00</td>
-                        <td>
-                            <div class="materia materia-25">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 25</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-25">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 25</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-25">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 25</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-25">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 25</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="materia materia-25">
-                                <div class="materia-nombre"><i class="fas fa-book"></i> Materia 25</div>
-                                <div class="materia-profesor"><i class="fas fa-user-tie"></i> Prof. Martínez</div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Paginación -->
-        <div class="pagination">
-            <div class="page-nav" id="prev-page"><i class="fas fa-chevron-left"></i></div>
-            <div class="page-item active">1</div>
-            <div class="page-item">2</div>
-            <div class="page-item">3</div>
-            <div class="page-nav" id="next-page"><i class="fas fa-chevron-right"></i></div>
-        </div>
+        <!-- Botón Crear Horario -->
+        <button class="btn-crear" (click)="irACrearHorario()">
+          <i class="fas fa-plus-circle"></i> Crear Horario
+        </button>
+      </div>
     </div>
 
-
+    <!-- Tabla de horario -->
+    <div class="horario-container" *ngIf="franjas.length">
+      <table class="horario-table">
+        <thead>
+          <tr>
+            <th class="sticky-col hora-column">
+              <i class="far fa-clock"></i> Hora
+            </th>
+            <th *ngFor="let dia of diasSemana">
+              <i class="fas fa-calendar-day"></i> {{ dia }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fila of franjas">
+            <td class="sticky-col hora-column">
+              <i class="fas fa-hourglass-start"></i> {{ fila.hora }} –
+              <i class="fas fa-hourglass-end"></i> {{ fila.fin }}
+            </td>
+            <td *ngFor="let dia of diasSemana">
+              <ng-container *ngIf="fila.datosPorDia[dia] as h; else vacio">
+                <div class="celda-info">
+                  <div>
+                    <i class="fas fa-book"></i> <strong>Materia:</strong> {{ h.materia_nombre }}
+                  </div>
+                  <div>
+                    <i class="fas fa-chalkboard-teacher"></i> <strong>Profesor:</strong> {{ h.profesor_nombre }}
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #vacio>
+                <span class="celda-vacia"><i class="fas fa-minus"></i> –</span>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

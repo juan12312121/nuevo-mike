@@ -58,6 +58,7 @@
                 <th>Estado</th>
                 <th>Registrado por</th>
                 <th>Tipo Registro</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -74,7 +75,6 @@
                     'status-badge status-falta': a.asistio === 'No Asistió',
                     'status-badge status-justificado': a.asistio === 'Justificado'
                   }">
-                   
                     {{ a.asistio }}
                   </span>
                 </td>
@@ -84,11 +84,18 @@
                     'registered-by registered-checador': a.tipo_registro === 'Checador',
                     'registered-by registered-mismo': a.tipo_registro === 'Profesor'
                   }">
-                  
                     {{ a.registrado_por_nombre }}
                   </span>
                 </td>
                 <td>{{ a.tipo_registro }}</td>
+               <td class="acciones-column">
+  <button *ngIf="a.asistio === 'Justificado'" 
+          class="btn-ver-justificante" 
+          (click)="verJustificante(a.id)"
+          title="Ver justificante">
+    <i class="fas fa-file-medical"></i>
+  </button>
+</td>
               </tr>
             </tbody>
           </table>
@@ -104,8 +111,63 @@
       <div class="panel" *ngIf="modoVisualizacion === 'graficas'">
         <app-dashboard-graficas [asistencias]="asistenciasFiltradas"></app-dashboard-graficas>
       </div>
-      
-      <!-- Loader y Error... -->
+    </div>
+  </div>
+
+  <!-- Modal de Justificación -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5><i class="fas fa-file-alt"></i> Detalles de Justificación</h5>
+        <button (click)="closeModal()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="justification-details">
+          <div class="detail-group">
+            <label>
+              <i class="far fa-calendar-alt"></i> Fecha de Asistencia:
+            </label>
+            <p class="detail-value">
+              {{ justificacionActual?.fecha_asistencia | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+          </div>
+         
+        
+          <div class="detail-group">
+            <label>
+              <i class="fas fa-comment-alt"></i> Motivo:
+            </label>
+            <p class="detail-value">{{ justificacionActual?.motivo }}</p>
+          </div>
+          <div class="detail-group">
+            <label>
+              <i class="far fa-clock"></i> Fecha de Justificación:
+            </label>
+            <p class="detail-value">
+              {{ justificacionActual?.fecha_justificacion | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+          </div>
+          <div class="detail-group" *ngIf="justificacionActual?.archivo_prueba">
+            <label>
+              <i class="fas fa-paperclip"></i> Archivo Adjunto:
+            </label>
+            <div class="image-container">
+              <img [src]="'http://localhost:4000/uploads/' + justificacionActual?.archivo_prueba" 
+                   alt="Justificante"
+                   class="justification-image">
+              <div class="image-overlay">              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeModal()" class="cancel-btn">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
+      </div>
     </div>
   </div>
 </div>

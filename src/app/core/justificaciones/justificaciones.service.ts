@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 // Asegúrate de que esta sea la URL de tu API para crear una justificación
 const API_URL = 'http://localhost:4000/api/justificaciones'; 
@@ -22,6 +22,14 @@ export class JustificacionesService {
   }
 
   obtenerJustificacionPorAsistencia(asistencia_id: number): Observable<any> {
-    return this.http.get(`${API_URL}/${asistencia_id}`);
+    console.log('Solicitando justificación para asistencia:', asistencia_id);
+    console.log('URL completa:', `${API_URL}/${asistencia_id}`);
+    
+    return this.http.get(`${API_URL}/${asistencia_id}`).pipe(
+      tap({
+        next: (response) => console.log('Respuesta exitosa:', response),
+        error: (error) => console.log('Error en la petición:', error)
+      })
+    );
   }
 }

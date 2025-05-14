@@ -22,7 +22,6 @@
                   <th>Fecha</th>
                   <th>Tema</th>
                   <th>Profesor</th>
-                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody>
@@ -31,26 +30,7 @@
                   <td>{{ tema.fecha }}</td>
                   <td>{{ tema.tema }}</td> <!-- Corregido a tema.tema -->
                   <td>{{ tema.registrado_por_nombre }}</td>
-                  <td>
-                    <span
-                      class="status-badge"
-                      [ngClass]="{
-                        'status-completo': tema.estado === 'Completo',
-                        'status-en-progreso': tema.estado === 'En Progreso',
-                        'status-no-iniciado': tema.estado === 'No Iniciado'
-                      }"
-                    >
-                      <i
-                        class="fa-solid"
-                        [ngClass]="{
-                          'fa-check': tema.estado === 'Completo',
-                          'fa-clock': tema.estado === 'En Progreso',
-                          'fa-times': tema.estado === 'No Iniciado'
-                        }"
-                      ></i>
-                      {{ tema.estado || 'No Disponible' }} <!-- Aquí puede poner un valor por defecto -->
-                    </span>
-                  </td>
+                
                 </tr>
               </tbody>
             </table>

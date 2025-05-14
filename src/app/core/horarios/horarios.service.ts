@@ -82,7 +82,7 @@ export class HorariosService {
   /** Obtiene todos los horarios usando la consulta SQL (LEFT JOIN) */
   getHorariosSQL(): Observable<Horario[]> {
     return this.http
-      .get<{ success: boolean; data: Horario[] }>(`${this.API_URL}/horarios/sql`)
+      .get<{ success: boolean; data: Horario[] }>(`${this.API_URL}/`)
       .pipe(map(res => res.data));
   }
 

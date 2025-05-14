@@ -1,80 +1,117 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { AsideAdministradorComponent } from "../../componentes/aside-administrador/aside-administrador.component";
+import { AsideAdministradorComponent } from '../../componentes/aside-administrador/aside-administrador.component';
+import { Estadisticas, StatsService } from '../../core/stats/stats.service';
 
 @Component({
   selector: 'app-principal-administrador',
   standalone: true,
-  imports: [AsideAdministradorComponent],
+  imports: [CommonModule, AsideAdministradorComponent],
   templateUrl: './principal-administrador.component.html',
-  styleUrl: './principal-administrador.component.css'
+  styleUrls: ['./principal-administrador.component.css']
 })
-export class PrincipalAdministradorComponent implements AfterViewInit {
+export class PrincipalAdministradorComponent implements AfterViewInit, OnDestroy {
+  estadisticas!: Estadisticas;
+  private charts: Chart[] = [];
 
-  constructor() {
-    Chart.register(...registerables); // Registra los componentes necesarios de Chart.js
+  constructor(private statsService: StatsService) {
+    Chart.register(...registerables);
   }
 
   ngAfterViewInit(): void {
-    this.renderSchoolsChart();
-    this.renderCareersChart();
+    this.loadStats();
   }
 
-  renderSchoolsChart(): void {
-    const ctx = document.getElementById('schoolsChart') as HTMLCanvasElement;
-    if (!ctx) return;
+  ngOnDestroy(): void {
+    // Limpiar las gráficas al destruir el componente
+    this.charts.forEach(chart => chart.destroy());
+  }
 
-    new Chart(ctx.getContext('2d')!, {
-      type: 'doughnut',
-      data: {
-        labels: ['Públicas', 'Privadas', 'Técnicas', 'Virtuales'],
-        datasets: [{
-          data: [14, 6, 3, 1],
-          backgroundColor: ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444'],
-          borderWidth: 0
-        }]
+  private loadStats(): void {
+    this.statsService.getEstadisticas().subscribe({
+      next: (data) => {
+        this.estadisticas = data;
+        this.initializeCharts();
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: 'bottom'
-          }
-        }
+      error: (error) => {
+        console.error('Error al cargar estadísticas:', error);
+        // Aquí podrías agregar manejo de errores UI
       }
     });
   }
 
-  renderCareersChart(): void {
-    const ctx = document.getElementById('careersChart') as HTMLCanvasElement;
-    if (!ctx) return;
+  private initializeCharts(): void {
+    this.renderGeneralStatsChart();
+  }
 
-    new Chart(ctx.getContext('2d')!, {
-      type: 'bar',
-      data: {
-        labels: ['Ingeniería', 'Ciencias', 'Humanidades', 'Artes', 'Salud', 'Negocios'],
-        datasets: [{
-          label: 'Número de Carreras',
-          data: [42, 31, 24, 15, 18, 26],
-          backgroundColor: '#3b82f6',
-          borderRadius: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false
-          }
+ private renderGeneralStatsChart(): void {
+  const ctx = document.getElementById('generalStatsChart') as HTMLCanvasElement;
+  if (!ctx) return;
+
+  const chart = new Chart(ctx.getContext('2d')!, {
+    type: 'bar',
+    data: {
+      labels: [
+        'Escuelas', 
+        'Facultades', 
+        'Jefes de Carrera', 
+        'Carreras',
+        
+      ],
+      datasets: [{
+        label: 'Estadísticas Generales',
+        data: [
+          this.estadisticas.escuelas, 
+          this.estadisticas.facultades, 
+          this.estadisticas.jefes, 
+          this.estadisticas.carreras,
+    
+        ],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.8)', // Azul
+          'rgba(76, 175, 80, 0.8)',  // Verde
+          'rgba(255, 152, 0, 0.8)',  // Naranja
+          'rgba(244, 67, 54, 0.8)',  // Rojo
+          'rgba(156, 39, 176, 0.8)', // Púrpura
+          'rgba(0, 188, 212, 0.8)',  // Cian
+          'rgba(255, 193, 7, 0.8)',  // Amarillo
+          'rgba(0, 150, 136, 0.8)'   // Verde oscuro
+        ],
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom'
         },
-        scales: {
-          y: {
-            beginAtZero: true
+        title: {
+          display: true,
+          text: 'Estadísticas Generales',
+          padding: {
+            top: 10,
+            bottom: 30
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            precision: 0
           }
         }
       }
-    });
-  }
+    }
+  });
+
+  this.charts.push(chart);
+}
+
+
+ 
 }

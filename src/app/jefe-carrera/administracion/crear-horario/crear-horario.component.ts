@@ -279,15 +279,21 @@ nextTab() {
     this.horasGeneradas = slots;
     this.saveCustomHours();
   }
-
-  getInfoTurno() {
-    switch (this.selectedTurno) {
-      case 'Matutino':   return { horario: '07:00 a 13:00', descripcion: 'Clases en la mañana.' };
-      case 'Vespertino': return { horario: '12:00 a 18:00', descripcion: 'Clases en la tarde.' };
-      case 'Nocturno':   return { horario: '17:00 a 22:00', descripcion: 'Clases en la noche.' };
-      default:           return null;
+  
+getInfoTurno() {
+  const turnosData: { [key: string]: { horario: string; descripcion: string } } = {
+    Matutino: { horario: '07:00 a 13:00', descripcion: 'Turno de la mañana' },
+    Vespertino: { horario: '13:00 a 19:00', descripcion: 'Turno de la tarde' },
+    Nocturno: { horario: '19:00 a 22:00', descripcion: 'Turno de la noche' },
+    Personalizado: {
+      horario: `${this.horaInicio} a ${this.horaFin}`,
+      descripcion: 'Horario definido por el usuario'
     }
-  }
+  };
+
+  return this.selectedTurno ? turnosData[this.selectedTurno] : null;
+}
+
 
   // 6) Load aulas
   getAulasConsola(): void {

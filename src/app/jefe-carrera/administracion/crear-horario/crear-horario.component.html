@@ -1,3 +1,4 @@
+<!-- crear-horario.component.html -->
 <div class="body">
   <app-aside-jefecarrera></app-aside-jefecarrera>
 
@@ -39,30 +40,25 @@
                     name="turno"
                     [value]="turno"
                     [(ngModel)]="selectedTurno"
-                    (ngModelChange)="onTurnoChange()"
+                    (change)="onTurnoChange()"
                   />
                   <label [for]="'turno-' + turno">{{ turno }}</label>
                 </div>
               </div>
             </div>
 
-               <!-- Información del turno estándar -->
-               <div
-               *ngIf="selectedTurno !== 'Personalizado' && getInfoTurno() as info"
-               class="info-turno"
-             >
-               <h4 class="info-titulo">Información del turno</h4>
-               <div class="info-item">
-                 <i class="fa-solid fa-clock info-icono"></i>
-                 <span><strong>Horario:</strong> {{ info.horario }}</span>
-               </div>
-               <div class="info-item">
-                 <i class="fa-solid fa-book-open info-icono"></i>
-                 <span><strong>Descripción:</strong> {{ info.descripcion }}</span>
-               </div>
-             </div>
-
-<br>
+            <!-- Info turno estándar -->
+            <div *ngIf="selectedTurno !== 'Personalizado' && getInfoTurno() as info" class="info-turno">
+              <h4 class="info-titulo">Información del turno</h4>
+              <div class="info-item">
+                <i class="fa-solid fa-clock info-icono"></i>
+                <span><strong>Horario:</strong> {{ info.horario }}</span>
+              </div>
+              <div class="info-item">
+                <i class="fa-solid fa-book-open info-icono"></i>
+                <span><strong>Descripción:</strong> {{ info.descripcion }}</span>
+              </div>
+            </div>
 
             <!-- Clases por día -->
             <div class="form-group">
@@ -75,28 +71,18 @@
                 min="1"
                 max="6"
                 [(ngModel)]="clasesPorDia"
-                (ngModelChange)="onClasesPorDiaChange()"
+                (change)="onClasesPorDiaChange()"
               />
             </div>
 
-            <!-- Rango y duración personalizado -->
+            <!-- Rango personalizado -->
             <ng-container *ngIf="selectedTurno === 'Personalizado'">
               <div class="form-group">
                 <label>Rango personalizado:</label>
                 <div class="time-group">
-                  <input
-                    type="time"
-                    class="form-control"
-                    name="horaInicio"
-                    [(ngModel)]="horaInicio"
-                  />
+                  <input type="time" class="form-control" name="horaInicio" [(ngModel)]="horaInicio" />
                   <span>a</span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    name="horaFin"
-                    [(ngModel)]="horaFin"
-                  />
+                  <input type="time" class="form-control" name="horaFin" [(ngModel)]="horaFin" />
                 </div>
               </div>
               <div class="form-group">
@@ -122,12 +108,7 @@
             <!-- Selección de grupo -->
             <div class="form-group">
               <label for="grupo_id">Selecciona el grupo:</label>
-              <select
-                id="grupo_id"
-                name="grupoId"
-                class="form-control"
-                [(ngModel)]="grupoSeleccionado"
-              >
+              <select id="grupo_id" class="form-control" [(ngModel)]="grupoSeleccionado" name="grupoId">
                 <option value="" disabled>Selecciona un grupo</option>
                 <option *ngFor="let grupo of grupos" [value]="grupo.id">
                   {{ grupo.id }} — {{ grupo.grupo_nombre }} • {{ grupo.semestre }}
@@ -135,14 +116,10 @@
               </select>
             </div>
 
+            <!-- Selección de aula -->
             <div class="form-group">
               <label for="aula_id">Aula Principal:</label>
-              <select
-                id="aula_id"
-                name="aulaId"
-                class="form-control"
-                [(ngModel)]="aulaSeleccionada"
-              >
+              <select id="aula_id" class="form-control" [(ngModel)]="aulaSeleccionada" name="aulaId">
                 <option value="" disabled>Selecciona un aula</option>
                 <option *ngFor="let aula of aulas" [value]="aula.id">
                   {{ aula.id }} — {{ aula.nombre }}
@@ -150,7 +127,6 @@
               </select>
             </div>
 
-      
           </div>
         </div>
 
@@ -178,35 +154,31 @@
                 </tbody>
               </table>
             </div>
-          </div>
-          <div class="actions-buttons">
-            <button class="btn btn-primary" (click)="nextTab()">Siguiente</button>
-
+            <div class="actions-buttons">
+              <button class="btn btn-primary" (click)="nextTab()">Siguiente</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-   <!-- Sólo muestro Tab2 cuando diasSemana ya está definido -->
-<app-tab2
-*ngIf="diasSemana?.length"
-[resumen]="resumen"
-[currentTab]="currentTab"
-[diasSeleccionados]="diasSeleccionados"
-(diasSeleccionadosChange)="onDiasSeleccionadosChange($event)"
-[diasSemana]="diasSemana"
-(tabChange)="selectTab($event)"
-></app-tab2>
+    <!-- Tab2 y Tab3 -->
+    <app-tab2
+      *ngIf="diasSemana?.length"
+      [resumen]="resumen"
+      [currentTab]="currentTab"
+      [diasSeleccionados]="diasSeleccionados"
+      (diasSeleccionadosChange)="onDiasSeleccionadosChange($event)"
+      [diasSemana]="diasSemana"
+      (tabChange)="selectTab($event)">
+    </app-tab2>
 
-  
-
-<app-tab3
-*ngIf="currentTab === 'diseno'"
-[resumen]="resumen"
-[diasSeleccionados]="diasSeleccionados"
-(tabChange)="selectTab($event)"
-[currentTab]="currentTab">
-</app-tab3>
-
+    <app-tab3
+      *ngIf="currentTab === 'diseno'"
+      [resumen]="resumen"
+      [diasSeleccionados]="diasSeleccionados"
+      (tabChange)="selectTab($event)"
+      [currentTab]="currentTab">
+    </app-tab3>
   </div>
 </div>
