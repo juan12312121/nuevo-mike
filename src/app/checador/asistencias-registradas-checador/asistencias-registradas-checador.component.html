@@ -1,97 +1,70 @@
+<!-- asistencias-registradas-checador.component.html -->
 <div>
-   <app-aside-checador></app-aside-checador>
-<div class="contenedor">
-  <h1 class="titulo">Asistencias Registradas</h1>
+  <app-aside-checador></app-aside-checador>
+  <div class="contenedor">
+    <h1 class="titulo">Asistencias Registradas</h1>
 
-  <!-- Indicador de carga -->
-  <div *ngIf="cargando" class="cargando">
-    <div class="spinner"></div>
-    <p>Cargando asistencias...</p>
-  </div>
-
-  <!-- Mensaje de error -->
-  <div *ngIf="error && !cargando" class="error-container">
-    <div class="error-icon">
-      <i class="fas fa-exclamation-triangle"></i>
+    <div *ngIf="cargando" class="cargando">
+      <div class="spinner"></div>
+      <p>Cargando asistencias...</p>
     </div>
-    <p class="error-mensaje">{{ error }}</p>
-    <button class="boton-reintentar" (click)="ngOnInit()">Reintentar</button>
-  </div>
 
-  <!-- Mensaje si no hay asistencias -->
-  <div *ngIf="!cargando && !error && asistencias.length === 0" class="sin-datos">
-    <i class="fas fa-calendar-times"></i>
-    <p>No se encontraron registros de asistencias</p>
-  </div>
+    <div *ngIf="error && !cargando" class="error-container">
+      <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <p class="error-mensaje">{{ error }}</p>
+      <button class="boton-reintentar" (click)="ngOnInit()">Reintentar</button>
+    </div>
 
-  <!-- Tabla de asistencias -->
-  <div *ngIf="!cargando && !error && asistencias.length > 0" class="tabla-container">
-    <div class="filtros">
-      <div class="busqueda">
-        <input 
-          type="text" 
-          placeholder="Buscar..."
-          class="input-busqueda"
-          (input)="filtrarAsistencias($event)"
-        >
+    <div *ngIf="!cargando && !error && asistencias.length === 0" class="sin-datos">
+      <i class="fas fa-calendar-times"></i>
+      <p>No se encontraron registros de asistencias</p>
+    </div>
+
+    <div *ngIf="!cargando && !error && asistenciasFiltradas.length > 0" class="tabla-container">
+      
+
+      <table class="tabla-asistencias">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Día Semana</th>
+            <th>Materia</th>
+            <th>Profesor</th>
+            <th>Asistió</th>
+       
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of asistenciasFiltradas | slice:(paginaActual-1)*elementosPorPagina:(paginaActual*elementosPorPagina)">
+         
+            <td>{{ a.id }}</td>
+            <td>{{ a.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ a.hora }}</td>
+            <td>{{ a.dia_semana }}</td>
+            <td>{{ a.materia_nombre }}</td>
+            <td>{{ a.profesor_nombre }}</td>
+            <td>
+              <span class="estado" [ngClass]="getEstadoClase(a.asistio)">
+                {{ a.asistio }}
+              </span>
+            </td>
+           
+            
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="paginacion">
+        <button [disabled]="paginaActual===1" (click)="cambiarPagina(paginaActual-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+        <button [disabled]="paginaActual===totalPaginas" (click)="cambiarPagina(paginaActual+1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-      <div class="fecha-filtro">
-        <label>Filtrar por fecha:</label>
-        <input 
-          type="date" 
-          class="input-fecha"
-          (change)="filtrarPorFecha($event)"
-        >
-      </div>
-    </div>
-
-    <table class="tabla-asistencias">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Fecha</th>
-          <th>Hora entrada</th>
-          <th>Hora salida</th>
-          <th>Tema</th>
-          <th>Alumno</th>
-          <th>Estado</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let asistencia of asistencias">
-          <td>{{ asistencia.id }}</td>
-          <td>{{ asistencia.fecha | date:'dd/MM/yyyy' }}</td>
-          <td>{{ asistencia.horaEntrada | date:'HH:mm' }}</td>
-          <td>{{ asistencia.horaSalida | date:'HH:mm' }}</td>
-          <td>{{ asistencia.tema?.nombre || 'N/A' }}</td>
-          <td>{{ asistencia.alumno?.nombre || 'Sin nombre' }}</td>
-          <td>
-            <span class="estado" [ngClass]="getEstadoClase(asistencia.estado)">
-              {{ asistencia.estado }}
-            </span>
-          </td>
-          <td class="acciones">
-            <button class="boton-accion ver" (click)="verDetalles(asistencia.id)">
-              <i class="fas fa-eye"></i>
-            </button>
-            <button class="boton-accion editar" (click)="editarAsistencia(asistencia.id)">
-              <i class="fas fa-edit"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="paginacion">
-      <button [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
-      <button [disabled]="paginaActual === totalPaginas" (click)="cambiarPagina(paginaActual + 1)">
-        <i class="fas fa-chevron-right"></i>
-      </button>
     </div>
   </div>
-</div> 
 </div>
