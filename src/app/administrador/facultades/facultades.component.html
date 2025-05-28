@@ -19,23 +19,20 @@
             <div class="filter-group">
               <div class="search-input">
                 <i class="fas fa-search search-icon"></i>
-                <!-- Aquí agregamos el ngModel y el evento input -->
-                <input
-                  type="text"
-                  class="search-field"
-                  placeholder="Buscar facultad..."
-                  [(ngModel)]="searchText"
-                  (input)="searchFacultades()"
-                />
+                <!-- Conecta el input de texto y llama a filterFacultades en cada cambio -->
+                <input type="text" class="search-field" placeholder="Buscar facultad..." [(ngModel)]="searchText"
+                  (input)="filterFacultades()" />
               </div>
             </div>
             <div class="filter-group">
               <span class="filter-label">Escuela:</span>
-              <!-- Este select es un filtro adicional, no lo modificaremos en este ejemplo -->
-              <select class="form-select" style="width: 200px;">
-                <option value="">Todas las escuelas</option>
-                 <!-- Iterar sobre las escuelas cargadas si necesitas este filtro -->
-                 <option *ngFor="let escuela of escuelas" [value]="escuela.id">{{ escuela.nombre }}</option>
+              <!-- Conecta el select y llama a filterFacultades en cada cambio -->
+              <select class="form-select" style="width: 200px;" [(ngModel)]="selectedSchoolId"
+                (change)="filterFacultades()">
+                <!-- Opción para "Todas las escuelas". Usa [ngValue]="null" para que coincida con selectedSchoolId = null -->
+                <option [ngValue]="null">Todas las escuelas</option>
+                <!-- Itera sobre las escuelas cargadas. Usa [ngValue]="escuela.id" -->
+                <option *ngFor="let escuela of escuelas" [ngValue]="escuela.id">{{ escuela.nombre }}</option>
               </select>
             </div>
           </div>
@@ -83,22 +80,30 @@
           </div>
 
           <!-- No Results Message -->
-          <!-- Muestra este mensaje si la lista filtrada Y paginada está vacía Y no está cargando -->
-          <div *ngIf="!cargando && paginatedFacultades.length === 0 && facultades.length === 0" class="no-results">
-            No se encontraron facultades registradas que coincidan con la búsqueda.
-          </div>
-           <!-- Mensaje específico si la lista completa está vacía -->
-          <div *ngIf="!cargando && originalFacultades.length === 0" class="no-results">
-            No se encontraron facultades registradas.
+          <!-- Modifica este mensaje para ser más genérico ya que hay múltiples filtros -->
+          <div *ngIf="!cargando && facultades.length === 0" class="no-results">
+            <!-- Si originalFacultades está vacía, significa que no hay datos cargados en absoluto -->
+            <ng-container *ngIf="originalFacultades.length === 0; else noMatchingResults">
+              No se encontraron facultades registradas.
+            </ng-container>
+            <!-- Si originalFacultades tiene datos pero facultades está vacía, es que no hay resultados para los filtros -->
+            <ng-template #noMatchingResults>
+              <!-- No Results Message -->
+              <div *ngIf="!cargando && facultades.length === 0" class="no-results">
+                <ng-container *ngIf="originalFacultades.length === 0; else noMatchingResults">
+                  No se encontraron facultades registradas.
+                </ng-container>
+                <ng-template #noMatchingResults>
+                  No se encontraron facultades que coincidan con los criterios de búsqueda/filtro.
+                </ng-template>
+              </div>
+            </ng-template>
           </div>
 
 
           <!-- Pagination Component -->
           <!-- El componente de paginación debe recibir la lista filtrada completa -->
-          <app-paginacion-administrador
-            [data]="facultades"
-            [pageSize]="pageSize"
-            [dataLabel]="'facultades'"
+          <app-paginacion-administrador [data]="facultades" [pageSize]="pageSize" [dataLabel]="'facultades'"
             (pageChanged)="onPageChange($event)">
           </app-paginacion-administrador>
         </div>
@@ -106,10 +111,9 @@
     </div>
 
     <!-- Modal: edición / creación de facultad -->
-    <app-modal-facultad
-      [visible]="showModal"
-      [facultadAEditar]="facultadAEditar"
-      (close)="handleClose()"
+    <!-- Si tu modal necesita la lista de escuelas para un select dentro de él, mantén o agrega el binding -->
+    <!-- Asegúrate de que ModalFacultadComponent tiene @Input('escuelas') escuelas: Escuela[] -->
+    <app-modal-facultad [visible]="showModal" [facultadAEditar]="facultadAEditar" (close)="handleClose()"
       (save)="handleSave($event)">
     </app-modal-facultad>
 

@@ -454,3 +454,13 @@
 .hidden {
     display: none;
 }
+.no-results {
+  text-align: center;     /* Centra el texto */
+  margin-top: 20px;       /* Espacio por encima del mensaje */
+  margin-bottom: 20px;    /* Espacio por debajo del mensaje */
+  color: #555;            /* Un color gris oscuro, menos duro que el negro puro */
+  font-size: 1.1em;       /* Ligeramente más grande que el texto normal si lo deseas */
+  font-style: italic;     /* Opcional: para darle un toque distinto */
+  /* Opcional: un borde o fondo sutil para destacarlo más */
+  border-radius: 5px;     /* Bordes ligeramente redondeados */
+}
