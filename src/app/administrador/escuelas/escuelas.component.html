@@ -21,14 +21,8 @@
               <label class="filter-label">Buscar:</label>
               <div class="search-input">
                 <i class="fas fa-search search-icon"></i>
-                <input
-                  type="text"
-                  class="search-field"
-                  id="searchInput"
-                  [(ngModel)]="searchText" 
-                  placeholder="Buscar por nombre o folio..."
-                  (input)="searchSchools()"
-                />
+                <input type="text" class="search-field" id="searchInput" [(ngModel)]="searchText"
+                  placeholder="Buscar por nombre o folio..." (input)="searchSchools()" />
               </div>
             </div>
           </div>
@@ -69,20 +63,14 @@
           </div>
 
           <!-- Paginación -->
-          <app-paginacion-administrador
-            [data]="escuelas"
-            [pageSize]="pageSize"
-            (pageChanged)="onPageChange($event)">
+          <app-paginacion-administrador [data]="escuelas" [pageSize]="pageSize" (pageChanged)="onPageChange($event)">
           </app-paginacion-administrador>
         </div>
       </div>
     </div>
 
     <!-- Modal de Escuelas -->
-    <app-modal-escuelas
-      [isOpen]="isModalOpen"
-      [escuelaData]="escuelaForm"
-      (close)="closeModal()"
+    <app-modal-escuelas [isOpen]="isModalOpen" [escuelaData]="escuelaForm" (close)="closeModal()"
       (save)="saveEscuela($event)">
     </app-modal-escuelas>
   </div>

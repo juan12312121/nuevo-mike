@@ -159,7 +159,7 @@ export class EscuelasComponent implements OnInit {
       didOpen: () => {
         const confirmBtn = document.getElementById('confirmarEliminar');
         const cancelBtn = document.getElementById('cancelarEliminar');
-        
+
         confirmBtn?.addEventListener('click', () => {
           Swal.close();
           // Llamada al servicio pasando el id de la escuela
@@ -186,11 +186,11 @@ export class EscuelasComponent implements OnInit {
             }
           });
         });
-  
+
         cancelBtn?.addEventListener('click', () => Swal.close());
       }
     });
   }
-  
-  
+
+
 }

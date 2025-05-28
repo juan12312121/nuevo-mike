@@ -9,11 +9,7 @@
         <div class="card">
           <div class="card-header">
             <h2 class="card-title">Facultades Registradas</h2>
-            <button
-              class="btn btn-primary"
-              id="btn-nueva-facultad"
-              (click)="openModal()"
-            >
+            <button class="btn btn-primary" id="btn-nueva-facultad" (click)="openModal()">
               <i class="fas fa-plus btn-icon"></i> Nueva Facultad
             </button>
           </div>
@@ -23,20 +19,23 @@
             <div class="filter-group">
               <div class="search-input">
                 <i class="fas fa-search search-icon"></i>
+                <!-- Aquí agregamos el ngModel y el evento input -->
                 <input
                   type="text"
                   class="search-field"
                   placeholder="Buscar facultad..."
+                  [(ngModel)]="searchText"
+                  (input)="searchFacultades()"
                 />
               </div>
             </div>
             <div class="filter-group">
               <span class="filter-label">Escuela:</span>
+              <!-- Este select es un filtro adicional, no lo modificaremos en este ejemplo -->
               <select class="form-select" style="width: 200px;">
                 <option value="">Todas las escuelas</option>
-                <option value="1">Universidad Nacional</option>
-                <option value="2">Instituto Tecnológico</option>
-                <option value="3">Universidad Autónoma</option>
+                 <!-- Iterar sobre las escuelas cargadas si necesitas este filtro -->
+                 <option *ngFor="let escuela of escuelas" [value]="escuela.id">{{ escuela.nombre }}</option>
               </select>
             </div>
           </div>
@@ -46,7 +45,8 @@
           <div *ngIf="error" class="error-message">{{ error }}</div>
 
           <!-- Faculties Table Section -->
-          <div *ngIf="!cargando && facultades.length > 0" class="table-container">
+          <!-- La tabla itera sobre paginatedFacultades, que ya es la lista filtrada y paginada -->
+          <div *ngIf="!cargando && paginatedFacultades.length > 0" class="table-container">
             <table class="data-table">
               <thead>
                 <tr>
@@ -69,17 +69,10 @@
                   <td>{{ facultad.telefono_contacto }}</td>
                   <td>
                     <div class="table-actions">
-                      <button
-                        class="btn-action btn-edit"
-                        title="Editar"
-                        (click)="editFacultad(facultad)"
-                      >
+                      <button class="btn-action btn-edit" title="Editar" (click)="editFacultad(facultad)">
                         <i class="fas fa-pen"></i>
                       </button>
-                      <button (click)="eliminarFacultad(facultad)"
-                        class="btn-action btn-delete"
-                        title="Eliminar"
-                      >
+                      <button (click)="eliminarFacultad(facultad)" class="btn-action btn-delete" title="Eliminar">
                         <i class="fas fa-trash"></i>
                       </button>
                     </div>
@@ -90,17 +83,23 @@
           </div>
 
           <!-- No Results Message -->
-          <div *ngIf="!cargando && facultades.length === 0" class="no-results">
+          <!-- Muestra este mensaje si la lista filtrada Y paginada está vacía Y no está cargando -->
+          <div *ngIf="!cargando && paginatedFacultades.length === 0 && facultades.length === 0" class="no-results">
+            No se encontraron facultades registradas que coincidan con la búsqueda.
+          </div>
+           <!-- Mensaje específico si la lista completa está vacía -->
+          <div *ngIf="!cargando && originalFacultades.length === 0" class="no-results">
             No se encontraron facultades registradas.
           </div>
 
+
           <!-- Pagination Component -->
+          <!-- El componente de paginación debe recibir la lista filtrada completa -->
           <app-paginacion-administrador
             [data]="facultades"
             [pageSize]="pageSize"
             [dataLabel]="'facultades'"
-            (pageChanged)="onPageChange($event)"
-          >
+            (pageChanged)="onPageChange($event)">
           </app-paginacion-administrador>
         </div>
       </div>
@@ -111,8 +110,7 @@
       [visible]="showModal"
       [facultadAEditar]="facultadAEditar"
       (close)="handleClose()"
-      (save)="handleSave($event)"
-    >
+      (save)="handleSave($event)">
     </app-modal-facultad>
 
   </div>
