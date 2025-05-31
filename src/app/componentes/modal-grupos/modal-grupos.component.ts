@@ -13,7 +13,6 @@ import Swal from 'sweetalert2';
 import { CarrerasService } from '../../core/carreras/carreras.service';
 import { GruposService } from '../../core/grupos/grupos.service';
 
-
 @Component({
   selector: 'app-modal-grupos',
   standalone: true,
@@ -31,7 +30,6 @@ export class ModalGruposComponent implements OnInit, OnChanges {
   @Output() isOpenChange = new EventEmitter<boolean>();
   @Output() grupoActualizado = new EventEmitter<void>();
 
-  // Nuevo input para recibir el grupo que vamos a editar
   @Input() grupoSeleccionado: any;
 
   editMode: boolean = false;
@@ -44,6 +42,12 @@ export class ModalGruposComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.obtenerCarreras();
+
+    // Establecer la carrera por defecto del usuario autenticado
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (usuario && usuario.carrera_id) {
+      this.carrera_id = usuario.carrera_id;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -76,6 +80,12 @@ export class ModalGruposComponent implements OnInit, OnChanges {
     this.semestre = '';
     this.editMode = false;
     this.grupoId = 0;
+
+    // Restaurar la carrera del usuario al cerrar (en caso de nuevo grupo)
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    if (usuario && usuario.carrera_id) {
+      this.carrera_id = usuario.carrera_id;
+    }
   }
 
   private setGrupoEditar(grupo: any): void {
@@ -93,15 +103,14 @@ export class ModalGruposComponent implements OnInit, OnChanges {
       carrera_id: this.carrera_id,
       semestre: this.semestre
     };
-  
+
     const accion = this.editMode ? 'actualizar' : 'crear';
     const obs = this.editMode
       ? this.gruposService.actualizarGrupo(this.grupoId, payload)
       : this.gruposService.crearGrupo(payload);
-  
+
     obs.subscribe(
       () => {
-        // Toast de éxito
         Swal.fire({
           toast: true,
           position: 'top-end',
@@ -117,7 +126,6 @@ export class ModalGruposComponent implements OnInit, OnChanges {
       },
       (error) => {
         console.error(`Error al ${accion} grupo:`, error);
-        // Toast de error
         Swal.fire({
           toast: true,
           position: 'top-end',
@@ -131,5 +139,4 @@ export class ModalGruposComponent implements OnInit, OnChanges {
       }
     );
   }
-  
 }

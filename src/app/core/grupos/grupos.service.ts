@@ -79,7 +79,7 @@ actualizarGrupo(id: number, grupo: any): Observable<any> {
 eliminarGrupo(id: number): Observable<any> {
   return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
 }
-
+  
   // grupos.service.ts
   getGruposPorUsuario(usuarioId: number): Observable<RawGrupo[]> {
     return this.http

@@ -13,10 +13,7 @@
 
     <a routerLink="/temas-vistos" routerLinkActive="active" class="nav-link">
       <i class="fa-solid fa-book"></i> Tema Vistos
-
     </a>
-
-
 
     <p class="nav-section-title">Administración</p>
 
@@ -56,7 +53,14 @@
         <p>Jefe de Carrera</p>
       </div>
     </div>
-    <button class="logout-btn" title="Cerrar sesión" (click)="logout()">
+    <!-- Botón de Cerrar Sesión con type="button" para que no haga submit -->
+    <button
+      type="button"
+      class="logout-btn"
+      title="Cerrar sesión"
+      (click)="logout()"
+      style="z-index: 9999;"
+    >
       <i class="fa-solid fa-sign-out-alt"></i>
     </button>
   </div>

@@ -29,7 +29,6 @@
     <a class="menu-item" routerLink="/facultades" routerLinkActive="active">
       <div class="menu-icon"><i class="fas fa-university"></i></div>
       <span>Facultades</span>
-
     </a>
 
     <a class="menu-item" routerLink="/carreras" routerLinkActive="active">
@@ -41,7 +40,6 @@
       <div class="menu-icon"><i class="fas fa-user-tie"></i></div>
       <span>Jefes de Carrera</span>
     </a>
-
 
   </div>
 
@@ -56,7 +54,8 @@
       </div>
     </div>
 
-    <button class="logout-button">
+    <!-- Aquí se añade el evento (click) para invocar logout() -->
+    <button class="logout-button" (click)="logout()">
       <span class="logout-icon"><i class="fas fa-sign-out-alt"></i></span>
       <span>Cerrar Sesión</span>
     </button>

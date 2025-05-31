@@ -37,7 +37,10 @@
       </label>
       <div class="input-wrapper">
         <i class="fa-solid fa-university input-icon"></i>
-        <select class="form-select" [(ngModel)]="carrera_id">
+        <select
+          class="form-select"
+          [(ngModel)]="carrera_id"
+        >
           <option value="">Seleccionar Carrera</option>
           <option
             *ngFor="let carrera of carreras"

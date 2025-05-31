@@ -1,7 +1,10 @@
-// src/app/componentes/aside-jefecarrera/aside-jefecarrera.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  Renderer2
+} from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-aside-jefecarrera',
@@ -11,7 +14,10 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./aside-jefecarrera.component.css']
 })
 export class AsideJefecarreraComponent implements OnInit {
-  constructor(private renderer: Renderer2) {}
+  constructor(
+    private renderer: Renderer2,
+    private router: Router   // ← Aquí inyectamos Router correctamente
+  ) {}
 
   ngOnInit(): void {
     // Inyecta Font Awesome si no lo has hecho en index.html
@@ -27,14 +33,28 @@ export class AsideJefecarreraComponent implements OnInit {
 
   logout(): void {
     console.log('Cerrando sesión y eliminando token y usuario de localStorage');
+
     const token = localStorage.getItem('token');
     const usuario = localStorage.getItem('usuario');
-    if (token) { console.log('Token encontrado:', token); }
-    if (usuario) { console.log('Usuario encontrado:', usuario); }
+    if (token) {
+      console.log('Token encontrado:', token);
+    }
+    if (usuario) {
+      console.log('Usuario encontrado:', usuario);
+    }
+
+    // Eliminamos token y usuario
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     console.log('Sesión cerrada');
-    // Aquí podrías redirigir a /login por ejemplo
-    // this.router.navigate(['/login']);
+
+    // Redirigimos a /login (ruta absoluta)
+    this.router.navigateByUrl('/login')
+      .then(navegó => {
+        console.log('Redirección a /login completada:', navegó);
+      })
+      .catch(err => {
+        console.error('Error al redirigir a /login:', err);
+      });
   }
 }
