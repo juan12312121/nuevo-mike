@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class MateriasService {
   private apiUrl = 'http://localhost:4000/api/materias'; // URL de tu API backend
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Método para obtener los encabezados con el token de autorización
   private getHeaders(): HttpHeaders {
@@ -25,6 +25,10 @@ export class MateriasService {
     return this.http.post(this.apiUrl, materiaData, { headers: this.getHeaders() });
   }
 
+  obtenerMateriasPorUsuario(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/por-usuario`, { headers: this.getHeaders() });
+  }
+
   // Método para obtener todas las materias
   obtenerMaterias(): Observable<any> {
     return this.http.get(this.apiUrl, { headers: this.getHeaders() });
@@ -36,7 +40,7 @@ export class MateriasService {
       headers: this.getHeaders()
     });
   }
-  
+
   eliminarMateria(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`, {
       headers: this.getHeaders()

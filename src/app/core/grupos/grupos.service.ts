@@ -1,6 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
+import { UsuariosService } from '../autenticacion/usuarios.service';
+
 
 
 export interface RawGrupo {
@@ -13,10 +15,10 @@ export interface RawGrupo {
 
 
 export interface RawGrupoApi {
-  grupo_id:      number;
-  grupo_nombre:  string;
-  carrera_nombre:string;
-  grupo_semestre:string;
+  grupo_id: number;
+  grupo_nombre: string;
+  carrera_nombre: string;
+  grupo_semestre: string;
 }
 
 export interface Grupo {
@@ -27,70 +29,69 @@ export interface Grupo {
 }
 
 
-@Injectable({ 
+@Injectable({
   providedIn: 'root'
 })
 export class GruposService {
 
   private apiUrl = 'http://localhost:4000/api/grupos'; // URL base de la API
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private usuariosService: UsuariosService) { }
 
-   // Obtener todos los grupos
-   getGrupos(): Observable<any> {
-    console.log('🚀 Haciendo solicitud GET a: ', this.apiUrl);  // Log antes de la solicitud
-    return this.http.get<any>(this.apiUrl).pipe(
-      tap(
-        (data) => {
-          console.log('✅ Respuesta obtenida de getGrupos():', data); // Log de la respuesta
-        },
-        (err: HttpErrorResponse) => {
-          console.error('❌ Error al obtener los grupos:', err);  // Log de errores
-        }
-      )
-    );
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.usuariosService.getToken();
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  }
+  // Obtener todos los grupos
+  getGrupos(): Observable<any> {
+  console.log('🚀 Haciendo solicitud GET a: ', this.apiUrl);
+  return this.http.get<any>(this.apiUrl, { headers: this.getAuthHeaders() }).pipe(
+    tap(
+      (data) => {
+        console.log('✅ Respuesta obtenida de getGrupos():', data);
+      },
+      (err: HttpErrorResponse) => {
+        console.error('❌ Error al obtener los grupos:', err);
+      }
+    )
+  );
   }
 
   // Obtener un grupo por ID
-  getGrupoById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
-  }
+ getGrupoById(id: number): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
+}
 
   // Crear un nuevo grupo
-  crearGrupo(grupo: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, grupo, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    });
-  }
+ crearGrupo(grupo: any): Observable<any> {
+  return this.http.post<any>(this.apiUrl, grupo, { headers: this.getAuthHeaders() });
+}
 
   // Actualizar un grupo
-  actualizarGrupo(id: number, grupo: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, grupo, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    });
-  }
+actualizarGrupo(id: number, grupo: any): Observable<any> {
+  return this.http.put<any>(`${this.apiUrl}/${id}`, grupo, { headers: this.getAuthHeaders() });
+}
 
   // Eliminar un grupo
-  eliminarGrupo(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  }
-
-// grupos.service.ts
-getGruposPorUsuario(usuarioId: number): Observable<RawGrupo[]> {
-  return this.http
-    .get<{ success: boolean; data: RawGrupo[] }>(`${this.apiUrl}/usuario/${usuarioId}`)
-    .pipe(
-      map(res => res.data),     // <-- aquí extraes únicamente el array
-      tap({
-        next: data => console.log('✅ getGruposPorUsuario datos:', data),
-        error: err  => console.error('❌ Error:', err)
-      })
-    );
+eliminarGrupo(id: number): Observable<any> {
+  return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
 }
+
+  // grupos.service.ts
+  getGruposPorUsuario(usuarioId: number): Observable<RawGrupo[]> {
+    return this.http
+      .get<{ success: boolean; data: RawGrupo[] }>(`${this.apiUrl}/usuario/${usuarioId}`)
+      .pipe(
+        map(res => res.data),     // <-- aquí extraes únicamente el array
+        tap({
+          next: data => console.log('✅ getGruposPorUsuario datos:', data),
+          error: err => console.error('❌ Error:', err)
+        })
+      );
+  }
 
 
 }

@@ -31,16 +31,16 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     }
-  
+
     this.usuariosService.login(this.loginForm.value).subscribe({
       next: ({ token, usuario }) => {
         console.log('Usuario recibido:', usuario);
-  
+
         if (!usuario || !usuario.rol_id) {
           this.errorMessage = 'La respuesta del servidor no es válida.';
           return;
         }
-  
+
         // Redirección según el rol_id
         switch (usuario.rol_id) {
           case 5:

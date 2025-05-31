@@ -27,25 +27,83 @@ export class GruposComponent implements OnInit {
   modalVisible: boolean = false;
 
 
-  constructor(private gruposService: GruposService) {}
+  constructor(private gruposService: GruposService) { }
 
   ngOnInit(): void {
     this.getGrupos();
   }
 
   getGrupos(): void {
-    this.gruposService.getGrupos().subscribe((data: any[]) => {
-      this.grupos = data.map((g: any) => ({   // ← aquí
-        id: g.id,
-        nombre: g.grupo_nombre,
-        carrera_nombre: g.carrera_nombre,
-        semestre: g.semestre
-      }));
-      console.table(this.grupos);
+    this.gruposService.getGrupos().subscribe({
+      next: (response: any) => {
+        console.log('📦 Respuesta completa del backend:', response);
+
+        // El backend devuelve { message: string, data: Grupo[] }
+        if (response.data && Array.isArray(response.data)) {
+          this.grupos = response.data.map((g: any) => ({
+            id: g.id,
+            nombre: g.nombre, // Ya no es grupo_nombre, es nombre directamente
+            carrera_nombre: g.carrera?.nombre || 'Sin carrera', // Acceder a carrera.nombre
+            semestre: g.semestre
+          }));
+          console.log('✅ Grupos mapeados:', this.grupos);
+          console.table(this.grupos);
+        } else {
+          // Caso cuando el usuario no tiene carrera asignada o no hay grupos
+          console.warn('⚠️ No hay grupos disponibles:', response.message);
+          this.grupos = [];
+
+          // Mostrar mensaje informativo al usuario
+          if (response.message) {
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'info',
+              title: response.message,
+              showConfirmButton: false,
+              timer: 3000
+            });
+          }
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error al obtener grupos:', error);
+        this.grupos = [];
+
+        // Manejo de errores específicos
+        if (error.status === 401) {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Sesión expirada. Por favor, inicie sesión nuevamente.',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } else if (error.status === 403) {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'warning',
+            title: 'No tiene permisos para ver grupos.',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        } else {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Error al cargar los grupos',
+            showConfirmButton: false,
+            timer: 3000
+          });
+        }
+      }
     });
   }
-  
-  
+
+
 
   eliminarGrupo(id: number): void {
     // 1) Toast tipo pregunta
@@ -111,7 +169,7 @@ export class GruposComponent implements OnInit {
   }
 
 
-  
+
 
   onModalClose(): void {
     this.modalOpen = false;

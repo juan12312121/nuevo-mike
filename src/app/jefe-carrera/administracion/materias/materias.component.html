@@ -1,71 +1,69 @@
 <div class="body">
-    <app-aside-jefecarrera></app-aside-jefecarrera>
-    
-    <div class="main-content">
-        <!-- Top Header -->
-        <header class="header">
-            <h1>Gestión de Materias</h1>
-            <div class="header-actions">
-                <!-- Aquí pueden ir botones de acción generales si es necesario -->
-            </div>
-        </header>
+  <app-aside-jefecarrera></app-aside-jefecarrera>
 
-        <!-- Dashboard Content -->
-        <main class="dashboard">
-            <div class="section-title">
-                <span>Materias</span>
-                <button class="add-button" (click)="abrirModal()">
-                    <i class="fa-solid fa-plus"></i> Agregar Materia
-                  </button>
-                  
-            </div>
-            
-            <div class="search-container">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" class="search-input" placeholder="Buscar materia por nombre o carrera...">
-            </div>
-            
-            <div class="subjects-grid fade-in-up">
-                <!-- Aquí iteramos sobre las materias y mostramos cada una -->
-                <div *ngFor="let materia of materias" class="subject-card">
-                    <!-- Colocamos el ID en la esquina superior derecha -->
-                    <div class="subject-card-id">
-                        {{ materia.id }}
-                    </div>
-                    <div class="subject-card-icon">
-                        <i class="fa-solid fa-book"></i>
-                    </div>
-                    <div class="subject-card-info">
-                        <!-- Mostramos los detalles de la materia -->
-                        <div class="subject-card-name">{{ materia.nombre }}</div> <!-- Nombre de la materia -->
-                        <div class="subject-card-career"> {{ materia.carrera?.nombre || 'Carrera no disponible' }}</div> <!-- Carrera de la materia -->
-                       
-                    </div>
-                    <div class="subject-card-actions">
-                        <button class="subject-card-button"(click)="editarMateria(materia)">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button class="subject-card-button delete" (click)="eliminarMateria(materia.id)">
-                            <i class="fa-solid fa-trash"></i>
-                          </button>
-                          
-                          
-                          
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Paginación -->
-            <app-paginacion></app-paginacion>
-        </main>
-    </div>
+  <div class="main-content">
+    <!-- Top Header -->
+    <header class="header">
+      <h1>Gestión de Materias</h1>
+      <div class="header-actions">
+        <!-- Aquí pueden ir botones de acción generales si es necesario -->
+      </div>
+    </header>
 
-    <app-modal-materias 
-    [show]="showModal" 
-    [materiaEditando]="materiaEditando"
-    (modalStatusChange)="handleModalChange($event)" 
-    (materiaAgregada)="agregarMateria($event)">
+    <!-- Dashboard Content -->
+    <main class="dashboard">
+      <div class="section-title">
+        <span>Materias</span>
+        <button class="add-button" (click)="abrirModal()">
+          <i class="fa-solid fa-plus"></i> Agregar Materia
+        </button>
+
+      </div>
+
+      <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" class="search-input" placeholder="Buscar materia por nombre o carrera...">
+      </div>
+
+      <div class="subjects-grid fade-in-up">
+        <!-- Aquí iteramos sobre las materias y mostramos cada una -->
+        <div *ngFor="let materia of materias" class="subject-card">
+          <!-- Colocamos el ID en la esquina superior derecha -->
+          <div class="subject-card-id">
+            {{ materia.id }}
+          </div>
+          <div class="subject-card-icon">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <div class="subject-card-info">
+            <!-- Mostramos los detalles de la materia -->
+            <div class="subject-card-name">{{ materia.nombre }}</div> <!-- Nombre de la materia -->
+            <div class="subject-card-career"> {{ materia.carrera?.nombre || 'Carrera no disponible' }}</div>
+            <!-- Carrera de la materia -->
+
+          </div>
+          <div class="subject-card-actions">
+            <button class="subject-card-button" (click)="editarMateria(materia)">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button class="subject-card-button delete" (click)="eliminarMateria(materia.id)">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <app-paginacion></app-paginacion>
+    </main>
+  </div>
+
+  <app-modal-materias [show]="showModal" [materiaEditando]="materiaEditando"
+    (modalStatusChange)="handleModalChange($event)" (materiaAgregada)="agregarMateria($event)">
   </app-modal-materias>
-  
+
 
 </div>
