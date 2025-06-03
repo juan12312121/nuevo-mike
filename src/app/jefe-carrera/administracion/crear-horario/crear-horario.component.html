@@ -106,15 +106,16 @@
             </ng-container>
 
             <!-- Selección de grupo -->
-            <div class="form-group">
-              <label for="grupo_id">Selecciona el grupo:</label>
-              <select id="grupo_id" class="form-control" [(ngModel)]="grupoSeleccionado" name="grupoId">
-                <option value="" disabled>Selecciona un grupo</option>
-                <option *ngFor="let grupo of grupos" [value]="grupo.id">
-                  {{ grupo.id }} — {{ grupo.grupo_nombre }} • {{ grupo.semestre }}
-                </option>
-              </select>
-            </div>
+         <div class="form-group">
+  <label for="grupo_id">Selecciona el grupo:</label>
+  <select id="grupo_id" class="form-control" [(ngModel)]="grupoSeleccionado" name="grupoId">
+    <option value="" disabled>Selecciona un grupo</option>
+    <!-- ✅ CAMBIO AQUÍ: grupo_nombre -> nombre -->
+    <option *ngFor="let grupo of grupos" [value]="grupo.id">
+      {{ grupo.id }} — {{ grupo.nombre }} • {{ grupo.semestre }}
+    </option>
+  </select>
+</div>
 
             <!-- Selección de aula -->
             <div class="form-group">

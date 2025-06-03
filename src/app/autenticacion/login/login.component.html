@@ -15,30 +15,53 @@
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <div *ngIf="errorMessage" class="error-message">
+      <!-- Mensaje de error general -->
+      <div *ngIf="errorMessage" class="error-message" role="alert">
         <i class="fa-solid fa-circle-exclamation"></i>
-        <span>{{ errorMessage }}. Intente nuevamente.</span>
+        <span>{{ errorMessage }}</span>
       </div>
 
       <div class="form-group">
-        <label for="correo">Correo</label>
-        <div class="input-group">
-          <input type="email" id="correo" class="form-control" placeholder="Ingrese su correo" formControlName="correo">
+        <label for="correo">Correo Electrónico</label>
+        <div class="input-group" [class.error-input]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
+          <input 
+            type="email" 
+            id="correo" 
+            class="form-control" 
+            placeholder="ejemplo@correo.com" 
+            formControlName="correo"
+            (input)="onInputChange()"
+            [class.is-invalid]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
           <i class="fa-solid fa-envelope"></i>
         </div>
-        <div *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched" class="error">
-          Ingresa un correo válido.
+        <!-- Mensajes de error específicos para correo -->
+        <div *ngIf="loginForm.get('correo')?.hasError('required') && loginForm.get('correo')?.touched" class="error">
+          <i class="fa-solid fa-exclamation-triangle"></i>
+          El correo electrónico es obligatorio.
+        </div>
+        <div *ngIf="loginForm.get('correo')?.hasError('email') && loginForm.get('correo')?.touched && !loginForm.get('correo')?.hasError('required')" class="error">
+          <i class="fa-solid fa-exclamation-triangle"></i>
+          Por favor, ingrese un correo electrónico válido.
         </div>
       </div>
 
       <div class="form-group">
         <label for="contrasena">Contraseña</label>
-        <div class="input-group">
-          <input type="password" id="contrasena" class="form-control" placeholder="Ingrese su contraseña" formControlName="contrasena">
+        <div class="input-group" [class.error-input]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
+          <input 
+            type="password" 
+            id="contrasena" 
+            class="form-control" 
+            placeholder="Ingrese su contraseña" 
+            formControlName="contrasena"
+            (input)="onInputChange()"
+            [class.is-invalid]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
           <i class="fa-solid fa-lock"></i>
         </div>
-        <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="error">
-          La contraseña es requerida.
+        <!-- Mensajes de error específicos para contraseña -->
+        <div *ngIf="loginForm.get('contrasena')?.hasError('required') && loginForm.get('contrasena')?.touched" class="error">
+          <i class="fa-solid fa-exclamation-triangle"></i>
+          La contraseña es obligatoria.
         </div>
       </div>
 
@@ -49,7 +72,22 @@
         </div>
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid" class="btn">Iniciar Sesión</button>
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid || isLoading" 
+        class="btn"
+        [class.loading]="isLoading">
+        <span *ngIf="!isLoading">
+          <i class="fa-solid fa-sign-in-alt"></i>
+          Iniciar Sesión
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fa-solid fa-spinner fa-spin"></i>
+          Iniciando sesión...
+        </span>
+      </button>
     </form>
+
+   
   </div>
 </div>

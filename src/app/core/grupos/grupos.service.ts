@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { UsuariosService } from '../autenticacion/usuarios.service';
@@ -6,6 +6,8 @@ import { UsuariosService } from '../autenticacion/usuarios.service';
 
 
 export interface RawGrupo {
+  carrera: any;
+  nombre: any;
   id: number;               // ID interno de base de datos
   grupo_id: number;         // ID real del grupo (por ejemplo, el que viene de la API)
   grupo_nombre: string;
@@ -46,19 +48,19 @@ export class GruposService {
     });
   }
   // Obtener todos los grupos
-  getGrupos(): Observable<any> {
-  console.log('🚀 Haciendo solicitud GET a: ', this.apiUrl);
-  return this.http.get<any>(this.apiUrl, { headers: this.getAuthHeaders() }).pipe(
-    tap(
-      (data) => {
-        console.log('✅ Respuesta obtenida de getGrupos():', data);
-      },
-      (err: HttpErrorResponse) => {
-        console.error('❌ Error al obtener los grupos:', err);
-      }
-    )
-  );
+ getGrupos(): Observable<RawGrupo[]> {
+    console.log('🚀 Haciendo solicitud GET a:', this.apiUrl);
+    return this.http
+      .get<{ data: RawGrupo[] }>(this.apiUrl, { headers: this.getAuthHeaders() })
+      .pipe(
+        map(response => response.data), // <— extraer el array de la propiedad "data"
+        tap({
+          next: rawArray => console.log('✅ Respuesta obtenida de getGrupos():', rawArray),
+          error: err => console.error('❌ Error al obtener los grupos:', err)
+        })
+      );
   }
+
 
   // Obtener un grupo por ID
  getGrupoById(id: number): Observable<any> {

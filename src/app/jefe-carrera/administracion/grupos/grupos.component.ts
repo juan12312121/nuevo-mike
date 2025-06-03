@@ -26,7 +26,6 @@ export class GruposComponent implements OnInit {
   grupoAEditar: any = null;
   modalVisible: boolean = false;
 
-
   constructor(private gruposService: GruposService) { }
 
   ngOnInit(): void {
@@ -38,32 +37,30 @@ export class GruposComponent implements OnInit {
       next: (response: any) => {
         console.log('📦 Respuesta completa del backend:', response);
 
-        // El backend devuelve { message: string, data: Grupo[] }
-        if (response.data && Array.isArray(response.data)) {
-          this.grupos = response.data.map((g: any) => ({
+        // El servicio ya extrae response.data, así que response es directamente el array
+        if (response && Array.isArray(response)) {
+          this.grupos = response.map((g: any) => ({
             id: g.id,
-            nombre: g.nombre, // Ya no es grupo_nombre, es nombre directamente
-            carrera_nombre: g.carrera?.nombre || 'Sin carrera', // Acceder a carrera.nombre
+            nombre: g.nombre,
+            carrera_nombre: g.carrera?.nombre || 'Sin carrera',
             semestre: g.semestre
           }));
           console.log('✅ Grupos mapeados:', this.grupos);
           console.table(this.grupos);
         } else {
-          // Caso cuando el usuario no tiene carrera asignada o no hay grupos
-          console.warn('⚠️ No hay grupos disponibles:', response.message);
+          // Caso cuando no hay grupos disponibles
+          console.warn('⚠️ No hay grupos disponibles');
           this.grupos = [];
 
           // Mostrar mensaje informativo al usuario
-          if (response.message) {
-            Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'info',
-              title: response.message,
-              showConfirmButton: false,
-              timer: 3000
-            });
-          }
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'info',
+            title: 'No hay grupos disponibles',
+            showConfirmButton: false,
+            timer: 3000
+          });
         }
       },
       error: (error) => {
@@ -102,8 +99,6 @@ export class GruposComponent implements OnInit {
       }
     });
   }
-
-
 
   eliminarGrupo(id: number): void {
     // 1) Toast tipo pregunta
@@ -167,9 +162,6 @@ export class GruposComponent implements OnInit {
     this.modalOpen = true;
     console.log('✏️ Modal abierto para editar el grupo:', grupo);
   }
-
-
-
 
   onModalClose(): void {
     this.modalOpen = false;

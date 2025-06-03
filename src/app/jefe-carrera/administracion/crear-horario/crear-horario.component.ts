@@ -41,6 +41,7 @@ export class CrearHorarioComponent implements OnInit, OnDestroy {
   diasSemana: string[] = [];
   tiposDuracion: string[] = [];
   diasSeleccionados: string[] = [];
+
   // --- Form Model ---
   selectedTurno: string | null = null;
   grupoSeleccionado: number | null = null;
@@ -56,7 +57,29 @@ export class CrearHorarioComponent implements OnInit, OnDestroy {
 
   showCustomSchedule = false;
   horasGeneradas: { horaInicio: string; horaFin: string; duracion: number }[] = [];
-handleTabChange: any;
+
+  // --- Resumen ---
+  resumen: {
+    turno: string;
+    horario: string;
+    tipoDuracion: string;
+    duracionClases: number;
+    grupo: string;
+    grupoId: number | null;
+    aula: string;
+    aulaId: number | null;
+    dias: string[];
+  } = {
+    turno: '',
+    horario: '',
+    tipoDuracion: '',
+    duracionClases: 0,
+    grupo: 'No seleccionado',
+    grupoId: null,
+    aula: 'No seleccionada',
+    aulaId: null,
+    dias: []
+  };
 
   constructor(
     private aulasService: AulasService,
@@ -67,7 +90,6 @@ handleTabChange: any;
   ngOnInit(): void {
     this.loadInitialData();
     this.loadCustomState();
-    this.getAulasConsola();
   }
 
   ngOnDestroy(): void {
@@ -96,15 +118,23 @@ handleTabChange: any;
             console.warn('[WARNING] Las aulas no tienen el formato esperado.');
             this.aulas = [];
           }
-  
+
           // Validación de los datos de grupos
           if (Array.isArray(grupos)) {
             this.grupos = grupos;
+          } else if (Array.isArray((grupos as any).data)) {
+            this.grupos = (grupos as any).data;
+          } else if (Array.isArray((grupos as any).grupos)) {
+            this.grupos = (grupos as any).grupos;
           } else {
             console.warn('[WARNING] Los grupos no tienen el formato esperado.');
             this.grupos = [];
           }
-  
+
+          // Debug para verificar que se cargaron correctamente
+          console.log('Grupos cargados en this.grupos:', this.grupos);
+          console.log('Cantidad de grupos:', this.grupos.length);
+
           // Validación de los enums
           if (enums && enums.turnos && Array.isArray(enums.turnos)) {
             this.turnos = enums.turnos;
@@ -112,14 +142,14 @@ handleTabChange: any;
             console.warn('[WARNING] Los turnos no están definidos correctamente.');
             this.turnos = [];
           }
-  
+
           if (enums && enums.diasSemana && Array.isArray(enums.diasSemana)) {
             this.diasSemana = enums.diasSemana;
           } else {
             console.warn('[WARNING] Los días de la semana no están definidos correctamente.');
             this.diasSemana = [];
           }
-  
+
           if (enums && enums.tiposDuracion && Array.isArray(enums.tiposDuracion)) {
             this.tiposDuracion = enums.tiposDuracion;
           } else {
@@ -129,12 +159,10 @@ handleTabChange: any;
         },
         error: (err) => {
           console.error('[ERROR] loadInitialData:', err);
-          // Mostrar un mensaje al usuario o realizar alguna acción específica en caso de error
           alert('Hubo un problema al cargar los datos. Por favor, inténtalo de nuevo más tarde.');
         }
       });
   }
-  
 
   // 2) Load/Save state
   private loadCustomState() {
@@ -153,9 +181,11 @@ handleTabChange: any;
       this.aulaSeleccionada = s.aulaSeleccionada;
     }
   }
+
   private saveCustomHours() {
     localStorage.setItem('horasPersonalizadas', JSON.stringify(this.horasGeneradas));
   }
+
   private saveFormState() {
     const state = {
       selectedTurno: this.selectedTurno,
@@ -169,63 +199,61 @@ handleTabChange: any;
     localStorage.setItem('crearHorarioForm', JSON.stringify(state));
   }
 
+  // 3) Tab navigation
+  selectTab(tab: TabKey) {
+    if (!this.tabs.includes(tab)) return;
 
+    // Si el nuevo tab es 'dias', actualizamos el resumen antes de renderizar
+    if (tab === 'dias') {
+      this.updateResumen();
+    }
 
+    this.currentTab = tab;
+  }
 
- // 3) Tab navigation
-selectTab(tab: TabKey) {
-  if (!this.tabs.includes(tab)) return;
+  nextTab() {
+    const turnoInfo = this.getInfoTurno();
+    if (!turnoInfo || !turnoInfo.horario) {
+      return console.error('Turno no válido o sin horario definido.');
+    }
 
-  // Si el nuevo tab es 'dias', actualizamos el resumen antes de renderizar
-  if (tab === 'dias') {
+    // Guardado de formato en localStorage
+    const [horaInicio, horaFin] = turnoInfo.horario.split(' a ');
+    const datosFormato = {
+      selectedTurno: this.selectedTurno,
+      clasesPorDia: this.clasesPorDia,
+      minutosPorClase: this.minutosPorClase,
+      horaInicio,
+      horaFin,
+      grupoSeleccionado: this.grupoSeleccionado,
+      aulaSeleccionada: this.aulaSeleccionada,
+      horasGeneradas: this.horasGeneradas
+    };
+    localStorage.setItem('crearHorarioForm', JSON.stringify(datosFormato));
+    console.log('Datos guardados del formato:', datosFormato);
+
+    // Ahora reutilizamos selectTab para hacer el build del resumen
+    this.selectTab('dias');
+  }
+
+  // Método para actualizar el resumen
+  private updateResumen() {
     const info = this.getInfoTurno();
     if (info && info.horario) {
       const [hi, hf] = info.horario.split(' a ');
       this.resumen = {
-        turno:          this.selectedTurno  || '',
-        horario:        `${hi} - ${hf}`,
-        tipoDuracion:   this.selectedTurno === 'Personalizado' ? 'Personalizada' : 'Estandar',
+        turno: this.selectedTurno || '',
+        horario: `${hi} - ${hf}`,
+        tipoDuracion: this.selectedTurno === 'Personalizado' ? 'Personalizada' : 'Estandar',
         duracionClases: this.minutosPorClase,
-        grupo:          this.grupos.find(g => g.id === this.grupoSeleccionado!)?.grupo_nombre || 'No seleccionado',
-        grupoId:        this.grupoSeleccionado,            // ← aquí
-        aula:           this.aulas.find(a => a.id === +this.aulaSeleccionada!)?.nombre || 'No seleccionada',
-        aulaId:         +this.aulaSeleccionada!,           // ← y aquí
-        dias:           this.diasSeleccionados
+        grupo: this.grupos.find(g => g.id === this.grupoSeleccionado!)?.nombre || 'No seleccionado',
+        grupoId: this.grupoSeleccionado,
+        aula: this.aulas.find(a => a.id === +this.aulaSeleccionada!)?.nombre || 'No seleccionada',
+        aulaId: +this.aulaSeleccionada!,
+        dias: this.diasSeleccionados
       };
     }
   }
-  
-
-  this.currentTab = tab;
-}
-
-nextTab() {
-  const turnoInfo = this.getInfoTurno();
-  if (!turnoInfo || !turnoInfo.horario) {
-    return console.error('Turno no válido o sin horario definido.');
-  }
-
-  // Guardado de formato en localStorage
-  const [horaInicio, horaFin] = turnoInfo.horario.split(' a ');
-  const datosFormato = {
-    selectedTurno: this.selectedTurno,
-    clasesPorDia: this.clasesPorDia,
-    minutosPorClase: this.minutosPorClase,
-    horaInicio,
-    horaFin,
-    grupoSeleccionado: this.grupoSeleccionado,
-    aulaSeleccionada: this.aulaSeleccionada,
-    horasGeneradas: this.horasGeneradas
-  };
-  localStorage.setItem('crearHorarioForm', JSON.stringify(datosFormato));
-  console.log('Datos guardados del formato:', datosFormato);
-
-  // Ahora reutilizamos selectTab para hacer el build del resumen
-  this.selectTab('dias');
-}
-
-  
-  
 
   // 4) Turn logic
   onTurnoChange() {
@@ -237,11 +265,14 @@ nextTab() {
       this.showCustomSchedule = false;
       this.generateStandardSchedule();
     }
+    this.saveFormState();
   }
+
   onClasesPorDiaChange() {
     if (this.selectedTurno && this.selectedTurno !== 'Personalizado') {
       this.generateStandardSchedule();
     }
+    this.saveFormState();
   }
 
   private generateStandardSchedule() {
@@ -256,7 +287,11 @@ nextTab() {
     let cur = start;
     for (let i = 0; i < this.clasesPorDia; i++) {
       const nxt = cur + slot;
-      slots.push({ horaInicio: this.minutesToTime(cur), horaFin: this.minutesToTime(nxt), duracion: slot });
+      slots.push({ 
+        horaInicio: this.minutesToTime(cur), 
+        horaFin: this.minutesToTime(nxt), 
+        duracion: slot 
+      });
       cur = nxt;
     }
     this.horasGeneradas = slots;
@@ -273,77 +308,54 @@ nextTab() {
     let cur = start;
     while (cur + this.minutosPorClase <= end) {
       const nxt = cur + this.minutosPorClase;
-      slots.push({ horaInicio: this.minutesToTime(cur), horaFin: this.minutesToTime(nxt), duracion: this.minutosPorClase });
+      slots.push({ 
+        horaInicio: this.minutesToTime(cur), 
+        horaFin: this.minutesToTime(nxt), 
+        duracion: this.minutosPorClase 
+      });
       cur = nxt;
     }
     this.horasGeneradas = slots;
     this.saveCustomHours();
   }
-  
-getInfoTurno() {
-  const turnosData: { [key: string]: { horario: string; descripcion: string } } = {
-    Matutino: { horario: '07:00 a 13:00', descripcion: 'Turno de la mañana' },
-    Vespertino: { horario: '13:00 a 19:00', descripcion: 'Turno de la tarde' },
-    Nocturno: { horario: '19:00 a 22:00', descripcion: 'Turno de la noche' },
-    Personalizado: {
-      horario: `${this.horaInicio} a ${this.horaFin}`,
-      descripcion: 'Horario definido por el usuario'
-    }
-  };
 
-  return this.selectedTurno ? turnosData[this.selectedTurno] : null;
-}
+  getInfoTurno() {
+    const turnosData: { [key: string]: { horario: string; descripcion: string } } = {
+      Matutino: { horario: '07:00 a 13:00', descripcion: 'Turno de la mañana' },
+      Vespertino: { horario: '13:00 a 19:00', descripcion: 'Turno de la tarde' },
+      Nocturno: { horario: '19:00 a 22:00', descripcion: 'Turno de la noche' },
+      Personalizado: {
+        horario: `${this.horaInicio} a ${this.horaFin}`,
+        descripcion: 'Horario definido por el usuario'
+      }
+    };
 
-
-  // 6) Load aulas
-  getAulasConsola(): void {
-    this.aulasService.obtenerAulas().pipe(takeUntil(this.destroy$)).subscribe({
-      next: res => {
-        const arr = Array.isArray(res)
-          ? res
-          : Array.isArray((res as any).data)
-          ? (res as any).data
-          : (res as any).aulas || [];
-        this.aulas = arr;
-        console.log('Aulas:', arr);
-      },
-      error: err => console.error('[ERROR] getAulasConsola:', err)
-    });
+    return this.selectedTurno ? turnosData[this.selectedTurno] : null;
   }
 
-  // Utility
-  private timeToMinutes(t: string) { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
-  private minutesToTime(m: number) { return `${Math.floor(m/60).toString().padStart(2,'0')}:${(m%60).toString().padStart(2,'0')}`; }
+  // Eventos de cambio de formulario
+  onGrupoChange() {
+    this.saveFormState();
+  }
 
+  onAulaChange() {
+    this.saveFormState();
+  }
 
-  resumen: {
-    turno: string;
-    horario: string;
-    tipoDuracion: string;
-    duracionClases: number;
-    grupo: string;
-    grupoId: number | null;    // ← agregado
-    aula: string;
-    aulaId: number | null;     // ← agregado
-    dias: string[];
-  } = {
-    turno: '',
-    horario: '',
-    tipoDuracion: '',
-    duracionClases: 0,
-    grupo: 'No seleccionado',
-    grupoId: null,
-    aula: 'No seleccionada',
-    aulaId: null,
-    dias: []
-  };
-  
-
+  // Días seleccionados
   onDiasSeleccionadosChange(dias: string[]) {
     this.diasSeleccionados = dias;
     console.log('Días en el padre:', this.diasSeleccionados);
-
-    // (Opcional) Actualizar el resumen aquí si quieres
     this.resumen.dias = [...dias];
+  }
+
+  // Utility methods
+  private timeToMinutes(t: string) { 
+    const [h, m] = t.split(':').map(Number); 
+    return h * 60 + m; 
+  }
+
+  private minutesToTime(m: number) { 
+    return `${Math.floor(m/60).toString().padStart(2,'0')}:${(m%60).toString().padStart(2,'0')}`; 
   }
 }

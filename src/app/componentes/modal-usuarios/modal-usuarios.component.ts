@@ -82,25 +82,35 @@ export class ModalUsuariosComponent implements OnInit, OnChanges {
     });
   }
 
-  private obtenerGrupos() {
-    this.loadingGrupos = true;
-    this.errorGrupos = null;
-    this.gruposService.getGrupos().subscribe({
-      next: (data: RawGrupo[]) => {
-        this.loadingGrupos = false;
-        this.grupos = data.map(g => ({
-          id: g.id,
-          nombre: g.grupo_nombre,
-          carrera_nombre: g.carrera_nombre,
-          semestre: g.semestre
-        }));
-      },
-      error: (err: HttpErrorResponse) => {
-        this.loadingGrupos = false;
-        this.errorGrupos = 'No fue posible cargar los grupos';
-      }
-    });
-  }
+private obtenerGrupos(): void {
+  this.loadingGrupos = true;
+  this.errorGrupos = null;
+
+  this.gruposService.getGrupos().subscribe({
+    next: (data: RawGrupo[]) => {
+      console.log('✅ Datos recibidos de grupos:', data);
+      this.loadingGrupos = false;
+
+      this.grupos = data.map((g: RawGrupo) => ({
+        id: g.id,
+        nombre: g.nombre,               // tal como viene del backend
+        carrera_nombre: g.carrera.nombre, // extrae el nombre de la carrera
+        semestre: g.semestre
+      }));
+
+      console.log('✅ Grupos procesados:', this.grupos);
+    },
+    error: (err: HttpErrorResponse) => {
+      this.loadingGrupos = false;
+      this.errorGrupos = '❌ No fue posible cargar los grupos';
+      console.error('❌ Error en la solicitud:', err);
+    }
+  });
+}
+
+
+
+
 
   private obtenerUsuarioPorId(id: number) {
     this.usuariosService.obtenerUsuarioPorId(id).subscribe({
