@@ -32,12 +32,21 @@
             id="nombre"
             name="nombre"
             class="form-input"
+            [class.error]="nombre.invalid && (nombre.dirty || nombre.touched)"
             type="text"
             placeholder="Ingresa el nombre completo"
             required
+            minlength="2"
+            maxlength="100"
             [(ngModel)]="usuario.nombre"
+            #nombre="ngModel"
           />
           <i class="fas fa-user input-icon"></i>
+          <div *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)" class="error-message">
+            <span *ngIf="nombre.errors?.['required']">El nombre es obligatorio</span>
+            <span *ngIf="nombre.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+            <span *ngIf="nombre.errors?.['maxlength']">El nombre no puede exceder 100 caracteres</span>
+          </div>
         </div>
 
         <!-- Correo Electrónico -->
@@ -47,12 +56,19 @@
             id="correo"
             name="correo"
             class="form-input"
+            [class.error]="correo.invalid && (correo.dirty || correo.touched)"
             type="email"
             placeholder="correo@ejemplo.com"
             required
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
             [(ngModel)]="usuario.correo"
+            #correo="ngModel"
           />
           <i class="fas fa-envelope input-icon"></i>
+          <div *ngIf="correo.invalid && (correo.dirty || correo.touched)" class="error-message">
+            <span *ngIf="correo.errors?.['required']">El correo electrónico es obligatorio</span>
+            <span *ngIf="correo.errors?.['email'] || correo.errors?.['pattern']">Ingresa un correo electrónico válido</span>
+          </div>
         </div>
 
         <!-- Contraseña (solo al crear) -->
@@ -62,13 +78,21 @@
             id="contrasena"
             name="contrasena"
             class="form-input"
+            [class.error]="contrasena.invalid && (contrasena.dirty || contrasena.touched)"
             type="password"
-            placeholder="Mínimo 6 caracteres"
+            placeholder="Mínimo 4 caracteres"
             required
-            minlength="6"
+            minlength="4"
+            maxlength="50"
             [(ngModel)]="usuario.contrasena"
+            #contrasena="ngModel"
           />
           <i class="fas fa-lock input-icon"></i>
+          <div *ngIf="contrasena.invalid && (contrasena.dirty || contrasena.touched)" class="error-message">
+            <span *ngIf="contrasena.errors?.['required']">La contraseña es obligatoria</span>
+            <span *ngIf="contrasena.errors?.['minlength']">La contraseña debe tener al menos 4 caracteres</span>
+            <span *ngIf="contrasena.errors?.['maxlength']">La contraseña no puede exceder 50 caracteres</span>
+          </div>
         </div>
 
         <!-- Carrera -->
@@ -78,8 +102,10 @@
             id="carrera"
             name="carrera_id"
             class="form-input"
+            [class.error]="carrera.invalid && (carrera.dirty || carrera.touched)"
             required
             [(ngModel)]="usuario.carrera_id"
+            #carrera="ngModel"
           >
             <option [ngValue]="null" disabled>Selecciona una carrera</option>
             <option
@@ -90,29 +116,35 @@
             </option>
           </select>
           <i class="fas fa-graduation-cap input-icon"></i>
-          <div *ngIf="errorCarreras" class="error">{{ errorCarreras }}</div>
+          <div *ngIf="carrera.invalid && (carrera.dirty || carrera.touched)" class="error-message">
+            <span *ngIf="carrera.errors?.['required']">Debe seleccionar una carrera</span>
+          </div>
+          <div *ngIf="errorCarreras" class="error-message">{{ errorCarreras }}</div>
         </div>
 
         <!-- Grupo (solo para Jefe de Grupo) -->
-    <!-- Grupo (solo para Jefe de Grupo) -->
-<div *ngIf="tipo === 'jefe'" class="form-group">
-  <label for="grupo">Grupo</label>
-  <select
-    id="grupo"
-    name="grupo_id"
-    class="form-input"
-    required
-    [(ngModel)]="usuario.grupo_id"
-  >
-    <option value="" disabled selected>Selecciona un grupo</option>
-    <option *ngFor="let g of grupos" [value]="g.id">
-      {{ g.id }} – {{ g.nombre }}
-    </option>
-  </select>
-  <i class="fas fa-users input-icon"></i>
-  <div *ngIf="errorGrupos" class="error">{{ errorGrupos }}</div>
-</div>
-
+        <div *ngIf="tipo === 'jefe'" class="form-group">
+          <label for="grupo">Grupo</label>
+          <select
+            id="grupo"
+            name="grupo_id"
+            class="form-input"
+            [class.error]="grupo.invalid && (grupo.dirty || grupo.touched)"
+            required
+            [(ngModel)]="usuario.grupo_id"
+            #grupo="ngModel"
+          >
+            <option value="" disabled selected>Selecciona un grupo</option>
+            <option *ngFor="let g of grupos" [value]="g.id">
+              {{ g.id }} – {{ g.nombre }}
+            </option>
+          </select>
+          <i class="fas fa-users input-icon"></i>
+          <div *ngIf="grupo.invalid && (grupo.dirty || grupo.touched)" class="error-message">
+            <span *ngIf="grupo.errors?.['required']">Debe seleccionar un grupo</span>
+          </div>
+          <div *ngIf="errorGrupos" class="error-message">{{ errorGrupos }}</div>
+        </div>
 
         <!-- Footer -->
         <div class="modal-footer">
