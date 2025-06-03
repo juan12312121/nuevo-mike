@@ -1,73 +1,41 @@
 <div class="body">
-    <!-- Componente aside existente -->
-    <app-aside-jefecarrera></app-aside-jefecarrera>
-    
-    <div class="main-content">
-      <div class="container">
-        <div class="header">
-          <h1>Temas Vistos</h1>
-          <div class="header-actions">
-            <!-- Aquí puedes agregar botones u otros controles si es necesario -->
-          </div>
-        </div>
+  <app-aside-jefecarrera></app-aside-jefecarrera>
   
-        <div class="panel">
-        
-          
-          <div class="table-container">
-            <table #tablaExport id="temasVistosTable">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Fecha</th>
-                  <th>Tema</th>
-                  <th>Profesor</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let tema of obtenerTemasPaginados()">
-                  <td>{{ tema.id }}</td>
-                  <td>{{ tema.fecha }}</td>
-                  <td>{{ tema.tema }}</td> <!-- Corregido a tema.tema -->
-                  <td>{{ tema.registrado_por_nombre }}</td>
-                
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          <div class="pagination">
-            <span class="pagination-info">
-              Página {{ paginaActual }} de {{ totalPaginas() }}
-            </span>
-            <div class="pagination-buttons">
-              <button
-                class="page-btn"
-                [disabled]="paginaActual === 1"
-                (click)="cambiarPagina(-1)"
-              >
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-              
-              <button
-                class="page-btn"
-                *ngFor="let page of [].constructor(totalPaginas()); let i = index"
-                [class.active]="paginaActual === i + 1"
-                (click)="paginaActual = i + 1"
-              >
-                {{ i + 1 }}
-              </button>
-              
-              <button
-                class="page-btn"
-                [disabled]="paginaActual === totalPaginas()"
-                (click)="cambiarPagina(1)"
-              >
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-          </div>
+  <div class="main-content">
+    <div class="container">
+      <div class="header">
+        <h1>Temas Vistos</h1>
+      </div>
+
+      <div class="panel">
+        <div class="table-container">
+          <table #tablaExport id="temasVistosTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Tema</th>
+                <th>Profesor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tema of obtenerTemasPaginados()">
+                <td>{{ tema.id }}</td>
+                <td>{{ tema.fecha }}</td>
+                <td>{{ tema.tema }}</td>
+                <td>{{ tema.registrado_por_nombre }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <app-paginacion 
+          [paginaActual]="paginaActual"
+          [totalPaginas]="totalPaginas()"
+          [maxPaginasVisibles]="5"
+          (cambiarPagina)="onCambiarPagina($event)">
+        </app-paginacion>
       </div>
     </div>
   </div>
+</div>

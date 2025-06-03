@@ -1,59 +1,66 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefecarreraComponent } from "../../componentes/aside-jefecarrera/aside-jefecarrera.component"; // Importa el servicio
+import { AsideJefecarreraComponent } from "../../componentes/aside-jefecarrera/aside-jefecarrera.component";
+import { PaginacionComponent } from "../../componentes/paginacion/paginacion.component";
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
-
 
 @Component({
   selector: 'app-temas-vistos',
   standalone: true,
-  imports: [AsideJefecarreraComponent, CommonModule, FormsModule],
+  imports: [
+    AsideJefecarreraComponent,
+    CommonModule,
+    FormsModule,
+    PaginacionComponent
+  ],
   templateUrl: './temas-vistos.component.html',
   styleUrls: ['./temas-vistos.component.css']
 })
 export class TemasVistosComponent implements OnInit {
-  temasVistos: any[] = [];  // Arreglo para almacenar los temas vistos
-  tipoRegistroFilter: string = ''; // Filtro para tipo de registro
-  searchTerm: string = '';  // Término de búsqueda
-  paginaActual: number = 1;  // Página actual para paginación
+  temasVistos: any[] = [];
+  tipoRegistroFilter: string = '';
+  searchTerm: string = '';
+  paginaActual: number = 1;
+
+  // Definimos cuántos temas mostramos por página:
+  registrosPorPagina: number = 10;
 
   constructor(private asistenciaTemaService: AsistenciaTemaService) {}
 
   ngOnInit(): void {
-    this.obtenerTemasVistos();  // Llamar a la función cuando el componente se inicializa
+    this.obtenerTemasVistos();
   }
 
   // Función para obtener los temas vistos
   obtenerTemasVistos(): void {
     this.asistenciaTemaService.obtenerTemasVistos().subscribe(
       (data) => {
-        this.temasVistos = data;  // Guardar los datos recibidos en el arreglo
-        
+        this.temasVistos = data;
         console.log('Temas vistos:', this.temasVistos);
       },
       (error) => {
-        console.error('Error al obtener los temas vistos:', error);  // Manejar errores
+        console.error('Error al obtener los temas vistos:', error);
       }
     );
   }
 
-
-  // Función para cambiar la página
-  cambiarPagina(direction: number): void {
-    if (this.paginaActual + direction > 0 && this.paginaActual + direction <= this.totalPaginas()) {
-      this.paginaActual += direction;
-    }
-  }
-
-  // Función para obtener el total de páginas (según los temas por página)
+  // Función para calcular el total de páginas, ahora usando 5 registros por página
   totalPaginas(): number {
-    return Math.ceil(this.temasVistos.length / 10); // Se asume que hay 10 temas por página
+    return Math.ceil(this.temasVistos.length / this.registrosPorPagina);
   }
 
-  // Función para obtener los temas actuales paginados
+  // Función para obtener los temas de la página actual (slice con 5 en vez de 10)
   obtenerTemasPaginados(): any[] {
-    const startIndex = (this.paginaActual - 1) * 10; // Página actual multiplicada por los temas por página
-    return this.temasVistos.slice(startIndex, startIndex + 10); // Retorna solo los temas de la página actual
+    const startIndex = (this.paginaActual - 1) * this.registrosPorPagina;
+    return this.temasVistos.slice(startIndex, startIndex + this.registrosPorPagina);
+  }
+
+  // Manejador cuando el componente de paginación emite el número de página seleccionado
+  onCambiarPagina(nuevaPagina: number): void {
+    console.log('Cambiando a página:', nuevaPagina);
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas()) {
+      this.paginaActual = nuevaPagina;
+    }
   }
 }

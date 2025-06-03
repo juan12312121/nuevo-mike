@@ -1,21 +1,55 @@
 <div class="pagination">
-    <button class="pagination-button disabled">
-        <i class="fa-solid fa-angles-left"></i>
-    </button>
-    <button class="pagination-button disabled">
-        <i class="fa-solid fa-angle-left"></i>
-    </button>
-    
-    <button class="pagination-button active">1</button>
-    <button class="pagination-button">2</button>
-    <button class="pagination-button">3</button>
-    
-    <span class="pagination-info">Página 1 de 3</span>
-    
-    <button class="pagination-button">
-        <i class="fa-solid fa-angle-right"></i>
-    </button>
-    <button class="pagination-button">
-        <i class="fa-solid fa-angles-right"></i>
-    </button>
+  <!-- Ir a primera página -->
+  <button 
+    class="pagination-button"
+    [class.disabled]="paginaActual === 1"
+    (click)="irAPrimera()"
+    [disabled]="paginaActual === 1"
+    title="Primera página">
+    <i class="fa-solid fa-angles-left"></i>
+  </button>
+  
+  <!-- Página anterior -->
+  <button 
+    class="pagination-button"
+    [class.disabled]="paginaActual === 1"
+    (click)="paginaAnterior()"
+    [disabled]="paginaActual === 1"
+    title="Página anterior">
+    <i class="fa-solid fa-angle-left"></i>
+  </button>
+  
+  <!-- Botones de páginas -->
+  <button 
+    *ngFor="let pagina of obtenerPaginasVisibles()"
+    class="pagination-button"
+    [class.active]="pagina === paginaActual"
+    (click)="irAPagina(pagina)">
+    {{ pagina }}
+  </button>
+  
+  <!-- Información de página -->
+  <span class="pagination-info">
+    Página {{ paginaActual }} de {{ totalPaginas }}
+  </span>
+  
+  <!-- Página siguiente -->
+  <button 
+    class="pagination-button"
+    [class.disabled]="paginaActual === totalPaginas"
+    (click)="paginaSiguiente()"
+    [disabled]="paginaActual === totalPaginas"
+    title="Página siguiente">
+    <i class="fa-solid fa-angle-right"></i>
+  </button>
+  
+  <!-- Ir a última página -->
+  <button 
+    class="pagination-button"
+    [class.disabled]="paginaActual === totalPaginas"
+    (click)="irAUltima()"
+    [disabled]="paginaActual === totalPaginas"
+    title="Última página">
+    <i class="fa-solid fa-angles-right"></i>
+  </button>
 </div>

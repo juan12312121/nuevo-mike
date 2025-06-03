@@ -5,9 +5,9 @@ import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import { AsideJefecarreraComponent } from '../../componentes/aside-jefecarrera/aside-jefecarrera.component';
 import { DashboardGraficasComponent } from '../../componentes/graficas/graficas.component';
+import { PaginacionComponent } from "../../componentes/paginacion/paginacion.component";
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
 import { JustificacionesService } from '../../core/justificaciones/justificaciones.service';
-
 
 @Component({
   selector: 'app-principal',
@@ -16,7 +16,8 @@ import { JustificacionesService } from '../../core/justificaciones/justificacion
     CommonModule,
     FormsModule,
     AsideJefecarreraComponent,
-    DashboardGraficasComponent
+    DashboardGraficasComponent,
+    PaginacionComponent
   ],
   templateUrl: './principal.component.html',
   styleUrls: ['./principal.component.css']
@@ -25,22 +26,13 @@ export class PrincipalComponent implements OnInit {
   @ViewChild('tablaExport', { static: false }) tabla!: ElementRef<HTMLTableElement>;
 
   asistencias: any[] = [];
-  asistenciasFiltradas: any[] = [];
 
-isModalOpen = false;
+  isModalOpen = false;
   justificacionActual: any = null;
-
-  // Filtros
-  tipoRegistroFilter = '';
-  asistioFilter = '';
-  fechaInicioFilter = '';
-  fechaFinFilter = '';
-  searchTerm = '';
 
   // Paginación
   paginaActual = 1;
-  registrosPorPagina = 15;
-
+registrosPorPagina = 10;
   // Modo de visualización
   modoVisualizacion = 'tabla'; // 'tabla' o 'graficas'
 
@@ -48,7 +40,10 @@ isModalOpen = false;
   error: string | null = null;
   public Math = Math;
 
-  constructor(private asistenciaService: AsistenciaTemaService,  private justificacionesService: JustificacionesService ) {}
+  constructor(
+    private asistenciaService: AsistenciaTemaService,
+    private justificacionesService: JustificacionesService
+  ) {}
 
   ngOnInit(): void {
     console.log('Inicializando PrincipalComponent...');
@@ -56,7 +51,6 @@ isModalOpen = false;
       next: datos => {
         console.log('Datos recibidos de servicio:', datos);
         this.asistencias = datos;
-        this.aplicarFiltros();
         this.cargando = false;
       },
       error: err => {
@@ -67,141 +61,69 @@ isModalOpen = false;
     });
   }
 
-
-  
-
-  aplicarFiltros(): void {
-    console.log('Aplicando filtros:', {
-      tipoRegistro: this.tipoRegistroFilter,
-      asistio: this.asistioFilter,
-      fechaInicio: this.fechaInicioFilter,
-      fechaFin: this.fechaFinFilter,
-      searchTerm: this.searchTerm
+  verJustificante(asistenciaId: number) {
+    console.log('Iniciando solicitud de justificación:', {
+      asistenciaId,
+      timestamp: new Date().toISOString()
     });
-    let datos = this.asistencias;
 
-    if (this.tipoRegistroFilter) {
-      datos = datos.filter(a => a.tipo_registro === this.tipoRegistroFilter);
-    }
-    if (this.asistioFilter) {
-      datos = datos.filter(a => a.asistio === this.asistioFilter);
-    }
-    if (this.fechaInicioFilter) {
-      datos = datos.filter(a => a.fecha >= this.fechaInicioFilter);
-    }
-    if (this.fechaFinFilter) {
-      datos = datos.filter(a => a.fecha <= this.fechaFinFilter);
-    }
-    if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      datos = datos.filter(a =>
-        a.profesor_nombre.toLowerCase().includes(term) ||
-        a.materia_nombre.toLowerCase().includes(term)
-      );
-    }
-
-    this.paginaActual = 1;
-    this.asistenciasFiltradas = datos;
-    console.log('Datos filtrados:', this.asistenciasFiltradas);
-  }
-
-verJustificante(asistenciaId: number) {
-  console.log('Iniciando solicitud de justificación:', {
-    asistenciaId,
-    timestamp: new Date().toISOString()
-  });
-
-  this.justificacionesService.obtenerJustificacionPorAsistencia(asistenciaId).subscribe({
-    next: (response) => {
-      console.log('Respuesta completa:', response);
-      
-      if (response) {
-        this.justificacionActual = response;
-        this.isModalOpen = true;
-        console.log('Justificación cargada exitosamente:', {
-          justificacionId: this.justificacionActual.justificacion_id,
-          asistenciaId: this.justificacionActual.asistencia_id,
-          fecha: this.justificacionActual.fecha_asistencia
-        });
-      } else {
-        console.log('No se encontró la justificación:', {
+    this.justificacionesService.obtenerJustificacionPorAsistencia(asistenciaId).subscribe({
+      next: (response) => {
+        console.log('Respuesta completa:', response);
+        
+        if (response) {
+          this.justificacionActual = response;
+          this.isModalOpen = true;
+          console.log('Justificación cargada exitosamente:', {
+            justificacionId: this.justificacionActual.justificacion_id,
+            asistenciaId: this.justificacionActual.asistencia_id,
+            fecha: this.justificacionActual.fecha_asistencia
+          });
+        } else {
+          console.log('No se encontró la justificación:', {
+            asistenciaId,
+            response
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener justificación:', {
           asistenciaId,
-          response
+          status: error.status,
+          message: error.message,
+          timestamp: new Date().toISOString()
         });
       }
-    },
-    error: (error) => {
-      console.error('Error al obtener justificación:', {
-        asistenciaId,
-        status: error.status,
-        message: error.message,
-        timestamp: new Date().toISOString()
-      });
-    }
-  });
-}
+    });
+  }
+
   closeModal() {
     this.isModalOpen = false;
     this.justificacionActual = null;
   }
 
-
+  // Método para obtener registros paginados
   obtenerRegistrosPaginados(): any[] {
+    if (this.cargando) return [];
     const inicio = (this.paginaActual - 1) * this.registrosPorPagina;
-    const paginados = this.asistenciasFiltradas.slice(inicio, inicio + this.registrosPorPagina);
+    const fin = inicio + this.registrosPorPagina;
+    const paginados = this.asistencias.slice(inicio, fin);
     console.log(`Obteniendo registros paginados [página ${this.paginaActual}]:`, paginados);
     return paginados;
   }
 
+  // Método para calcular total de páginas
   totalPaginas(): number {
-    const total = Math.ceil(this.asistenciasFiltradas.length / this.registrosPorPagina);
+    const total = Math.ceil(this.asistencias.length / this.registrosPorPagina);
     console.log('Total de páginas calculado:', total);
     return total;
   }
 
-  cambiarPagina(direccion: number): void {
-    const nueva = this.paginaActual + direccion;
-    console.log(`Cambiando página en dirección ${direccion}, nueva página: ${nueva}`);
-    if (nueva > 0 && nueva <= this.totalPaginas()) {
-      this.paginaActual = nueva;
-    }
-  }
-
-  paginasVisibles(): number[] {
-    const total = this.totalPaginas();
-    const current = this.paginaActual;
-    const maxVisibles = 5;
-    let startPage: number;
-    let endPage: number;
-
-    if (total <= maxVisibles) {
-      startPage = 1;
-      endPage = total;
-    } else {
-      const before = Math.floor(maxVisibles / 2);
-      const after = Math.ceil(maxVisibles / 2) - 1;
-
-      if (current <= before) {
-        startPage = 1;
-        endPage = maxVisibles;
-      } else if (current + after >= total) {
-        startPage = total - maxVisibles + 1;
-        endPage = total;
-      } else {
-        startPage = current - before;
-        endPage = current + after;
-      }
-    }
-
-    const visibles = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-    console.log('Páginas visibles:', visibles);
-    return visibles;
-  }
-
-  irAPagina(pagina: number): void {
-    console.log('Ir a página:', pagina);
-    if (pagina >= 1 && pagina <= this.totalPaginas()) {
-      this.paginaActual = pagina;
+  // Método que maneja el cambio de página desde el componente de paginación
+  onCambiarPagina(nuevaPagina: number): void {
+    console.log('Cambiando a página:', nuevaPagina);
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas()) {
+      this.paginaActual = nuevaPagina;
     }
   }
 
@@ -269,7 +191,10 @@ verJustificante(asistenciaId: number) {
     sheet.eachRow(row =>
       row.eachCell(cell => {
         cell.border = {
-          top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' }
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
         };
       })
     );
