@@ -39,6 +39,18 @@ export class ProfesoresComponent implements OnInit {
 
   asignacionToEdit: { id: number; profesor_id: number; materia_id: number } | null = null;
 
+  // Paginación para profesores
+  paginaActualProfesores: number = 1;
+  registrosPorPaginaProfesores: number = 12; // 12 tarjetas por página
+
+  // Paginación para asignaciones
+  paginaActualAsignaciones: number = 1;
+  registrosPorPaginaAsignaciones: number = 12;
+
+  // Términos de búsqueda
+  terminoBusquedaProfesores: string = '';
+  terminoBusquedaAsignaciones: string = '';
+
   // Flags to prevent duplicate submissions
   isSavingProfesor = false;
   isSavingAsignacion = false;
@@ -50,33 +62,68 @@ export class ProfesoresComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerProfesores();
+    // Cargar asignaciones desde el inicio para que estén disponibles
+    this.obtenerAsignaciones();
   }
 
   cambiarTab(tab: string): void {
+    console.log(`🔄 Cambiando a tab: ${tab}`);
     this.activeTab = tab;
-    if (tab === 'asignaciones') {
+    if (tab === 'asignaciones' && this.asignaciones.length === 0) {
       this.obtenerAsignaciones();
     }
   }
 
-  // -------- Profesores --------
+  // -------- PROFESORES --------
   obtenerProfesores(): void {
     this.usuariosService.listarProfesores().subscribe({
       next: (res) => {
         this.profesores = res.profesores;
-        this.profesoresFiltrados = [...this.profesores];
+        this.filtrarProfesores();
       },
       error: (err) => console.error('Error al cargar profesores', err),
     });
   }
 
+  filtrarProfesores(): void {
+    if (!this.terminoBusquedaProfesores.trim()) {
+      this.profesoresFiltrados = [...this.profesores];
+    } else {
+      const term = this.terminoBusquedaProfesores.toLowerCase().trim();
+      this.profesoresFiltrados = this.profesores.filter((p) =>
+        [p.nombre, p.correo, p.rol_nombre]
+          .map((s: string) => (s || '').toLowerCase())
+          .some((s: string) => s.includes(term))
+      );
+    }
+    // Resetear a la primera página cuando se filtra
+    this.paginaActualProfesores = 1;
+  }
+
   buscarProfesor(event: any): void {
-    const term = event.target.value.toLowerCase();
-    this.profesoresFiltrados = this.profesores.filter((p) =>
-      [p.nombre, p.correo, p.rol_nombre]
-        .map((s: string) => (s || '').toLowerCase())
-        .some((s: string) => s.includes(term))
-    );
+    this.terminoBusquedaProfesores = event.target.value;
+    this.filtrarProfesores();
+  }
+
+  // Paginación para profesores
+  onCambiarPaginaProfesores(nuevaPagina: number): void {
+    this.paginaActualProfesores = nuevaPagina;
+    console.log(`📄 Cambiando a página ${nuevaPagina} en profesores`);
+  }
+
+  totalPaginasProfesores(): number {
+    const total = Math.ceil(this.profesoresFiltrados.length / this.registrosPorPaginaProfesores);
+    return total === 0 ? 1 : total;
+  }
+
+  get profesoresPaginados(): any[] {
+    const inicio = (this.paginaActualProfesores - 1) * this.registrosPorPaginaProfesores;
+    const fin = inicio + this.registrosPorPaginaProfesores;
+    return this.profesoresFiltrados.slice(inicio, fin);
+  }
+
+  get mostrarPaginacionProfesores(): boolean {
+    return this.profesoresFiltrados.length > this.registrosPorPaginaProfesores;
   }
 
   abrirModal(): void {
@@ -103,7 +150,7 @@ export class ProfesoresComponent implements OnInit {
     this.usuariosService.eliminarUsuario(id).subscribe({
       next: () => {
         this.profesores = this.profesores.filter((p) => p.id !== id);
-        this.profesoresFiltrados = this.profesoresFiltrados.filter((p) => p.id !== id);
+        this.filtrarProfesores(); // Refiltrar después de eliminar
         console.log(`Profesor con ID ${id} eliminado.`);
       },
       error: (err) => {
@@ -113,25 +160,71 @@ export class ProfesoresComponent implements OnInit {
     });
   }
 
-  // -------- Asignaciones --------
+  // -------- ASIGNACIONES --------
   obtenerAsignaciones(): void {
+    console.log('🔄 Obteniendo asignaciones...');
     this.asignService.obtenerAsignaciones().subscribe({
       next: (data) => {
-        console.log('Asignaciones recibidas:', data);
-        this.asignaciones = data;
-        this.asignacionesFiltradas = [...this.asignaciones];
+        console.log('✅ Asignaciones recibidas:', data);
+        this.asignaciones = Array.isArray(data) ? data : [];
+        this.filtrarAsignaciones();
+        // Debug después de procesar los datos
+        setTimeout(() => this.debugPaginacionAsignaciones(), 100);
       },
-      error: (err) => console.error('Error al cargar asignaciones', err),
+      error: (err) => {
+        console.error('❌ Error al cargar asignaciones', err);
+        this.asignaciones = [];
+        this.asignacionesFiltradas = [];
+      },
     });
   }
 
+  filtrarAsignaciones(): void {
+    if (!this.terminoBusquedaAsignaciones.trim()) {
+      this.asignacionesFiltradas = [...this.asignaciones];
+    } else {
+      const term = this.terminoBusquedaAsignaciones.toLowerCase().trim();
+      this.asignacionesFiltradas = this.asignaciones.filter(
+        (a) =>
+          (a.profesorNombre && a.profesorNombre.toLowerCase().includes(term)) ||
+          (a.materiaNombre && a.materiaNombre.toLowerCase().includes(term))
+      );
+    }
+    // Resetear a la primera página cuando se filtra
+    this.paginaActualAsignaciones = 1;
+    console.log(`🔍 Filtradas ${this.asignacionesFiltradas.length} asignaciones de ${this.asignaciones.length} totales`);
+  }
+
   buscarAsignacion(event: any): void {
-    const term = event.target.value.toLowerCase();
-    this.asignacionesFiltradas = this.asignaciones.filter(
-      (a) =>
-        a.profesorNombre.toLowerCase().includes(term) ||
-        a.materiaNombre.toLowerCase().includes(term)
-    );
+    this.terminoBusquedaAsignaciones = event.target.value;
+    this.filtrarAsignaciones();
+  }
+
+  // Paginación para asignaciones
+  onCambiarPaginaAsignaciones(nuevaPagina: number): void {
+    this.paginaActualAsignaciones = nuevaPagina;
+    console.log(`📄 Cambiando a página ${nuevaPagina} en asignaciones`);
+  }
+
+  totalPaginasAsignaciones(): number {
+    const total = Math.ceil(this.asignacionesFiltradas.length / this.registrosPorPaginaAsignaciones);
+    const resultado = total === 0 ? 1 : total;
+    console.log(`📊 Total páginas asignaciones: ${resultado} (${this.asignacionesFiltradas.length} registros, ${this.registrosPorPaginaAsignaciones} por página)`);
+    return resultado;
+  }
+
+  get asignacionesPaginadas(): any[] {
+    const inicio = (this.paginaActualAsignaciones - 1) * this.registrosPorPaginaAsignaciones;
+    const fin = inicio + this.registrosPorPaginaAsignaciones;
+    const paginados = this.asignacionesFiltradas.slice(inicio, fin);
+    console.log(`📋 Asignaciones paginadas: ${paginados.length} elementos (desde ${inicio} hasta ${fin})`);
+    return paginados;
+  }
+
+  get mostrarPaginacionAsignaciones(): boolean {
+    const mostrar = this.asignacionesFiltradas.length > this.registrosPorPaginaAsignaciones;
+    console.log(`👁️ Mostrar paginación asignaciones: ${mostrar} (${this.asignacionesFiltradas.length} > ${this.registrosPorPaginaAsignaciones})`);
+    return mostrar;
   }
 
   abrirModalAsignacion(): void {
@@ -140,13 +233,14 @@ export class ProfesoresComponent implements OnInit {
   }
 
   crearAsignacion(profesor_id: number, materia_id: number): void {
-    if (this.isSavingAsignacion) return; // Avoid duplicate submission
+    if (this.isSavingAsignacion) return;
     this.isSavingAsignacion = true;
 
     this.asignService.crearAsignacion(profesor_id, materia_id).subscribe({
       next: () => {
         this.obtenerAsignaciones();
         this.isSavingAsignacion = false;
+        this.showAsignModal = false;
       },
       error: (err) => {
         console.error('Error al crear asignación', err);
@@ -165,6 +259,7 @@ export class ProfesoresComponent implements OnInit {
         next: () => {
           this.obtenerAsignaciones();
           this.isSavingAsignacion = false;
+          this.showAsignModal = false;
         },
         error: (err) => {
           console.error('Error al actualizar asignación', err);
@@ -179,23 +274,41 @@ export class ProfesoresComponent implements OnInit {
   }
 
   eliminarAsignacion(id: number): void {
+    if (!confirm('¿Estás seguro de que deseas eliminar esta asignación?')) return;
+    
     this.asignService.eliminarAsignacion(id).subscribe({
-      next: () => this.obtenerAsignaciones(),
+      next: () => {
+        this.obtenerAsignaciones();
+        console.log(`Asignación con ID ${id} eliminada.`);
+      },
       error: (err) => console.error('Error al eliminar asignación', err),
     });
+  }
+
+  editarAsignacion(asignacion: any): void {
+    this.asignacionToEdit = {
+      id: asignacion.id,
+      profesor_id: asignacion.profesor_id,
+      materia_id: asignacion.materia_id
+    };
+    this.showAsignModal = true;
+  }
+
+  // Método de debugging para asignaciones
+  debugPaginacionAsignaciones(): void {
+    console.log('🐛 === DEBUG PAGINACIÓN ASIGNACIONES ===');
+    console.log('📊 Total asignaciones:', this.asignaciones.length);
+    console.log('🔍 Asignaciones filtradas:', this.asignacionesFiltradas.length);
+    console.log('📄 Registros por página:', this.registrosPorPaginaAsignaciones);
+    console.log('👁️ Mostrar paginación:', this.mostrarPaginacionAsignaciones);
+    console.log('📈 Total páginas:', this.totalPaginasAsignaciones());
+    console.log('📍 Página actual:', this.paginaActualAsignaciones);
+    console.log('📋 Asignaciones paginadas:', this.asignacionesPaginadas.length);
+    console.log('🔖 Tab activo:', this.activeTab);
   }
 
   // Pista para *ngFor trackBy
   trackById(index: number, item: any): any {
     return item && item.id != null ? item.id : index;
-  }
-
-  editarAsignacion(asignacion: any): void {
-    this.asignacionToEdit = {
-      id:           asignacion.id,
-      profesor_id:  asignacion.profesor_id,
-      materia_id:   asignacion.materia_id
-    };
-    this.showAsignModal = true;
   }
 }

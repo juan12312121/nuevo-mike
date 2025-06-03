@@ -20,7 +20,7 @@
     <!-- Tab Content: Profesores -->
     <main class="dashboard" *ngIf="activeTab === 'profesores'">
       <div class="section-title">
-        <span>Profesores</span>
+        <span>Profesores ({{ profesoresFiltrados.length }})</span>
         <button class="add-button" (click)="abrirModal()">
           <i class="fa-solid fa-plus"></i> Agregar Profesor
         </button>
@@ -31,6 +31,7 @@
         <input
           type="text"
           class="search-input"
+          [(ngModel)]="terminoBusquedaProfesores"
           (input)="buscarProfesor($event)"
           placeholder="Buscar profesor por nombre, correo o carrera..."
         />
@@ -38,7 +39,7 @@
       
       <div class="professors-grid fade-in-up">
         <div
-          *ngFor="let profesor of profesoresFiltrados; trackBy: trackById"
+          *ngFor="let profesor of profesoresPaginados; trackBy: trackById"
           class="professor-card"
         >
           <div class="professor-id">{{ profesor.id }}</div>
@@ -63,15 +64,45 @@
             </button>
           </div>
         </div>
+
+        <!-- Mensaje cuando no hay profesores después del filtro -->
+        <div *ngIf="profesoresFiltrados.length === 0 && profesores.length > 0" class="no-results">
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fa-solid fa-user-slash"></i>
+            </div>
+            <div class="empty-state-title">No se encontraron profesores</div>
+            <div class="empty-state-text">No hay profesores que coincidan con "{{ terminoBusquedaProfesores }}"</div>
+          </div>
+        </div>
+
+        <!-- Mensaje cuando no hay profesores en absoluto -->
+        <div *ngIf="profesores.length === 0" class="no-data">
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="empty-state-title">No hay profesores registrados</div>
+            <div class="empty-state-text">Agrega el primer profesor para comenzar</div>
+          </div>
+        </div>
       </div>
       
-      <app-paginacion></app-paginacion>
+      <!-- Paginación para Profesores - Siempre visible -->
+      <div style="margin-top: 20px;">
+        <app-paginacion
+          [paginaActual]="paginaActualProfesores"
+          [totalPaginas]="totalPaginasProfesores()"
+          [maxPaginasVisibles]="5"
+          (cambiarPagina)="onCambiarPaginaProfesores($event)">
+        </app-paginacion>
+      </div>
     </main>
 
     <!-- Tab Content: Asignación de Materias -->
     <main class="dashboard" *ngIf="activeTab === 'asignaciones'">
       <div class="section-title">
-        <span>Asignación de Materias</span>
+        <span>Asignación de Materias ({{ asignacionesFiltradas.length }})</span>
         <button class="add-button" (click)="abrirModalAsignacion()">
           <i class="fa-solid fa-plus"></i> Asignar Materia
         </button>
@@ -82,22 +113,25 @@
         <input
           type="text"
           class="search-input"
+          [(ngModel)]="terminoBusquedaAsignaciones"
           (input)="buscarAsignacion($event)"
           placeholder="Buscar por nombre de profesor o materia..."
         />
       </div>
     
-      <div class="groups-grid fade-in-up">
+      <!-- Grid de asignaciones - Solo mostrar si hay datos -->
+      <div class="groups-grid fade-in-up" *ngIf="asignacionesFiltradas.length > 0">
         <div 
           class="group-card"
-          *ngFor="let asignacion of asignacionesFiltradas; trackBy: trackById"
+          *ngFor="let asignacion of asignacionesPaginadas; trackBy: trackById"
         >
           <div class="group-card-icon">
             <i class="fa-solid fa-book"></i>
           </div>
           <div class="group-card-info">
             <div class="group-card-teacher">
-              <i class="fa-solid fa-user"></i> {{ asignacion.profesorNombre }} (ID: {{ asignacion.id }})
+              <i class="fa-solid fa-user"></i> 
+              {{ asignacion.profesorNombre }} (ID: {{ asignacion.id }})
             </div>
             <div class="group-card-name">
               {{ asignacion.materiaNombre }}
@@ -108,28 +142,47 @@
               <i class="fa-solid fa-pen-to-square"></i>
             </button>
             
-            
-            <button class="group-card-button delete" (click)="eliminarAsignacion(asignacion.id)">
+            <button class="group-card-button delete" (click)="eliminarAsignacion(asignacion.id)" title="Eliminar asignación">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
-          
         </div>
       </div>
-    
-      <div *ngIf="asignacionesFiltradas.length === 0" class="empty-state">
+
+      <!-- Mensaje cuando no hay asignaciones después del filtro -->
+      <div *ngIf="asignacionesFiltradas.length === 0 && asignaciones.length > 0" 
+           class="empty-state">
+        <div class="empty-state-icon">
+          <i class="fa-solid fa-search"></i>
+        </div>
+        <div class="empty-state-title">No se encontraron asignaciones</div>
+        <div class="empty-state-text">
+          No hay asignaciones que coincidan con "{{ terminoBusquedaAsignaciones }}"
+        </div>
+      </div>
+
+      <!-- Mensaje cuando no hay asignaciones en absoluto -->
+      <div *ngIf="asignaciones.length === 0" class="empty-state">
         <div class="empty-state-icon">
           <i class="fa-solid fa-book-open"></i>
         </div>
         <div class="empty-state-title">No hay materias asignadas</div>
-        <div class="empty-state-text">Agrega una nueva asignación o cambia la búsqueda</div>
-    
+        <div class="empty-state-text">Agrega una nueva asignación para comenzar</div>
       </div>
     
-      <app-paginacion *ngIf="asignacionesFiltradas.length > 0"></app-paginacion>
+      <!-- Paginación para Asignaciones - Siempre visible -->
+      <div style="margin-top: 20px;">
+        <app-paginacion
+          [paginaActual]="paginaActualAsignaciones"
+          [totalPaginas]="totalPaginasAsignaciones()"
+          [maxPaginasVisibles]="5"
+          (cambiarPagina)="onCambiarPaginaAsignaciones($event)">
+        </app-paginacion>
+      </div>
     </main>
   </div>
   
+  <!-- Modal de Profesores -->
   <app-modalprofesores
     *ngIf="modalVisible"
     [modalVisible]="modalVisible"
@@ -138,12 +191,11 @@
     (registroExitoso)="actualizarListaProfesor($event)"
   ></app-modalprofesores>
 
+  <!-- Modal de Asignación de Materias -->
   <app-modal-asignar-materias
-  [(visible)]="showAsignModal"
-  [asignacion] ="asignacionToEdit"
-  (asignar)    ="crearAsignacion($event.profesor_id, $event.materia_id)"
-  (editar)     ="actualizarAsignacion($event.profesor_id, $event.materia_id)"
-></app-modal-asignar-materias>
-
-
+    [(visible)]="showAsignModal"
+    [asignacion]="asignacionToEdit"
+    (asignar)="crearAsignacion($event.profesor_id, $event.materia_id)"
+    (editar)="actualizarAsignacion($event.profesor_id, $event.materia_id)"
+  ></app-modal-asignar-materias>
 </div>

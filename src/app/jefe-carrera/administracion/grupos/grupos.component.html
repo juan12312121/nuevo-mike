@@ -1,6 +1,6 @@
 <div class="body">
   <app-aside-jefecarrera></app-aside-jefecarrera>
-
+  
   <div class="main-content">
     <header class="header">
       <h1>Gestión de Grupos</h1>
@@ -20,11 +20,14 @@
           type="text"
           class="search-input"
           placeholder="Buscar grupo por nombre, carrera o semestre..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="filtrarGrupos()"
         />
       </div>
 
       <div class="groups-grid fade-in-up">
-        <div *ngFor="let grupo of grupos" class="group-card">
+        <!-- Usar gruposPaginados en lugar de grupos -->
+        <div *ngFor="let grupo of gruposPaginados" class="group-card">
           <div class="group-card-icon">
             <i class="fa-solid fa-users"></i>
           </div>
@@ -55,7 +58,18 @@
         </div>
       </div>
 
-      <app-paginacion></app-paginacion>
+      <!-- Mostrar mensaje cuando no hay resultados -->
+      <div *ngIf="filtered.length === 0 && grupos.length > 0" class="no-results">
+        <p>No se encontraron grupos que coincidan con la búsqueda.</p>
+      </div>
+
+      <app-paginacion
+        *ngIf="mostrarPaginacion"
+        [paginaActual]="paginaActual"
+        [totalPaginas]="totalPaginas()"
+        [maxPaginasVisibles]="5"
+        (cambiarPagina)="onCambiarPagina($event)">
+      </app-paginacion>
     </main>
   </div>
 

@@ -22,9 +22,13 @@ import { GruposService } from '../../../core/grupos/grupos.service';
 })
 export class GruposComponent implements OnInit {
   grupos: any[] = [];
+  filtered: any[] = []; // Array filtrado para búsqueda
   modalOpen = false;
   grupoAEditar: any = null;
   modalVisible: boolean = false;
+  paginaActual: number = 1;
+  registrosPorPagina: number = 20; // Número de registros por página
+  terminoBusqueda: string = ''; // Término de búsqueda
 
   constructor(private gruposService: GruposService) { }
 
@@ -45,12 +49,18 @@ export class GruposComponent implements OnInit {
             carrera_nombre: g.carrera?.nombre || 'Sin carrera',
             semestre: g.semestre
           }));
+          
+          // Inicializar el array filtrado
+          this.filtered = [...this.grupos];
+          this.paginaActual = 1; // Resetear a la primera página
+          
           console.log('✅ Grupos mapeados:', this.grupos);
           console.table(this.grupos);
         } else {
           // Caso cuando no hay grupos disponibles
           console.warn('⚠️ No hay grupos disponibles');
           this.grupos = [];
+          this.filtered = [];
 
           // Mostrar mensaje informativo al usuario
           Swal.fire({
@@ -66,6 +76,7 @@ export class GruposComponent implements OnInit {
       error: (error) => {
         console.error('❌ Error al obtener grupos:', error);
         this.grupos = [];
+        this.filtered = [];
 
         // Manejo de errores específicos
         if (error.status === 401) {
@@ -98,6 +109,28 @@ export class GruposComponent implements OnInit {
         }
       }
     });
+  }
+
+  // Método para filtrar grupos basado en el término de búsqueda
+  filtrarGrupos(): void {
+    if (!this.terminoBusqueda.trim()) {
+      this.filtered = [...this.grupos];
+    } else {
+      const termino = this.terminoBusqueda.toLowerCase();
+      this.filtered = this.grupos.filter(grupo => 
+        grupo.nombre.toLowerCase().includes(termino) ||
+        grupo.carrera_nombre.toLowerCase().includes(termino) ||
+        grupo.semestre.toString().includes(termino)
+      );
+    }
+    this.paginaActual = 1; // Resetear a la primera página después del filtrado
+  }
+
+  // Método para obtener los grupos de la página actual
+  get gruposPaginados(): any[] {
+    const inicio = (this.paginaActual - 1) * this.registrosPorPagina;
+    const fin = inicio + this.registrosPorPagina;
+    return this.filtered.slice(inicio, fin);
   }
 
   eliminarGrupo(id: number): void {
@@ -167,5 +200,20 @@ export class GruposComponent implements OnInit {
     this.modalOpen = false;
     console.log('❎ Modal cerrado. Refrescando lista de grupos...');
     this.getGrupos();
+  }
+
+  // Método para cambiar de página
+  onCambiarPagina(nuevaPagina: number): void {
+    this.paginaActual = nuevaPagina;
+    console.log(`📄 Cambiando a página ${nuevaPagina}`);
+  }
+
+  get mostrarPaginacion(): boolean {
+    return this.filtered.length > 0; // Mostrar solo si hay elementos
+  }
+
+  totalPaginas(): number {
+    const total = Math.ceil(this.filtered.length / this.registrosPorPagina);
+    return total === 0 ? 1 : total; // Siempre mostrar al menos 1 página
   }
 }

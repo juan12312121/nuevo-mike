@@ -1,6 +1,6 @@
 <div class="body">
   <app-aside-jefecarrera></app-aside-jefecarrera>
-
+  
   <div class="main-content">
     <!-- Top Header -->
     <header class="header">
@@ -17,17 +17,32 @@
         <button class="add-button" (click)="abrirModal()">
           <i class="fa-solid fa-plus"></i> Agregar Materia
         </button>
-
       </div>
 
       <div class="search-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" class="search-input" placeholder="Buscar materia por nombre o carrera...">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Buscar materia por nombre o carrera..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="onBusquedaChange()">
       </div>
 
-      <div class="subjects-grid fade-in-up">
-        <!-- Aquí iteramos sobre las materias y mostramos cada una -->
-        <div *ngFor="let materia of materias" class="subject-card">
+      <!-- Mostrar loading -->
+      <div *ngIf="loading" class="loading-container">
+        <p>Cargando materias...</p>
+      </div>
+
+      <!-- Mostrar mensaje de error -->
+      <div *ngIf="errorMessage && !loading" class="error-container">
+        <p>{{ errorMessage }}</p>
+      </div>
+
+      <!-- Mostrar materias cuando no hay loading ni error -->
+      <div *ngIf="!loading && !errorMessage" class="subjects-grid fade-in-up">
+        <!-- Iterar sobre las materias paginadas -->
+        <div *ngFor="let materia of materiasPaginadas" class="subject-card">
           <!-- Colocamos el ID en la esquina superior derecha -->
           <div class="subject-card-id">
             {{ materia.id }}
@@ -37,10 +52,8 @@
           </div>
           <div class="subject-card-info">
             <!-- Mostramos los detalles de la materia -->
-            <div class="subject-card-name">{{ materia.nombre }}</div> <!-- Nombre de la materia -->
-            <div class="subject-card-career"> {{ materia.carrera?.nombre || 'Carrera no disponible' }}</div>
-            <!-- Carrera de la materia -->
-
+            <div class="subject-card-name">{{ materia.nombre }}</div>
+            <div class="subject-card-career">{{ materia.carrera?.nombre || 'Carrera no disponible' }}</div>
           </div>
           <div class="subject-card-actions">
             <button class="subject-card-button" (click)="editarMateria(materia)">
@@ -49,21 +62,35 @@
             <button class="subject-card-button delete" (click)="eliminarMateria(materia.id)">
               <i class="fa-solid fa-trash"></i>
             </button>
-
-
-
           </div>
+        </div>
+
+        <!-- Mensaje cuando no hay materias después del filtro -->
+        <div *ngIf="filtered.length === 0 && materias.length > 0" class="no-results">
+          <p>No se encontraron materias que coincidan con "{{ terminoBusqueda }}"</p>
+        </div>
+
+        <!-- Mensaje cuando no hay materias en absoluto -->
+        <div *ngIf="materias.length === 0" class="no-data">
+          <p>No tienes materias registradas aún.</p>
         </div>
       </div>
 
       <!-- Paginación -->
-      <app-paginacion></app-paginacion>
+      <app-paginacion
+        *ngIf="mostrarPaginacion && !loading"
+        [paginaActual]="paginaActual"
+        [totalPaginas]="totalPaginas()"
+        [maxPaginasVisibles]="5"
+        (cambiarPagina)="onCambiarPagina($event)">
+      </app-paginacion>
     </main>
   </div>
 
-  <app-modal-materias [show]="showModal" [materiaEditando]="materiaEditando"
-    (modalStatusChange)="handleModalChange($event)" (materiaAgregada)="agregarMateria($event)">
+  <app-modal-materias 
+    [show]="showModal" 
+    [materiaEditando]="materiaEditando"
+    (modalStatusChange)="handleModalChange($event)" 
+    (materiaAgregada)="agregarMateria($event)">
   </app-modal-materias>
-
-
 </div>
