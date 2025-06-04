@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AsignacionMateriasService {
 
-  private apiUrl = 'http://localhost:4000/api/asignaciones';  // URL de la API
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/asignaciones';
 
   constructor(private http: HttpClient) { }
 

@@ -75,7 +75,7 @@ export interface EnumsResponse {
   providedIn: 'root'
 })
 export class HorariosService {
-  private API_URL = 'http://localhost:4000/api/horarios'; // URL base de la API
+private API_URL = 'https://mi-back-2pbd.onrender.com/api/horarios';
 
   constructor(private http: HttpClient) { }
 

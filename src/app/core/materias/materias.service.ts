@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MateriasService {
-  private apiUrl = 'http://localhost:4000/api/materias'; // URL de tu API backend
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/materias';
 
   constructor(private http: HttpClient) { }
 

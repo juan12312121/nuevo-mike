@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CarrerasService {
 
-  private apiUrl = 'http://localhost:4000/api/carreras'; // Cambia si usas otro puerto
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/carreras';
 
   constructor(private http: HttpClient) {}
 

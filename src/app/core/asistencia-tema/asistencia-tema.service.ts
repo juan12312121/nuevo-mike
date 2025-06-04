@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AsistenciaTemaService {
-  private apiUrl = 'http://localhost:4000/api/asistencia-tema';
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/asistencia-tema';
 
   constructor(private http: HttpClient) { }
 

@@ -36,7 +36,7 @@ export interface Grupo {
 })
 export class GruposService {
 
-  private apiUrl = 'http://localhost:4000/api/grupos'; // URL base de la API
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/grupos';
 
   constructor(private http: HttpClient, private usuariosService: UsuariosService) { }
 

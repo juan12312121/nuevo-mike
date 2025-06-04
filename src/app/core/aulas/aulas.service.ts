@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators'; // Importamos para manejar errores
 })
 export class AulasService {
 
-  private apiUrl = 'http://localhost:4000/api/aulas';  // URL base
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/aulas';
 
   constructor(private http: HttpClient) { }
 

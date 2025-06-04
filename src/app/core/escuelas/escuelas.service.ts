@@ -12,7 +12,7 @@ export interface Escuela {
   providedIn: 'root'
 })
 export class EscuelasService {
-  private baseUrl = 'http://localhost:4000/api/escuelas';
+private baseUrl = 'https://mi-back-2pbd.onrender.com/api/escuelas';
 
   constructor(private http: HttpClient) { }
 

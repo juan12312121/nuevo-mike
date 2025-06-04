@@ -14,7 +14,7 @@ export interface Estadisticas {
 })
 export class StatsService {
 
-private apiUrl = 'http://localhost:4000/api/estadisticas';
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/estadisticas';
 
   constructor(private http: HttpClient) { }
 

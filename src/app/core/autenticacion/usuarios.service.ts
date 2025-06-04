@@ -21,7 +21,7 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class UsuariosService {
-  private baseUrl = 'http://localhost:4000/api/usuarios';
+private baseUrl = 'https://mi-back-2pbd.onrender.com/api/usuarios';
 
   constructor(private http: HttpClient) { }
 

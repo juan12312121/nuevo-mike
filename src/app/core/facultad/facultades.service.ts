@@ -15,7 +15,7 @@ export interface Facultad {
 
 @Injectable({ providedIn: 'root' })
 export class FacultadesService {
-  private apiUrl = 'http://localhost:4000/api/facultades';
+private apiUrl = 'https://mi-back-2pbd.onrender.com/api/facultades';
 
   constructor(private http: HttpClient) {}
 
