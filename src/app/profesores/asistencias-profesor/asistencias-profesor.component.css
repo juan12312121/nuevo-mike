@@ -576,3 +576,191 @@ app-aside-profesores {
     font-size: 0.95rem;
   }
 }
+
+/* Estilos para Paginación */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  gap: 8px;
+  background-color: #f8fafc;
+  border-top: 1px solid #eaedf0;
+  margin-top: 0;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #dfe4ea;
+  background-color: #ffffff;
+  color: #546e7a;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+.pagination button:disabled {
+  background-color: #f1f2f6;
+  color: #bdc3c7;
+  border-color: #e8eaed;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination button.active {
+  background-color: #3498db;
+  color: white;
+  border-color: #3498db;
+  box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+  font-weight: 600;
+}
+
+.pagination button.active:hover {
+  background-color: #2980b9;
+  border-color: #2980b9;
+  transform: none;
+}
+
+/* Botones de navegación (Anterior/Siguiente) */
+.pagination button:first-child,
+.pagination button:last-child {
+  padding: 8px 16px;
+  font-weight: 500;
+  min-width: auto;
+}
+
+.pagination button:first-child {
+  margin-right: 4px;
+}
+
+.pagination button:last-child {
+  margin-left: 4px;
+}
+
+/* Efectos adicionales */
+.pagination button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .pagination {
+    padding: 15px 10px;
+    gap: 6px;
+  }
+  
+  .pagination button {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 36px;
+    height: 32px;
+  }
+  
+  .pagination button:first-child,
+  .pagination button:last-child {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 12px 8px;
+  }
+  
+  .pagination button {
+    padding: 5px 8px;
+    font-size: 12px;
+    min-width: 32px;
+    height: 28px;
+  }
+  
+  .pagination button:first-child,
+  .pagination button:last-child {
+    padding: 5px 10px;
+    flex-basis: 100%;
+    margin: 2px 0;
+  }
+}
+
+/* Información adicional de paginación (opcional) */
+.pagination-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8fafc;
+  color: #546e7a;
+  font-size: 14px;
+  border-top: 1px solid #eaedf0;
+}
+
+.pagination-info .results-count {
+  font-weight: 500;
+}
+
+.pagination-info .page-info {
+  color: #7f8c8d;
+}
+
+/* Versión compacta para espacios reducidos */
+.pagination.compact {
+  padding: 12px;
+  gap: 4px;
+}
+
+.pagination.compact button {
+  padding: 6px 8px;
+  font-size: 13px;
+  min-width: 32px;
+  height: 28px;
+}
+
+/* Animación de carga durante cambio de página */
+.pagination.loading button:not(:disabled) {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.pagination.loading button:not(:disabled)::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: 4px;
+}
+
+/* Mejora visual para números de página con más de un dígito */
+.pagination button:not(:first-child):not(:last-child) {
+  min-width: 40px;
+}
+
+/* Estados de focus para accesibilidad */
+.pagination button:focus {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+.pagination button:focus:not(.active) {
+  background-color: rgba(52, 152, 219, 0.1);
+}

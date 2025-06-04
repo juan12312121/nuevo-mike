@@ -1,34 +1,21 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h2>
-      <i class="fas fa-graduation-cap"></i>
-      Jefe de Carrera
-    </h2>
-    <button class="toggle-sidebar" id="toggle-sidebar">
-      <i class="fas fa-bars"></i>
-    </button>
+    <h2><i class="fas fa-graduation-cap"></i> Jefe de grupo</h2>
+   
   </div>
 
   <div class="sidebar-content">
     <div class="sidebar-section">
       <div class="sidebar-menu">
-        <!-- Cada <a> con #menuLink para controlar "active" -->
-        <a #menuLink (click)="navegar('crear-horario')" class="active">
-          <i class="fas fa-calendar-alt"></i> Crear Horario
+        <a #menuLink (click)="navegar('jefe-grupo')">
+          <i class="fas fa-calendar-alt"></i> Horario
         </a>
-        <a #menuLink (click)="navegar('grupos')">
-          <i class="fas fa-users"></i> Grupos
+        <a #menuLink (click)="navegar('mis-asistencias')">
+          <i class="fas fa-clipboard-check"></i> Asistencias
         </a>
-        <a #menuLink (click)="navegar('materias')">
-          <i class="fas fa-book"></i> Materias
+        <a #menuLink (click)="navegar('temas-vistos2')">
+          <i class="fas fa-book"></i> Temas Vistos
         </a>
-        <a #menuLink (click)="navegar('profes')">
-          <i class="fas fa-chalkboard-teacher"></i> Profesores
-        </a>
-        <a #menuLink (click)="navegar('usuarios')">
-          <i class="fas fa-user"></i> Usuarios
-        </a>
-        <!-- Agrega o elimina enlaces según tus rutas existentes -->
       </div>
     </div>
   </div>
@@ -36,21 +23,13 @@
   <div class="sidebar-footer">
     <div class="user-info">
       <div class="user-avatar">
-        JC <!-- Iniciales o avatar dinámico -->
+        JG
       </div>
       <div>
-        <div class="user-name">Jorge Castillo</div>
-        <div class="user-role">Jefe de Carrera</div>
+        <div class="user-role">Jefe de Grupo</div>
       </div>
     </div>
-
-    <!-- Botón de Cerrar Sesión -->
-    <button
-      type="button"
-      (click)="cerrarSesion()"
-      class="cerrar-sesion-btn"
-      style="z-index: 9999;"
-    >
+    <button (click)="cerrarSesion()" class="cerrar-sesion-btn" title="Cerrar sesión">
       <i class="fas fa-sign-out-alt"></i>
     </button>
   </div>

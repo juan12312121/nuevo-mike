@@ -26,7 +26,7 @@
         {{ error }}
       </div>
 
-      <!-- Table with data -->
+      <!-- Tabla con datos paginados -->
       <div class="table-container" *ngIf="!loading && !error">
         <table>
           <thead>
@@ -42,12 +42,13 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let asistencia of asistencias">
+            <!-- Iteramos sólo sobre pagedAsistencias -->
+            <tr *ngFor="let asistencia of pagedAsistencias">
               <td>{{ asistencia.asistencia_id }}</td>
               <td>{{ asistencia.materia }}</td>
               <td>{{ asistencia.turno }}</td>
               <td>{{ asistencia.aula }}</td>
-              <td>{{ asistencia.fecha_registro | date : "dd/MM/yyyy" }}</td>
+              <td>{{ asistencia.fecha_registro | date: 'dd/MM/yyyy' }}</td>
               <td>{{ asistencia.hora_inicio }} - {{ asistencia.hora_fin }}</td>
               <td>
                 <span
@@ -77,12 +78,12 @@
                   >
                     Ver justificante
                   </button>
-
                   <span *ngSwitchDefault>--</span>
                 </ng-container>
               </td>
             </tr>
 
+            <!-- Si no hay ninguna asistencia en todo el arreglo -->
             <tr *ngIf="asistencias.length === 0">
               <td colspan="8" class="no-data">
                 No hay registros de asistencias disponibles.
@@ -90,6 +91,29 @@
             </tr>
           </tbody>
         </table>
+
+        <!-- Bloque de paginación -->
+        <div class="pagination">
+          <!-- Botón página anterior -->
+          <button (click)="prevPage()" [disabled]="currentPage === 1">
+            &laquo; Anterior
+          </button>
+
+          <!-- Botones numéricos de cada página -->
+          <ng-container *ngFor="let _ of [].constructor(totalPages); let i = index">
+            <button
+              [class.active]="currentPage === (i + 1)"
+              (click)="goToPage(i + 1)"
+            >
+              {{ i + 1 }}
+            </button>
+          </ng-container>
+
+          <!-- Botón página siguiente -->
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+            Siguiente &raquo;
+          </button>
+        </div>
       </div>
     </main>
   </div>
@@ -130,54 +154,58 @@
         <button (click)="closeJustificacionModal()" class="cancel-btn">
           Cancelar
         </button>
-        <button (click)="saveJustificacion()" class="save-btn">Guardar</button>
+        <button (click)="saveJustificacion()" class="save-btn">
+          Guardar
+        </button>
       </div>
     </div>
   </div>
 
+  <!-- Modal para ver justificante -->
   <div class="modal" *ngIf="isViewModalOpen">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5><i class="fas fa-file-alt"></i> Detalles de Justificación</h5>
-      <button (click)="closeViewJustificacionModal()" class="close-btn">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="justification-details">
-        <div class="detail-group">
-          <label>
-            <i class="far fa-calendar-alt"></i> Fecha de Registro:
-          </label>
-          <p class="detail-value">
-            {{ selectedJustificacion?.fecha_asistencia | date:'dd/MM/yyyy HH:mm' }}
-          </p>
-        </div>
-        <div class="detail-group">
-          <label>
-            <i class="fas fa-comment-alt"></i> Motivo:
-          </label>
-          <p class="detail-value">{{ selectedJustificacion?.motivo }}</p>
-        </div>
-        <div class="detail-group" *ngIf="selectedJustificacion?.archivo_prueba">
-          <label>
-            <i class="fas fa-paperclip"></i> Archivo Adjunto:
-          </label>
-          <div class="image-container">
-            <img [src]="'http://localhost:4000/uploads/' + selectedJustificacion?.archivo_prueba" 
-                 alt="Justificante"
-                 class="justification-image">
-            <div class="image-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5><i class="fas fa-file-alt"></i> Detalles de Justificación</h5>
+        <button (click)="closeViewJustificacionModal()" class="close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="justification-details">
+          <div class="detail-group">
+            <label>
+              <i class="far fa-calendar-alt"></i> Fecha de Registro:
+            </label>
+            <p class="detail-value">
+              {{ selectedJustificacion?.fecha_asistencia | date: 'dd/MM/yyyy HH:mm' }}
+            </p>
+          </div>
+          <div class="detail-group">
+            <label>
+              <i class="fas fa-comment-alt"></i> Motivo:
+            </label>
+            <p class="detail-value">{{ selectedJustificacion?.motivo }}</p>
+          </div>
+          <div class="detail-group" *ngIf="selectedJustificacion?.archivo_prueba">
+            <label>
+              <i class="fas fa-paperclip"></i> Archivo Adjunto:
+            </label>
+            <div class="image-container">
+              <img
+                [src]="'http://localhost:4000/uploads/' + selectedJustificacion?.archivo_prueba"
+                alt="Justificante"
+                class="justification-image"
+              />
+              <div class="image-overlay"></div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button (click)="closeViewJustificacionModal()" class="cancel-btn">
-        <i class="fas fa-times"></i> Cerrar
-      </button>
+      <div class="modal-footer">
+        <button (click)="closeViewJustificacionModal()" class="cancel-btn">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
+      </div>
     </div>
   </div>
-</div>
 </div>
