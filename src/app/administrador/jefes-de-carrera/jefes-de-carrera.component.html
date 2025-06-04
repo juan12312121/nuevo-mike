@@ -34,7 +34,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let jefe of jefes">
+                <!-- Iteramos solo los jefes de la página actual -->
+                <tr *ngFor="let jefe of paginatedJefes">
                   <td>{{ jefe.usuario_id }}</td>
                   <td>{{ jefe.usuario_nombre }}</td>
                   <td>{{ jefe.usuario_correo }}</td>
@@ -46,33 +47,47 @@
                       <button 
                         class="btn-action btn-edit" 
                         (click)="abrirModal(jefe.usuario_id)" 
-                        [attr.data-id]="jefe.usuario_id">
+                        [attr.data-id]="jefe.usuario_id"
+                      >
                         <i class="fas fa-edit"></i>
                       </button>
-                      <button class="btn-action btn-delete" (click)="eliminarJefe(jefe)">
+                      <button 
+                        class="btn-action btn-delete" 
+                        (click)="eliminarJefe(jefe)"
+                      >
                         <i class="fas fa-trash"></i>
                       </button>
-                      
-                      
                     </div>
                   </td>
+                </tr>
+
+                <!-- Mensaje si en la página actual no hay registros -->
+                <tr *ngIf="paginatedJefes.length === 0">
+                  <td colspan="7" class="no-data">No hay jefes de carrera.</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- Paginación -->
-          <app-paginacion-administrador></app-paginacion-administrador>
+          <!-- ↓↓↓ Componente de paginación ↓↓↓ -->
+          <app-paginacion-administrador
+            [data]="jefes"
+            [pageSize]="pageSize"
+            dataLabel="jefes"
+            (pageChanged)="onPageChange($event)"
+          >
+          </app-paginacion-administrador>
         </div>
       </div>
     </div>
 
-    <!-- Modal para agregar o editar Jefe de Carrera -->
+    <!-- Modal para agregar/editar Jefe de Carrera -->
     <app-modal-jefecarrera
       *ngIf="mostrarModal"
       [usuarioId]="usuarioId"
       [esActualizar]="esActualizar"
       (cerrarModal)="cerrarModal()"
-    ></app-modal-jefecarrera>
+    >
+    </app-modal-jefecarrera>
   </div>
 </div>

@@ -33,7 +33,8 @@
 
           <div class="profesor-nombre">Prof. {{ asignacion.profesorNombre }}</div>
           <div class="profesor-materias">
-            <span class="materia-tag" [ngStyle]="{'background-color': getColorForMateria(asignacion.id)}">
+            <!-- ✅ Usar color general en lugar de color por materia -->
+            <span class="materia-tag" [ngStyle]="{'background-color': getColorGeneral()}">
               {{ asignacion.materiaNombre }}
             </span>
           </div>
@@ -79,7 +80,7 @@
                       'new-assignment': asignacion.isNew,
                       'removing': asignacion.isRemoving
                     }"
-                    [ngStyle]="{'background-color': getColorForMateria(asignacion.materiaId)}"
+                    [ngStyle]="{'background-color': getColorGeneral()}"
                   >
                     <div class="asignacion-header">
                       <span class="asignacion-materia">{{ asignacion.materiaNombre }}</span>

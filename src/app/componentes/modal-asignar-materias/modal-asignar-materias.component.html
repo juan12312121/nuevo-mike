@@ -5,7 +5,7 @@
         <i class="fas fa-clipboard-list"></i>
         {{ isEditMode ? 'Editar Asignación' : 'Nueva Asignación' }}
       </h2>
-      <button class="modal-close" (click)="close()">
+      <button class="modal-close" (click)="close()" [disabled]="isSaving">
         <i class="fas fa-times"></i>
       </button>
     </div>
@@ -13,33 +13,61 @@
     <form [formGroup]="form" (ngSubmit)="guardarAsignacion()">
       <div class="modal-body">
         <div class="form-group">
-          <label>Profesor</label>
-          <select formControlName="profesorId" class="form-select">
+          <label for="profesorId">Profesor <span class="required">*</span></label>
+          <select 
+            id="profesorId"
+            formControlName="profesorId" 
+            class="form-select"
+            [class.is-invalid]="profesorControl?.invalid && profesorControl?.touched">
             <option [value]="null" disabled>Seleccionar profesor</option>
             <option *ngFor="let p of profesores" [value]="p.id">
               {{ p.id }} - {{ p.nombre }}
             </option>
           </select>
+          <div 
+            *ngIf="profesorControl?.invalid && profesorControl?.touched" 
+            class="invalid-feedback">
+            Por favor selecciona un profesor
+          </div>
         </div>
 
         <div class="form-group">
-          <label>Materia</label>
-          <select formControlName="materiaId" class="form-select">
+          <label for="materiaId">Materia <span class="required">*</span></label>
+          <select 
+            id="materiaId"
+            formControlName="materiaId" 
+            class="form-select"
+            [class.is-invalid]="materiaControl?.invalid && materiaControl?.touched">
             <option [value]="null" disabled>Seleccionar materia</option>
             <option *ngFor="let m of materias" [value]="m.id">
               {{ m.id }} - {{ m.nombre }}
             </option>
           </select>
+          <div 
+            *ngIf="materiaControl?.invalid && materiaControl?.touched" 
+            class="invalid-feedback">
+            Por favor selecciona una materia
+          </div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="close()">Cancelar</button>
-        <button type="submit" class="btn btn-primary">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="close()"
+          [disabled]="isSaving">
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="!puedeGuardar">
+          <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="isSaving" class="fas fa-spinner fa-spin me-2"></i>
           {{ isEditMode ? 'Guardar Cambios' : 'Guardar Asignación' }}
         </button>
       </div>
     </form>
-
   </div>
 </div>

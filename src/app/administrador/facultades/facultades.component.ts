@@ -48,7 +48,7 @@ export class FacultadesComponent implements OnInit {
   // Paginación
   paginatedFacultades: Facultad[] = [];
   currentPage = 1;
-  pageSize = 8;
+  pageSize = 10;
 
   constructor(
     private facultadesService: FacultadesService,

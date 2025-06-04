@@ -46,7 +46,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let carrera of carrerasFiltradas">
+                <!-- Reemplazamos carrerasFiltradas por paginatedCarreras -->
+                <tr *ngFor="let carrera of paginatedCarreras">
                   <td>{{ carrera.carrera_id }}</td>
                   <td>{{ carrera.carrera_nombre }}</td>
                   <td>{{ carrera.facultad_nombre }}</td>
@@ -59,18 +60,29 @@
                       </button>
                       <!-- Botón de Eliminación -->
                       <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarCarrera(carrera)">
-
                         <i class="fas fa-trash-alt"></i>
                       </button>
                     </div>
                   </td>
                 </tr>
+
+                <!-- Si no hay resultados en la página actual -->
+                <tr *ngIf="paginatedCarreras.length === 0">
+                  <td colspan="5" class="no-data">No se encontraron carreras.</td>
+                </tr>
               </tbody>
             </table>
           </div>
 
-          <!-- Paginación -->
-          <app-paginacion-administrador></app-paginacion-administrador>
+          <!-- ↓↓↓ Paginación ↓↓↓ -->
+          <app-paginacion-administrador
+            [data]="carrerasFiltradas"
+            [pageSize]="pageSize"
+            dataLabel="carreras"
+            (pageChanged)="onPageChange($event)"
+          >
+          </app-paginacion-administrador>
+
         </div>
       </div>
     </div>
@@ -80,7 +92,8 @@
       *ngIf="mostrarModal"
       [carreraSeleccionada]="carreraSeleccionada"
       (cerrarModal)="cerrarModal()"
-      (carreraGuardada)="agregarCarrera()">
+      (carreraGuardada)="agregarCarrera()"
+    >
     </app-modal-carreras>
   </div>
 </div>

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-
 @Component({
   selector: 'app-paginacion-administrador',
   standalone: true,
@@ -10,35 +9,45 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
   styleUrls: ['./paginacion-administrador.component.css']
 })
 export class PaginacionAdministradorComponent implements OnChanges {
-  @Input() data: any[] = [];  // Entrada de datos genérica
-  @Input() pageSize: number = 8;  // Número de elementos por página
-  @Input() dataLabel: string = 'elementos'; // Etiqueta dinámica para los elementos (escuelas, carreras, etc.)
-  @Output() pageChanged = new EventEmitter<number>(); // Emitir el cambio de página
-  
-  currentPage: number = 1;  // Página actual
-  paginatedData: any[] = [];  // Los datos que se mostrarán según la paginación
-  
+  @Input() data: any[] = [];          // Lista completa de elementos
+  @Input() pageSize: number = 8;      // Elementos por página
+  @Input() dataLabel: string = 'elementos'; // Etiqueta para mostrar (“escuelas”, “carreras”, etc.)
+  @Output() pageChanged = new EventEmitter<number>(); // Emite número de página al padre
+
+  currentPage: number = 1;             // Página actual
+  totalPages: number = 1;              // Total de páginas (se calcula)
+
   ngOnChanges(changes: SimpleChanges): void {
+    // Si cambian los datos, reiniciamos la página actual a 1 y recalculamos totalPages
     if (changes['data']) {
-      this.paginateData();  // Vuelve a calcular los elementos a mostrar
+      this.currentPage = 1;
+      this.updateTotalPages();
+      this.emitCurrentPage();
+    }
+    // También si cambia pageSize
+    if (changes['pageSize']) {
+      this.updateTotalPages();
+      if (this.currentPage > this.totalPages) {
+        this.currentPage = this.totalPages;
+      }
+      this.emitCurrentPage();
     }
   }
 
-  paginateData() {
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    this.paginatedData = this.data.slice(startIndex, endIndex);
+  private updateTotalPages() {
+    this.totalPages = Math.ceil(this.data.length / this.pageSize) || 1;
   }
 
-  get totalPages() {
-    return Math.ceil(this.data.length / this.pageSize);
+  private emitCurrentPage() {
+    this.pageChanged.emit(this.currentPage);
   }
 
   setPage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.pageChanged.emit(this.currentPage); // Emitir solo la página
+    if (page < 1 || page > this.totalPages) {
+      return;
     }
+    this.currentPage = page;
+    this.emitCurrentPage();
   }
 
   prevPage() {
@@ -53,11 +62,21 @@ export class PaginacionAdministradorComponent implements OnChanges {
     }
   }
 
+  // Array con índices de página [1, 2, 3, …]
   get pages(): number[] {
-    const pages = [];
+    const pagesArray: number[] = [];
     for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
+      pagesArray.push(i);
     }
-    return pages;
+    return pagesArray;
+  }
+
+  // Rango de elementos que se están mostrando (1–8, 9–16, etc.)
+  get startIndex(): number {
+    return (this.currentPage - 1) * this.pageSize + 1;
+  }
+  get endIndex(): number {
+    const possibleEnd = this.currentPage * this.pageSize;
+    return possibleEnd > this.data.length ? this.data.length : possibleEnd;
   }
 }

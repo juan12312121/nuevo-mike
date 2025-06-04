@@ -29,8 +29,8 @@ export class EscuelasComponent implements OnInit {
   searchText = '';
 
   // Paginación
-  currentPage = 1;
-  pageSize = 8;
+currentPage = 1;
+pageSize = 10;
 
   constructor(private escuelasService: EscuelasService) {}
 

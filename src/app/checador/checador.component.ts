@@ -31,9 +31,17 @@ export class ChecadorComponent implements OnInit {
   // Filtros de horario
   selectedGrupoId: number | null = null;
   selectedTurno = '';
+  selectedDia = '';  // Nuevo filtro por día
+  selectedHora = '';  // Nuevo filtro por hora
+  
   diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
   slots: Slot[] = [];
+  horasDisponibles: string[] = [];  // Nuevo array para horas disponibles
   horariosPorDia: Record<string, Record<string, any>> = {};
+  
+  // Nuevas propiedades para mostrar datos filtrados
+  clasesFiltradasPorDia: any[] = [];
+  clasesFiltradasPorHora: any[] = [];
 
   // Opciones de tipo de asistencia
   asistenciaTipos: RegistroTipo[] = ['Asistió', 'No Asistió', 'Justificado'];
@@ -69,9 +77,7 @@ export class ChecadorComponent implements OnInit {
     console.log('selectedTurno:', this.selectedTurno);
 
     if (!this.selectedGrupoId || !this.selectedTurno) {
-      this.slots = [];
-      this.horariosPorDia = {};
-      console.log('Faltan filtro de grupo o turno, saliendo.');
+      this.resetFilters();
       return;
     }
 
@@ -79,6 +85,7 @@ export class ChecadorComponent implements OnInit {
     console.log('Grupo encontrado:', grupo);
     if (!grupo) {
       console.warn('No se encontró el grupo.');
+      this.resetFilters();
       return;
     }
 
@@ -116,6 +123,83 @@ export class ChecadorComponent implements OnInit {
       .map(([inicio, fin]) => ({ inicio, fin }))
       .sort((a, b) => a.inicio.localeCompare(b.inicio));
     console.log('Slots finales:', this.slots);
+
+    // Construir array de horas disponibles
+    this.horasDisponibles = this.slots.map(slot => slot.inicio);
+    
+    // Resetear filtros específicos
+    this.selectedDia = '';
+    this.selectedHora = '';
+    this.aplicarFiltros();
+  }
+
+  onDiaChange(): void {
+    console.log('Día seleccionado:', this.selectedDia);
+    this.aplicarFiltros();
+  }
+
+  onHoraChange(): void {
+    console.log('Hora seleccionada:', this.selectedHora);
+    this.aplicarFiltros();
+  }
+
+  aplicarFiltros(): void {
+    // Resetear arrays filtrados
+    this.clasesFiltradasPorDia = [];
+    this.clasesFiltradasPorHora = [];
+
+    if (this.selectedDia) {
+      // Filtrar por día específico
+      const clasesDia = this.horariosPorDia[this.selectedDia] || {};
+      this.clasesFiltradasPorDia = Object.keys(clasesDia)
+        .map(hora => ({
+          ...clasesDia[hora],
+          hora_slot: hora
+        }))
+        .sort((a, b) => a.hora_inicio.localeCompare(b.hora_inicio));
+    }
+
+    if (this.selectedHora) {
+      // Filtrar por hora específica
+      this.clasesFiltradasPorHora = [];
+      this.diasSemana.forEach(dia => {
+        const clase = this.horariosPorDia[dia]?.[this.selectedHora];
+        if (clase) {
+          this.clasesFiltradasPorHora.push({
+            ...clase,
+            dia_semana: dia
+          });
+        }
+      });
+    }
+  }
+
+  resetFilters(): void {
+    this.slots = [];
+    this.horasDisponibles = [];
+    this.horariosPorDia = {};
+    this.selectedDia = '';
+    this.selectedHora = '';
+    this.clasesFiltradasPorDia = [];
+    this.clasesFiltradasPorHora = [];
+    console.log('Filtros reseteados');
+  }
+
+  // Método para determinar qué vista mostrar
+  shouldShowFullTable(): boolean {
+    return !this.selectedDia && !this.selectedHora && this.slots.length > 0;
+  }
+
+  shouldShowDayFilter(): boolean {
+    return this.selectedDia !== '' && !this.selectedHora;
+  }
+
+  shouldShowHourFilter(): boolean {
+    return this.selectedHora !== '' && !this.selectedDia;
+  }
+
+  shouldShowBothFilters(): boolean {
+    return this.selectedDia !== '' && this.selectedHora !== '';
   }
 
   getCell(dia: string, inicio: string): any | null {
@@ -144,7 +228,7 @@ export class ChecadorComponent implements OnInit {
 
     // 2) Construyes el payload con los campos exactos
     const payload = {
-      asignacion_id: this.selectedClase.asignacion_id,  // <--- propiedad corregida
+      asignacion_id: this.selectedClase.asignacion_id,
       asistio: tipo,
       registrado_por_id: this.usuarioId,
       tema: tema

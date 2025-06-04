@@ -1,25 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
+
 import { AsideAdministradorComponent } from "../../componentes/aside-administrador/aside-administrador.component";
-import { ModalJefecarreraComponent } from "../../componentes/modal-jefecarrera/modal-jefecarrera.component"; // ajusta la ruta si es necesario
+import { ModalJefecarreraComponent } from "../../componentes/modal-jefecarrera/modal-jefecarrera.component";
 import { PaginacionAdministradorComponent } from "../../componentes/paginacion-administrador/paginacion-administrador.component";
 import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 
 @Component({
   selector: 'app-jefes-de-carrera',
   standalone: true,
-  imports: [AsideAdministradorComponent, PaginacionAdministradorComponent, CommonModule, ModalJefecarreraComponent],
+  imports: [
+    AsideAdministradorComponent,
+    PaginacionAdministradorComponent,
+    CommonModule,
+    ModalJefecarreraComponent
+  ],
   templateUrl: './jefes-de-carrera.component.html',
   styleUrls: ['./jefes-de-carrera.component.css']
 })
 export class JefesDeCarreraComponent implements OnInit {
   jefes: any[] = [];
   mostrarModal: boolean = false;
-  usuarioId: number | null = null; // Variable para almacenar el ID del jefe de carrera a editar
-  esActualizar: boolean = false;   // Flag para saber si es un modal de actualización
-searchTerm: any;
-filtroEstado: any;
+  usuarioId: number | null = null; 
+  esActualizar: boolean = false;
+
+  // ↓↓↓ Propiedades de paginación ↓↓↓
+  currentPage = 1;
+  pageSize = 10;
+
+  searchTerm: any;
+  filtroEstado: any;
 
   constructor(private usuariosService: UsuariosService) {}
 
@@ -36,6 +47,8 @@ filtroEstado: any;
         if (res.jefes) {
           this.jefes = res.jefes;
           console.log('Jefes de carrera obtenidos:', this.jefes);
+          // Reiniciamos la página cuando cargan los datos
+          this.currentPage = 1;
         } else {
           console.error('La respuesta no contiene la propiedad "jefes":', res);
         }
@@ -46,7 +59,6 @@ filtroEstado: any;
     });
   }
 
-  // Función para abrir el modal para agregar o actualizar un jefe de carrera
   abrirModal(id: number | null = null): void {
     console.log('Abriendo modal');
     if (id) {
@@ -58,12 +70,13 @@ filtroEstado: any;
     }
     this.mostrarModal = true;
   }
+
   eliminarJefe(jefe: any): void {
     Swal.fire({
       toast: true,
       position: 'top-end',
       icon: 'warning',
-      title: `¿Eliminar a "${jefe.usuario_nombre}"?`,  // ✅ aquí está el cambio
+      title: `¿Eliminar a "${jefe.usuario_nombre}"?`,
       html: `
         <div style="margin-top: 10px;">
           <button id="confirmarEliminar" class="swal2-confirm swal2-styled" style="background-color:#d33; margin-right:5px;">Sí</button>
@@ -76,7 +89,7 @@ filtroEstado: any;
       didOpen: () => {
         const confirmBtn = document.getElementById('confirmarEliminar');
         const cancelBtn = document.getElementById('cancelarEliminar');
-  
+
         confirmBtn?.addEventListener('click', () => {
           Swal.close();
           this.usuariosService.eliminarUsuario(jefe.usuario_id).subscribe({
@@ -102,23 +115,29 @@ filtroEstado: any;
             }
           });
         });
-  
+
         cancelBtn?.addEventListener('click', () => {
           Swal.close();
         });
       }
     });
   }
-  
-  
 
-  // Función para cerrar el modal y refrescar los datos de jefes de carrera
   cerrarModal() {
     console.log('Cerrando modal');
     this.mostrarModal = false;
-    this.obtenerJefes(); // Obtiene nuevamente los jefes después de cerrar el modal
+    this.obtenerJefes(); // Refrescar datos tras cerrar el modal
   }
 
-  // Función para manejar la eliminación de un jefe de carrera
- 
+  // ↓↓↓ Handler para el evento pageChanged ↓↓↓
+  onPageChange(page: number) {
+    console.log('Página seleccionada:', page);
+    this.currentPage = page;
+  }
+
+  // ↓↓↓ Getter que devuelve solo el slice de jefes según página actual ↓↓↓
+  get paginatedJefes(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.jefes.slice(start, start + this.pageSize);
+  }
 }

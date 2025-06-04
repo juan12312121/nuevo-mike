@@ -17,16 +17,15 @@ export class Tab3Component implements OnInit {
   @Input() diasSeleccionados: string[] = [];
   @Input() resumen: {
     turno: string;
-    horario: string;
+    horario: string;           // ej: "17:00 - 22:00"
     tipoDuracion: string;
-    duracionClases: number;
+    duracionClases: number;    // ej: 50 (minutos)
     grupo: string;
-    grupoId: number | null;    // <-- agregado
+    grupoId: number | null;
     aula: string;
-    aulaId: number | null;     // <-- agregado
+    aulaId: number | null;
     dias: string[];
   } | null = null;
-
 
   @Input() currentTab: 'formato' | 'dias' | 'diseno' = 'formato';
   @Output() tabChange = new EventEmitter<'formato' | 'dias' | 'diseno'>();
@@ -36,8 +35,8 @@ export class Tab3Component implements OnInit {
   loading = true;
   error: string | null = null;
   
-  // Horas del horario
-  horas = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+  // Horas del horario - se generarán dinámicamente
+  horas: string[] = [];
   dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   
   // Elemento que se está arrastrando actualmente
@@ -45,6 +44,9 @@ export class Tab3Component implements OnInit {
   
   // Para mantener registro de la celda actualmente en hover durante el arrastre
   activeCellKey: string | null = null;
+
+  // ✅ Color general para todas las asignaciones
+  private colorGeneral = '#2E7D32'; // Verde bosque profesional
 
   constructor(
     private horariosService: HorariosService,
@@ -58,6 +60,9 @@ export class Tab3Component implements OnInit {
       resumen: this.resumen,
       diasSeleccionados: this.diasSeleccionados
     });
+
+    // ✅ Generar horas basándose en la configuración del resumen
+    this.generarHorasDesdeResumen();
   
     forkJoin({
       asignaciones: this.asignService.obtenerAsignaciones()
@@ -66,8 +71,6 @@ export class Tab3Component implements OnInit {
         console.log('Tab3: asignaciones recibidas', asignaciones);
         this.asignaciones = asignaciones;
         this.loading = false;
-  
-        this.generarHorasDesdeResumen(); // ✅ aquí sí es válido
       },
       error: (err) => {
         console.error('Tab3: error cargando datos', err);
@@ -205,10 +208,27 @@ export class Tab3Component implements OnInit {
     }
   }
 
+  // ✅ Método mejorado para calcular hora de fin basado en la duración detectada automáticamente
   getHoraFin(horaInicio: string): string {
-    const [h, m] = horaInicio.split(':').map(Number);
-    const nuevaHora = h + 1;
-    return `${nuevaHora.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    // Usar la duración detectada automáticamente
+    const duracionMinutos = this.determinarDuracionPorTurno();
+
+    try {
+      const [h, m] = horaInicio.split(':').map(n => parseInt(n, 10));
+      const tiempoInicioMin = h * 60 + m;
+      const tiempoFinMin = tiempoInicioMin + duracionMinutos;
+      
+      const horaFin = Math.floor(tiempoFinMin / 60);
+      const minutoFin = tiempoFinMin % 60;
+      
+      return `${horaFin.toString().padStart(2, '0')}:${minutoFin.toString().padStart(2, '0')}`;
+    } catch (error) {
+      console.error('Error calculando hora fin:', error);
+      // Fallback
+      const [h, m] = horaInicio.split(':').map(Number);
+      const nuevaHora = h + 1;
+      return `${nuevaHora.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+    }
   }
 
   // Eliminar una asignación del horario
@@ -281,39 +301,10 @@ export class Tab3Component implements OnInit {
       });
     });
   }
-  
-  
-  
 
-
-  private colorPalette = [
-    '#2E7D32', // verde bosque
-    '#FFB300', // dorado oscuro
-    '#0288D1', // azul petróleo
-    '#D84315', // rojo teja
-    '#6A1B9A', // púrpura profundo
-    '#00897B', // verde azulado
-    '#F57F17', // amarillo mostaza
-    '#5D4037', // marrón café
-    '#455A64', // gris azulado
-    '#1E88E5', // azul vibrante
-    '#C62828', // granate
-    '#AD1457', // rosa oscuro
-    '#2C387E', // azul noche
-    '#33691E', // verde oliva oscuro
-    '#4E342E', // marrón oscuro
-    '#37474F'  // pizarra oscura
-  ];
-  
-
-  private materiaColorMap = new Map<number, string>();
-
-  getColorForMateria(materiaId: number): string {
-    if (!this.materiaColorMap.has(materiaId)) {
-      const nextIndex = this.materiaColorMap.size % this.colorPalette.length;
-      this.materiaColorMap.set(materiaId, this.colorPalette[nextIndex]);
-    }
-    return this.materiaColorMap.get(materiaId)!;
+  // ✅ MÉTODO SIMPLIFICADO: Color general para todas las asignaciones
+  getColorGeneral(): string {
+    return this.colorGeneral;
   }
 
   getInitialData(): { 
@@ -338,27 +329,184 @@ export class Tab3Component implements OnInit {
     return data;
   }
  
-  
   // Verificar conflictos en el horario
   tieneConflicto(dia: string, hora: string): boolean {
     const clave = `${dia}-${hora}`;
     return this.horarioAsignado[clave]?.length > 1;
   }
 
+  // ✅ MÉTODO PRINCIPAL CORREGIDO: Turnos predefinidos usan 60 minutos
+  private determinarDuracionPorTurno(): number {
+    if (!this.resumen?.turno) {
+      console.warn('No hay turno definido, usando 60 minutos por defecto');
+      return 60;
+    }
 
+    const turno = this.resumen.turno.toLowerCase();
+    console.log('Analizando turno para determinar duración:', turno);
+
+    // Si ya viene configurada la duración en el resumen, usarla
+    if (this.resumen.duracionClases && this.resumen.duracionClases > 0) {
+      console.log('Usando duración configurada en el resumen:', this.resumen.duracionClases);
+      return this.resumen.duracionClases;
+    }
+
+    // ✅ LÓGICA CORREGIDA: Turnos predefinidos usan 60 minutos
+    switch (turno) {
+      case 'matutino':
+      case 'vespertino':  
+      case 'nocturno':
+        // ✅ CORRECCIÓN: Turnos predefinidos usan 60 minutos (no 50)
+        console.log('Turno predefinido detectado, usando 60 minutos');
+        return 60;
+        
+      case 'personalizado':
+        // Turnos personalizados: detectar según el horario con lógica inteligente
+        const duracionDetectada = this.detectarDuracionPorHorario();
+        console.log('Turno personalizado, duración detectada:', duracionDetectada);
+        return duracionDetectada;
+        
+      default:
+        // Si el turno no coincide con los patrones conocidos, intentar detectar por horario
+        console.log('Turno no reconocido, detectando por horario');
+        return this.detectarDuracionPorHorario();
+    }
+  }
+
+  // ✅ Detectar duración para turnos personalizados basándose en eficiencia
+  private detectarDuracionPorHorario(): number {
+    if (!this.resumen?.horario) {
+      return 60; // Fallback
+    }
+
+    try {
+      const [rangoInicio, rangoFin] = this.resumen.horario.split(' - ');
+      const [hInicio, mInicio] = rangoInicio.split(':').map(n => parseInt(n, 10));
+      const [hFin, mFin] = rangoFin.split(':').map(n => parseInt(n, 10));
+      
+      const tiempoTotalMinutos = (hFin * 60 + mFin) - (hInicio * 60 + mInicio);
+      
+      console.log('Análisis de horario personalizado:', {
+        horario: this.resumen.horario,
+        tiempoTotalMinutos: tiempoTotalMinutos,
+        horasDisponibles: tiempoTotalMinutos / 60
+      });
+
+      // ✅ Heurística para detectar si es mejor 50 o 60 minutos
+      const clasesCon50 = Math.floor(tiempoTotalMinutos / 50);
+      const clasesCon60 = Math.floor(tiempoTotalMinutos / 60);
+      
+      console.log('Comparación de eficiencia para turno personalizado:', {
+        clasesCon50: clasesCon50,
+        clasesCon60: clasesCon60,
+        tiempoSobranteCon50: tiempoTotalMinutos % 50,
+        tiempoSobranteCon60: tiempoTotalMinutos % 60
+      });
+
+      // Preferir 50 minutos si:
+      // 1. Da más clases que 60 minutos, O
+      // 2. Da la misma cantidad pero con menos tiempo sobrante
+      if (clasesCon50 > clasesCon60) {
+        console.log('Eligiendo 50 minutos: más clases disponibles');
+        return 50;
+      } else if (clasesCon50 === clasesCon60) {
+        const sobranteCon50 = tiempoTotalMinutos % 50;
+        const sobranteCon60 = tiempoTotalMinutos % 60;
+        
+        if (sobranteCon50 <= sobranteCon60) {
+          console.log('Eligiendo 50 minutos: mismo número de clases, menos tiempo sobrante');
+          return 50;
+        } else {
+          console.log('Eligiendo 60 minutos: menos tiempo sobrante');
+          return 60;
+        }
+      } else {
+        console.log('Eligiendo 60 minutos: configuración estándar');
+        return 60;
+      }
+      
+    } catch (error) {
+      console.error('Error detectando duración por horario:', error);
+      return 60; // Fallback seguro
+    }
+  }
+
+  // ✅ Método mejorado para generar horas dinámicamente con detección inteligente
   private generarHorasDesdeResumen() {
     this.horas = [];
-    const [hInicio, mInicio] = this.resumen!.horario.split(' - ')[0].split(':').map(n => +n);
-    const [hFin, mFin]     = this.resumen!.horario.split(' - ')[1].split(':').map(n => +n);
-    const dur = this.resumen!.duracionClases; // minutos
-    let current = hInicio * 60 + mInicio;
-    const end = hFin * 60 + mFin;
-
-    while (current + dur <= end) {
-      const hh = Math.floor(current/60).toString().padStart(2,'0');
-      const mm = (current%60).toString().padStart(2,'0');
-      this.horas.push(`${hh}:${mm}`);
-      current += dur;
+    
+    if (!this.resumen || !this.resumen.horario) {
+      console.warn('No hay resumen o horario disponible para generar horas');
+      this.horas = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00'];
+      return;
     }
+
+    try {
+      // Extraer horario de inicio y fin del formato "17:00 - 22:00"
+      const [rangoInicio, rangoFin] = this.resumen.horario.split(' - ');
+      const [hInicio, mInicio] = rangoInicio.split(':').map(n => parseInt(n, 10));
+      const [hFin, mFin] = rangoFin.split(':').map(n => parseInt(n, 10));
+      
+      // ✅ Usar la detección inteligente de duración
+      const duracionMinutos = this.determinarDuracionPorTurno();
+      
+      // Convertir a minutos desde medianoche
+      let tiempoActual = hInicio * 60 + mInicio;
+      const tiempoFin = hFin * 60 + mFin;
+      const tiempoTotalDisponible = tiempoFin - tiempoActual;
+
+      console.log('Generando horario con detección inteligente:', {
+        turno: this.resumen.turno,
+        horarioOriginal: this.resumen.horario,
+        duracionDetectada: duracionMinutos,
+        tiempoTotalMinutos: tiempoTotalDisponible,
+        configuracionOriginal: this.resumen.duracionClases
+      });
+
+      // Calcular cuántas clases caben exactamente
+      const clasesQueCalben = Math.floor(tiempoTotalDisponible / duracionMinutos);
+      
+      console.log(`Con clases de ${duracionMinutos}min caben ${clasesQueCalben} períodos en ${tiempoTotalDisponible}min`);
+
+      // Generar horarios mientras quepa una clase completa
+      let claseCount = 0;
+      while (tiempoActual + duracionMinutos <= tiempoFin && claseCount < clasesQueCalben) {
+        const horas = Math.floor(tiempoActual / 60);
+        const minutos = tiempoActual % 60;
+        const horaFormateada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+        
+        this.horas.push(horaFormateada);
+        console.log(`Período ${claseCount + 1}: ${horaFormateada} (${duracionMinutos}min)`);
+        
+        tiempoActual += duracionMinutos;
+        claseCount++;
+      }
+
+      console.log('Horarios generados finales:', this.horas);
+      console.log(`Total de períodos de clase: ${this.horas.length}`);
+      
+      // ✅ Validación final
+      if (this.horas.length === 0) {
+        console.warn('No se generaron horarios válidos. Verificar configuración.');
+        console.warn('Usando horario por defecto como fallback');
+        this.horas = this.generarHorarioFallback();
+      }
+      
+    } catch (error) {
+      console.error('Error al generar horas desde resumen:', error);
+      console.error('Resumen recibido:', this.resumen);
+      // Fallback a horario por defecto si hay error
+      this.horas = this.generarHorarioFallback();
+    }
+  }
+
+  // ✅ Método auxiliar para horario de fallback
+  private generarHorarioFallback(): string[] {
+    const horarioFallback = [];
+    for (let hora = 8; hora <= 14; hora++) {
+      horarioFallback.push(`${hora.toString().padStart(2, '0')}:00`);
+    }
+    console.log('Usando horario fallback:', horarioFallback);
+    return horarioFallback;
   }
 }

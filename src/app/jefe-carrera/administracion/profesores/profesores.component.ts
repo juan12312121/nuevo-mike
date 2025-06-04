@@ -232,42 +232,55 @@ export class ProfesoresComponent implements OnInit {
     this.showAsignModal = true;
   }
 
-  crearAsignacion(profesor_id: number, materia_id: number): void {
-    if (this.isSavingAsignacion) return;
-    this.isSavingAsignacion = true;
+  // En profesores.component.ts
+// REEMPLAZA el método crearAsignacion por este:
 
-    this.asignService.crearAsignacion(profesor_id, materia_id).subscribe({
-      next: () => {
+crearAsignacion(profesor_id: number, materia_id: number): void {
+  console.log('🚀 Padre: Creando asignación', { profesor_id, materia_id });
+  
+  if (this.isSavingAsignacion) {
+    console.log('⚠️ Ya está guardando, ignorando...');
+    return;
+  }
+  
+  this.isSavingAsignacion = true;
+
+  this.asignService.crearAsignacion(profesor_id, materia_id).subscribe({
+    next: (response) => {
+      console.log('✅ Asignación creada exitosamente:', response);
+      this.obtenerAsignaciones();
+      this.isSavingAsignacion = false;
+      this.showAsignModal = false;
+    },
+    error: (err) => {
+      console.error('❌ Error al crear asignación:', err);
+      this.isSavingAsignacion = false;
+    }
+  });
+}
+
+// El método actualizarAsignacion se mantiene igual:
+actualizarAsignacion(profesor_id: number, materia_id: number): void {
+  console.log('🔄 Padre: Actualizando asignación', { profesor_id, materia_id });
+  
+  if (!this.asignacionToEdit || this.isSavingAsignacion) return;
+  this.isSavingAsignacion = true;
+
+  this.asignService
+    .actualizarAsignacion(this.asignacionToEdit.id, profesor_id, materia_id)
+    .subscribe({
+      next: (response) => {
+        console.log('✅ Asignación actualizada exitosamente:', response);
         this.obtenerAsignaciones();
         this.isSavingAsignacion = false;
         this.showAsignModal = false;
       },
       error: (err) => {
-        console.error('Error al crear asignación', err);
+        console.error('❌ Error al actualizar asignación:', err);
         this.isSavingAsignacion = false;
       },
     });
-  }
-
-  actualizarAsignacion(profesor_id: number, materia_id: number): void {
-    if (!this.asignacionToEdit || this.isSavingAsignacion) return;
-    this.isSavingAsignacion = true;
-
-    this.asignService
-      .actualizarAsignacion(this.asignacionToEdit.id, profesor_id, materia_id)
-      .subscribe({
-        next: () => {
-          this.obtenerAsignaciones();
-          this.isSavingAsignacion = false;
-          this.showAsignModal = false;
-        },
-        error: (err) => {
-          console.error('Error al actualizar asignación', err);
-          this.isSavingAsignacion = false;
-        },
-      });
-  }
-
+}
   cerrarAsignModal(): void {
     this.showAsignModal = false;
     this.asignacionToEdit = null;

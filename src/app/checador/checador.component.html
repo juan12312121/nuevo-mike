@@ -35,10 +35,41 @@
             <option value="Nocturno">Nocturno</option>
           </select>
         </div>
+
+        <!-- NUEVO: SELECT DÍA -->
+        <div class="selector" *ngIf="slots.length > 0">
+          <label for="dia"><i class="fas fa-calendar-day"></i> Día:</label>
+          <select
+            id="dia"
+            [(ngModel)]="selectedDia"
+            (ngModelChange)="onDiaChange()"
+          >
+            <option value="">— Todos los días —</option>
+            <option *ngFor="let d of diasSemana" [value]="d">
+              {{ d }}
+            </option>
+          </select>
+        </div>
+
+        <!-- NUEVO: SELECT HORA -->
+        <div class="selector" *ngIf="slots.length > 0">
+          <label for="hora"><i class="fas fa-clock"></i> Hora:</label>
+          <select
+            id="hora"
+            [(ngModel)]="selectedHora"
+            (ngModelChange)="onHoraChange()"
+          >
+            <option value="">— Todas las horas —</option>
+            <option *ngFor="let h of horasDisponibles" [value]="h">
+              {{ h | slice:0:5 }}
+            </option>
+          </select>
+        </div>
       </div>
     </header>
 
-    <div class="horario-container" *ngIf="slots.length > 0">
+    <!-- TABLA COMPLETA (sin filtros específicos) -->
+    <div class="horario-container" *ngIf="shouldShowFullTable()">
       <div style="overflow-x: auto;">
         <table class="horario-table">
           <thead>
@@ -86,6 +117,111 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- VISTA FILTRADA POR DÍA -->
+    <div class="clases-filtradas" *ngIf="shouldShowDayFilter()">
+      <h2><i class="fas fa-calendar-day"></i> Clases del {{ selectedDia }}</h2>
+      <div class="clases-grid">
+        <div 
+          *ngFor="let clase of clasesFiltradasPorDia" 
+          class="clase-card"
+          [ngClass]="'materia-' + clase.materia_id"
+        >
+          <div class="clase-header">
+            <h3><i class="fas fa-book"></i> {{ clase.materia }}</h3>
+            <span class="hora-badge">
+              {{ clase.hora_inicio | slice:0:5 }} - {{ clase.hora_fin | slice:0:5 }}
+            </span>
+          </div>
+          <div class="clase-details">
+            <p><i class="fas fa-chalkboard-teacher"></i> {{ clase.profesor }}</p>
+            <p><i class="fas fa-school"></i> Aula {{ clase.aula }}</p>
+            <p class="asignacion-id">ID Asignación: {{ clase.asignacion_id }}</p>
+          </div>
+          <button
+            class="btn-asistencia-clase"
+            (click)="marcarAsistenciaClase(clase)"
+            title="Marcar asistencia para esta clase"
+          >
+            <i class="fas fa-user-check"></i> Marcar Asistencia
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA FILTRADA POR HORA -->
+    <div class="clases-filtradas" *ngIf="shouldShowHourFilter()">
+      <h2><i class="fas fa-clock"></i> Clases a las {{ selectedHora | slice:0:5 }}</h2>
+      <div class="clases-grid">
+        <div 
+          *ngFor="let clase of clasesFiltradasPorHora" 
+          class="clase-card"
+          [ngClass]="'materia-' + clase.materia_id"
+        >
+          <div class="clase-header">
+            <h3><i class="fas fa-book"></i> {{ clase.materia }}</h3>
+            <span class="dia-badge">{{ clase.dia_semana }}</span>
+          </div>
+          <div class="clase-details">
+            <p><i class="fas fa-chalkboard-teacher"></i> {{ clase.profesor }}</p>
+            <p><i class="fas fa-school"></i> Aula {{ clase.aula }}</p>
+            <p class="asignacion-id">ID Asignación: {{ clase.asignacion_id }}</p>
+          </div>
+          <button
+            class="btn-asistencia-clase"
+            (click)="marcarAsistenciaClase(clase)"
+            title="Marcar asistencia para esta clase"
+          >
+            <i class="fas fa-user-check"></i> Marcar Asistencia
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA CON AMBOS FILTROS -->
+    <div class="clase-especifica" *ngIf="shouldShowBothFilters()">
+      <ng-container *ngIf="getCell(selectedDia, selectedHora) as claseEspecifica; else noClase">
+        <h2><i class="fas fa-calendar-check"></i> Clase Específica</h2>
+        <div class="clase-detalle-completo" [ngClass]="'materia-' + claseEspecifica.materia_id">
+          <div class="clase-info-principal">
+            <h3><i class="fas fa-book"></i> {{ claseEspecifica.materia }}</h3>
+            <div class="horario-dia">
+              <span class="dia-info">{{ selectedDia }}</span>
+              <span class="hora-info">
+                {{ claseEspecifica.hora_inicio | slice:0:5 }} - {{ claseEspecifica.hora_fin | slice:0:5 }}
+              </span>
+            </div>
+          </div>
+          <div class="clase-detalles-grid">
+            <div class="detalle-item">
+              <i class="fas fa-chalkboard-teacher"></i>
+              <span>{{ claseEspecifica.profesor }}</span>
+            </div>
+            <div class="detalle-item">
+              <i class="fas fa-school"></i>
+              <span>Aula {{ claseEspecifica.aula }}</span>
+            </div>
+            <div class="detalle-item">
+              <i class="fas fa-hashtag"></i>
+              <span>ID: {{ claseEspecifica.asignacion_id }}</span>
+            </div>
+          </div>
+          <button
+            class="btn-asistencia-grande"
+            (click)="marcarAsistenciaClase(claseEspecifica)"
+            title="Marcar asistencia para esta clase"
+          >
+            <i class="fas fa-user-check"></i> Marcar Asistencia
+          </button>
+        </div>
+      </ng-container>
+      <ng-template #noClase>
+        <div class="no-clase-message">
+          <i class="fas fa-info-circle"></i>
+          <p>No hay clase programada para {{ selectedDia }} a las {{ selectedHora | slice:0:5 }}</p>
+        </div>
+      </ng-template>
     </div>
 
     <div *ngIf="slots.length === 0" class="empty-state">

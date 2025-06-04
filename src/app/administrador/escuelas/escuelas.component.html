@@ -63,8 +63,15 @@
           </div>
 
           <!-- Paginación -->
-          <app-paginacion-administrador [data]="escuelas" [pageSize]="pageSize" (pageChanged)="onPageChange($event)">
-          </app-paginacion-administrador>
+    <!-- ► Orden correcto: primero inputs ([data], [pageSize]), luego output (pageChanged) -->
+<app-paginacion-administrador
+  [data]="escuelas"
+  [pageSize]="pageSize"
+  dataLabel="escuelas"
+  (pageChanged)="onPageChange($event)">
+</app-paginacion-administrador>
+
+
         </div>
       </div>
     </div>
