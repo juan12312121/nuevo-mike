@@ -14,6 +14,15 @@
       <p>Ingrese sus credenciales de acceso</p>
     </div>
 
+    <!-- Credenciales de Administrador -->
+    <div style="background: #e8f4fd; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
+      <p style="margin: 0; font-size: 14px; color: #333;">
+        <strong>Credenciales de Admin:</strong><br>
+        <strong>Correo:</strong> admin&#64;admin.com<br>
+        <strong>Contraseña:</strong> admin123
+      </p>
+    </div>
+
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       <!-- Mensaje de error general -->
       <div *ngIf="errorMessage" class="error-message" role="alert">
@@ -25,10 +34,10 @@
         <label for="correo">Correo Electrónico</label>
         <div class="input-group" [class.error-input]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
           <input 
-            type="email" 
-            id="correo" 
-            class="form-control" 
-            placeholder="ejemplo@correo.com" 
+            type="email"
+            id="correo"
+            class="form-control"
+            placeholder="ejemplo@correo.com"
             formControlName="correo"
             (input)="onInputChange()"
             [class.is-invalid]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
@@ -49,10 +58,10 @@
         <label for="contrasena">Contraseña</label>
         <div class="input-group" [class.error-input]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
           <input 
-            type="password" 
-            id="contrasena" 
-            class="form-control" 
-            placeholder="Ingrese su contraseña" 
+            type="password"
+            id="contrasena"
+            class="form-control"
+            placeholder="Ingrese su contraseña"
             formControlName="contrasena"
             (input)="onInputChange()"
             [class.is-invalid]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
@@ -73,8 +82,8 @@
       </div>
 
       <button 
-        type="submit" 
-        [disabled]="loginForm.invalid || isLoading" 
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading"
         class="btn"
         [class.loading]="isLoading">
         <span *ngIf="!isLoading">
@@ -88,6 +97,6 @@
       </button>
     </form>
 
-   
   </div>
 </div>
+

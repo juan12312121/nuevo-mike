@@ -21,9 +21,10 @@ export class LoginComponent {
     private usuariosService: UsuariosService,
     private router: Router
   ) {
+    // Inicializar el formulario con las credenciales de desarrollo
     this.loginForm = this.fb.group({
-      correo: ['', [Validators.required, Validators.email]],
-      contrasena: ['', [Validators.required, Validators.minLength(1)]]
+      correo: ['admin@admin.com', [Validators.required, Validators.email]],
+      contrasena: ['admin123', [Validators.required, Validators.minLength(1)]]
     });
   }
 
@@ -77,6 +78,21 @@ export class LoginComponent {
         this.handleLoginError(err);
       }
     });
+  }
+
+  // Método para rellenar rápidamente las credenciales de administrador
+  fillAdminCredentials(): void {
+    this.loginForm.patchValue({
+      correo: 'admin@admin.com',
+      contrasena: 'admin123'
+    });
+    this.errorMessage = null;
+  }
+
+  // Método para limpiar el formulario
+  clearForm(): void {
+    this.loginForm.reset();
+    this.errorMessage = null;
   }
 
   private showFormErrors(): void {
