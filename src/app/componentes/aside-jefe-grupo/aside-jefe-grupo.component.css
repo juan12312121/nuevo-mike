@@ -8,7 +8,7 @@
     position: fixed;
     left: 0;
     top: 0;
-    height: 100vh;
+    height: 80vh;
     z-index: 100;
     transition: transform 0.3s ease;
   }
