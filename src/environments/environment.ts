@@ -1,4 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:4000/api'
+  production: true,
+  apiUrl: 'https://mi-back-2pbd.onrender.com/api'
 };
