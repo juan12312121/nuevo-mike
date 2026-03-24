@@ -1,81 +1,84 @@
-<!-- src/app/aulas/aulas.component.html -->
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
 
-  <div class="main-content">
-    <!-- Encabezado -->
-    <header class="header">
-      <h1>Gestión de Aulas</h1>
-      <div class="header-actions">
-        <button class="add-button" (click)="abrirModal()">
-          <i class="fas fa-plus"></i> Agregar Aula
-        </button>
-      </div>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Espacios Físicos</h1>
     </header>
 
-    <!-- Dashboard Content -->
-    <main class="dashboard">
-      <div class="section-title">
-        <span>Aulas</span>
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Aulas Disponibles ({{ filteredAulas.length }})</h2>
+        <button class="btn-premium" (click)="abrirModal()">
+          <i class="fas fa-plus"></i> Registrar Aula
+        </button>
       </div>
 
-      <!-- Contenedor de búsqueda -->
-      <div class="search-container">
-        <i class="fas fa-search search-icon"></i>
+      <div class="search-wrapper-premium">
+        <i class="fas fa-search search-icon-premium"></i>
         <input
           type="text"
-          class="search-input"
+          class="search-input-premium"
           placeholder="Buscar aula por ID o nombre..."
           [(ngModel)]="searchQuery"
           (ngModelChange)="buscarAulas()"
         />
       </div>
 
-      <!-- Información de paginación -->
-      <div class="pagination-info" *ngIf="filteredAulas.length > 0">
-        <small *ngIf="searchQuery" style="margin-left: 10px; color: #666;">
-          ({{ aulas.length }} aulas en total)
-        </small>
-      </div>
-
-      
-
-      <!-- Aulas -->
-      <div class="classrooms-grid fade-in-up">
-        <div
-          *ngFor="let aula of aulasPaginadas"
-          class="classroom-card"
-        >
-          <div class="classroom-id">{{ aula.id }}</div>
-          <div class="classroom-name">{{ aula.nombre }}</div>
-          <!-- Botón de eliminar -->
-          <button
-            class="delete-button"
-            (click)="eliminarAula(aula.id)"
-            title="Eliminar aula"
-          >
-            <i class="fas fa-trash"></i>
-          </button>
+      <div class="fade-in-premium">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Identificador del Aula</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let aula of aulasPaginadas">
+                <td><span class="badge-premium badge-blue">#{{ aula.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #fdf2f8; color: #db2777;"><i class="fa-solid fa-door-open"></i></div>
+                    <span style="font-weight: 600;">{{ aula.nombre }}</span>
+                  </div>
+                </td>
+                <td><span class="badge-premium badge-green">Disponible</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-delete" (click)="eliminarAula(aula.id)" title="Eliminar aula">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filteredAulas.length === 0">
+                <td colspan="4">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-building-circle-exclamation empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No se encontraron aulas registradas.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <div *ngIf="filteredAulas.length === 0" class="no-classrooms">
-          <p>No se encontraron aulas</p>
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion 
+            *ngIf="mostrarPaginacion"
+            [paginaActual]="paginaActual"
+            [totalPaginas]="totalPaginas()"
+            [maxPaginasVisibles]="5"
+            (cambiarPagina)="onCambiarPagina($event)">
+          </app-paginacion>
         </div>
       </div>
-
-      <!-- Paginación - Cambié la condición -->
-      <app-paginacion 
-        *ngIf="mostrarPaginacion"
-        [paginaActual]="paginaActual"
-        [totalPaginas]="totalPaginas()"
-        [maxPaginasVisibles]="5"
-        (cambiarPagina)="onCambiarPagina($event)">
-      </app-paginacion>
-
     </main>
   </div>
 
-  <!-- Modal de agregar aulas -->
   <app-modalaulas
     [show]="showModal"
     (showChange)="onModalChange($event)"

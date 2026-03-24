@@ -1,15 +1,15 @@
-<div class="body">
+<div class="body-wrapper">
     <app-aside-administrador></app-aside-administrador>
     
-    <div class="main-content">
-        <div class="header">
-            <h1>Panel de Administración</h1>
-        </div>
+    <div class="main-content-layout">
+        <header class="header-premium">
+            <h1 style="margin: 0;">Panel de Administración <span *ngIf="usuariosService.isSchoolAdmin()">| {{ usuariosService.getUsuario()?.nombre }}</span></h1>
+        </header>
         
-        <div class="dashboard">
+        <main class="dashboard-container">
             <!-- Tarjetas de estadísticas -->
             <div class="stats-container" *ngIf="estadisticas">
-                <div class="stats-card">
+                <div class="stats-card" *ngIf="usuariosService.isSuperAdmin()">
                     <div class="stats-icon">
                         <i class="fas fa-school"></i>
                     </div>
@@ -60,40 +60,35 @@
                         <canvas id="generalStatsChart"></canvas>
                     </div>
                 </div>
-
-               
             </div>
 
             <!-- Tabla de actividad reciente -->
-            <div class="recent-activity-card">
-                <div class="recent-activity-header">
-                    <h3 class="recent-activity-title">Actividad Reciente</h3>
-                    <button class="recent-activity-link">Ver todo</button>
+            <div class="table-wrapper-premium fade-in-premium" style="margin-top: 24px;">
+                <div style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+                    <h3 class="section-title-premium">Actividad Reciente</h3>
+                    <button class="btn-premium" style="padding: 8px 16px; font-size: 13px;">Ver todo</button>
                 </div>
-                <div class="table-container">
-                    <table class="recent-activity-table">
-                        <thead>
-                            <tr>
-                                <th>Evento</th>
-                                <th>Institución</th>
-                                <th>Usuario</th>
-                                <th>Estado</th>
-                                <th>Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Nueva escuela registrada</td>
-                                <td>Universidad Tecnológica del Sur</td>
-                                <td>adminsistema.edu</td>
-                                <td><span class="status-badge status-activo">Completado</span></td>
-                                <td>15/04/2025</td>
-                            </tr>
-                            <!-- Más filas aquí -->
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table-premium">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Institución</th>
+                            <th>Usuario</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Nueva escuela registrada</td>
+                            <td>Universidad Tecnológica del Sur</td>
+                            <td>adminsistema.edu</td>
+                            <td><span class="badge-premium badge-green">Completado</span></td>
+                            <td>15/04/2025</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
+        </main>
     </div>
-</div>
+</div>

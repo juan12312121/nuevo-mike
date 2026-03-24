@@ -8,8 +8,8 @@ import Swal from 'sweetalert2';
 import { Escuela, EscuelasService } from '../../core/escuelas/escuelas.service';
 import { Facultad, FacultadesService } from '../../core/facultad/facultades.service';
 
-import { AsideAdministradorComponent } from '../../componentes/aside-administrador/aside-administrador.component';
-import { ModalFacultadComponent } from '../../componentes/modal-facultad/modal-facultad.component';
+import { AsideAdministradorComponent } from '../aside-administrador/aside-administrador.component';
+import { ModalFacultadComponent } from './modal-facultad/modal-facultad.component';
 import { PaginacionAdministradorComponent } from '../../componentes/paginacion-administrador/paginacion-administrador.component';
 
 @Component({

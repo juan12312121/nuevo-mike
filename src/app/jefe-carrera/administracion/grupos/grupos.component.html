@@ -1,79 +1,94 @@
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
   
-  <div class="main-content">
-    <header class="header">
-      <h1>Gestión de Grupos</h1>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Control de Grupos</h1>
     </header>
-
-    <main class="dashboard">
-      <div class="section-title">
-        <span>Grupos</span>
-        <button class="add-button" (click)="abrirModalNuevo()">
-          <i class="fa-solid fa-plus"></i> Agregar Grupo
+    
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Grupos Académicos ({{ filtered.length }})</h2>
+        <button class="btn-premium" (click)="abrirModalNuevo()">
+          <i class="fa-solid fa-plus"></i> Registrar Grupo
         </button>
       </div>
-
-      <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      
+      <div class="search-wrapper-premium">
+        <i class="fa-solid fa-magnifying-glass search-icon-premium"></i>
         <input
           type="text"
-          class="search-input"
+          class="search-input-premium"
           placeholder="Buscar grupo por nombre, carrera o semestre..."
           [(ngModel)]="terminoBusqueda"
           (input)="filtrarGrupos()"
         />
       </div>
 
-      <div class="groups-grid fade-in-up">
-        <!-- Usar gruposPaginados en lugar de grupos -->
-        <div *ngFor="let grupo of gruposPaginados" class="group-card">
-          <div class="group-card-icon">
-            <i class="fa-solid fa-users"></i>
-          </div>
-          <div class="group-card-info">
-            <div class="group-card-name">{{ grupo.nombre }}</div>
-            <div class="group-card-code">{{ grupo.id }}</div>
-            <div class="group-card-subject">{{ grupo.carrera_nombre }}</div>
-            <div class="group-card-semestre">
-              Semestre: {{ grupo.semestre }}
-            </div>
-          </div>
-          <div class="group-card-actions">
-            <button
-              class="group-card-button"
-              (click)="editarGrupo(grupo)"
-              title="Editar Grupo"
-            >
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button
-              class="group-card-button delete"
-              (click)="eliminarGrupo(grupo.id)"
-              title="Eliminar Grupo"
-            >
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
+      <div class="fade-in-premium">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre del Grupo</th>
+                <th>Carrera</th>
+                <th>Ciclo / Semestre</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let grupo of gruposPaginados">
+                <td><span class="badge-premium badge-blue">#{{ grupo.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #f0fdf4; color: #16a34a;"><i class="fa-solid fa-people-group"></i></div>
+                    <span style="font-weight: 600;">{{ grupo.nombre }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-premium badge-purple">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    {{ grupo.carrera_nombre }}
+                  </span>
+                </td>
+                <td><span class="badge-premium badge-amber">Semestre {{ grupo.semestre }}</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" (click)="editarGrupo(grupo)" title="Editar Grupo">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn-action btn-delete" (click)="eliminarGrupo(grupo.id)" title="Eliminar Grupo">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filtered.length === 0">
+                <td colspan="5">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-users-slash empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No se encontraron grupos que coincidan con la búsqueda.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion
+            *ngIf="mostrarPaginacion"
+            [paginaActual]="paginaActual"
+            [totalPaginas]="totalPaginas()"
+            [maxPaginasVisibles]="5"
+            (cambiarPagina)="onCambiarPagina($event)">
+          </app-paginacion>
         </div>
       </div>
-
-      <!-- Mostrar mensaje cuando no hay resultados -->
-      <div *ngIf="filtered.length === 0 && grupos.length > 0" class="no-results">
-        <p>No se encontraron grupos que coincidan con la búsqueda.</p>
-      </div>
-
-      <app-paginacion
-        *ngIf="mostrarPaginacion"
-        [paginaActual]="paginaActual"
-        [totalPaginas]="totalPaginas()"
-        [maxPaginasVisibles]="5"
-        (cambiarPagina)="onCambiarPagina($event)">
-      </app-paginacion>
     </main>
   </div>
 
-  <!-- Bind de isOpen y de grupoAEditar -->
   <app-modal-grupos
     [isOpen]="modalOpen"
     (isOpenChange)="modalOpen = $event"

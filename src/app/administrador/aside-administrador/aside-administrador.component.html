@@ -1,0 +1,79 @@
+<aside class="sidebar-premium">
+  <div class="sidebar-inner">
+    <div class="sidebar-header">
+      <div class="logo-wrapper">
+        <div class="logo-box" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 8px 16px rgba(16, 185, 129, 0.3);">
+          <i class="fas fa-shield-halved"></i>
+        </div>
+        <div class="logo-text">
+          <h2>AdminPanel</h2>
+          <span style="color: #10b981;">{{ usuariosService.isSuperAdmin() ? 'Super Admin' : 'School Admin' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="nav-group">
+        <p class="nav-label">General</p>
+        <a class="nav-item" [routerLink]="usuariosService.isSuperAdmin() ? '/super-admin' : '/administrador'" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-gauge-high"></i></div>
+          <span>Panel de Control</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+
+      <!-- Super Admin Section -->
+      <div class="nav-group" *ngIf="usuariosService.isSuperAdmin()">
+        <p class="nav-label">Gestión Global</p>
+        <a class="nav-item" routerLink="/escuelas" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-school-flag"></i></div>
+          <span>Centros Educativos</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a class="nav-item" routerLink="/super-admin/admins" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-user-gear"></i></div>
+          <span>Administradores</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+
+      <!-- School Admin Section -->
+      <div class="nav-group" *ngIf="usuariosService.isSchoolAdmin()">
+        <p class="nav-label">Administración del Plantel</p>
+        <a class="nav-item" routerLink="/facultades" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-building-columns"></i></div>
+          <span>Facultades</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a class="nav-item" routerLink="/carreras" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-graduation-cap"></i></div>
+          <span>Carreras</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a class="nav-item" routerLink="/jefe-de-carrera" routerLinkActive="active">
+          <div class="nav-icon"><i class="fas fa-id-card-clip"></i></div>
+          <span>Jefes de Carrera</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card-premium">
+        <div class="user-avatar-premium" style="color: #10b981; border-color: rgba(16, 185, 129, 0.2);">
+          <i class="fa-solid fa-crown"></i>
+        </div>
+        <div class="user-meta">
+          <p class="user-name">Administrador</p>
+          <span class="user-role">{{ usuariosService.isSuperAdmin() ? 'Global' : 'Local' }}</span>
+        </div>
+        <button class="btn-logout-premium" (click)="logout()" title="Cerrar Sesión">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>

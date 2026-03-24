@@ -1,0 +1,45 @@
+<aside class="sidebar-premium">
+  <div class="sidebar-inner">
+    <div class="sidebar-header">
+      <div class="logo-wrapper">
+        <div class="logo-box" style="background: linear-gradient(135deg, #0ea5e9, #0284c7); box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);">
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+        <div class="logo-text">
+          <h2>CampusPoint</h2>
+          <span style="color: #0ea5e9;">Portal Docente</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="nav-group">
+        <p class="nav-label">Mi Agenda</p>
+        <a *ngFor="let item of menuItems" 
+           class="nav-item" 
+           [class.active]="menuActivo === item.section" 
+           (click)="navegarA(item)"
+           style="cursor: pointer;">
+          <div class="nav-icon"><i [class]="item.icon"></i></div>
+          <span>{{ item.text }}</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card-premium">
+        <div class="user-avatar-premium" style="color: #22d3ee; border-color: rgba(34, 211, 238, 0.2);">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div class="user-meta">
+          <p class="user-name">{{ profesorNombre }}</p>
+          <span class="user-role">{{ profesorRol }}</span>
+        </div>
+        <button class="btn-logout-premium" (click)="cerrarSesion()" title="Cerrar Sesión">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>

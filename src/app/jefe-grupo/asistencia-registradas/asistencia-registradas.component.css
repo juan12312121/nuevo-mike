@@ -9,19 +9,20 @@
 /* Container principal - anchura optimizada */
 .container {
   width: 100%;
-  max-width: 1350px; /* Limitar el ancho máximo */
-  margin: 0 auto; /* Centrar el contenido */
+  max-width: 1350px;
+  margin: 0 auto;
+  margin-left: 280px; /* Separación del menú lateral */
   flex: 1;
   padding: 32px;
+  transition: margin-left 0.3s ease;
 }
 
-/* Contenido principal - dimensiones optimizadas */
 .main-content {
   flex: 1;
-  padding: 16px; /* Reducido de 24px */
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  max-width: calc(100% - 280px); /* Previene desbordamiento en desktop */
 }
 
 /* Encabezado más compacto */
@@ -318,10 +319,6 @@ app-aside-jefe-grupo {
     font-size: 26px;
   }
   
-  app-aside-jefe-grupo {
-    min-width: 200px;
-  }
-  
   .filter-item {
     min-width: 100px;
   }
@@ -332,6 +329,7 @@ app-aside-jefe-grupo {
   .container {
     max-width: 980px;
     padding: 16px;
+    margin-left: 80px;
   }
   
   .main-content {
@@ -340,10 +338,6 @@ app-aside-jefe-grupo {
   
   .header h1 {
     font-size: 24px;
-  }
-  
-  app-aside-jefe-grupo {
-    min-width: 180px;
   }
   
   .filter-item {
@@ -365,6 +359,7 @@ app-aside-jefe-grupo {
 @media (max-width: 1023px) and (min-width: 768px) {
   .container {
     padding: 12px;
+    margin-left: 80px;
   }
   
   .main-content {
@@ -384,10 +379,6 @@ app-aside-jefe-grupo {
   .header-actions {
     width: 100%;
     justify-content: flex-start;
-  }
-  
-  app-aside-jefe-grupo {
-    min-width: 160px;
   }
   
   .filters {
@@ -439,6 +430,7 @@ app-aside-jefe-grupo {
 @media (max-width: 767px) {
   .container {
     padding: 8px;
+    margin-left: 70px;
   }
   
   .main-content {
@@ -462,13 +454,6 @@ app-aside-jefe-grupo {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 6px;
-  }
-  
-  app-aside-jefe-grupo {
-    min-width: unset;
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #e2e8f0;
   }
   
   .filters {

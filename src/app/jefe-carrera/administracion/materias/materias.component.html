@@ -1,89 +1,104 @@
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
   
-  <div class="main-content">
-    <!-- Top Header -->
-    <header class="header">
-      <h1>Gestión de Materias</h1>
-      <div class="header-actions">
-        <!-- Aquí pueden ir botones de acción generales si es necesario -->
-      </div>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Catálogo Académico</h1>
     </header>
-
-    <!-- Dashboard Content -->
-    <main class="dashboard">
-      <div class="section-title">
-        <span>Materias</span>
-        <button class="add-button" (click)="abrirModal()">
-          <i class="fa-solid fa-plus"></i> Agregar Materia
+    
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Materias Registradas ({{ filtered.length }})</h2>
+        <button class="btn-premium" (click)="abrirModal()">
+          <i class="fa-solid fa-plus"></i> Registrar Materia
         </button>
       </div>
-
-      <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      
+      <div class="search-wrapper-premium">
+        <i class="fa-solid fa-magnifying-glass search-icon-premium"></i>
         <input 
           type="text" 
-          class="search-input" 
+          class="search-input-premium" 
           placeholder="Buscar materia por nombre o carrera..."
           [(ngModel)]="terminoBusqueda"
-          (input)="onBusquedaChange()">
+          (input)="onBusquedaChange()"
+        />
       </div>
 
-      <!-- Mostrar loading -->
-      <div *ngIf="loading" class="loading-container">
-        <p>Cargando materias...</p>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="empty-state-premium">
+        <i class="fa-solid fa-spinner fa-spin empty-state-icon-premium"></i>
+        <p class="empty-state-text-premium">Cargando materias...</p>
       </div>
 
-      <!-- Mostrar mensaje de error -->
-      <div *ngIf="errorMessage && !loading" class="error-container">
-        <p>{{ errorMessage }}</p>
+      <!-- Error State -->
+      <div *ngIf="errorMessage && !loading" class="empty-state-premium">
+        <i class="fa-solid fa-triangle-exclamation empty-state-icon-premium" style="color: var(--danger);"></i>
+        <p class="empty-state-text-premium">{{ errorMessage }}</p>
       </div>
 
-      <!-- Mostrar materias cuando no hay loading ni error -->
-      <div *ngIf="!loading && !errorMessage" class="subjects-grid fade-in-up">
-        <!-- Iterar sobre las materias paginadas -->
-        <div *ngFor="let materia of materiasPaginadas" class="subject-card">
-          <!-- Colocamos el ID en la esquina superior derecha -->
-          <div class="subject-card-id">
-            {{ materia.id }}
-          </div>
-          <div class="subject-card-icon">
-            <i class="fa-solid fa-book"></i>
-          </div>
-          <div class="subject-card-info">
-            <!-- Mostramos los detalles de la materia -->
-            <div class="subject-card-name">{{ materia.nombre }}</div>
-            <div class="subject-card-career">{{ materia.carrera?.nombre || 'Carrera no disponible' }}</div>
-          </div>
-          <div class="subject-card-actions">
-            <button class="subject-card-button" (click)="editarMateria(materia)">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="subject-card-button delete" (click)="eliminarMateria(materia.id)">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
+      <!-- Table View -->
+      <div class="fade-in-premium" *ngIf="!loading && !errorMessage">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre de la Materia</th>
+                <th>Carrera Perteneciente</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let materia of materiasPaginadas">
+                <td><span class="badge-premium badge-blue">#{{ materia.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #eef2ff; color: #6366f1;"><i class="fa-solid fa-book-open"></i></div>
+                    <span style="font-weight: 600;">{{ materia.nombre }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-premium badge-purple">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    {{ materia.carrera?.nombre || 'Carrera no disponible' }}
+                  </span>
+                </td>
+                <td><span class="badge-premium badge-green">Habilitada</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" (click)="editarMateria(materia)" title="Editar materia">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn-action btn-delete" (click)="eliminarMateria(materia.id)" title="Eliminar materia">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="filtered.length === 0">
+                <td colspan="5">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-layer-group empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No se encontraron materias que coincidan con la búsqueda.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- Mensaje cuando no hay materias después del filtro -->
-        <div *ngIf="filtered.length === 0 && materias.length > 0" class="no-results">
-          <p>No se encontraron materias que coincidan con "{{ terminoBusqueda }}"</p>
-        </div>
-
-        <!-- Mensaje cuando no hay materias en absoluto -->
-        <div *ngIf="materias.length === 0" class="no-data">
-          <p>No tienes materias registradas aún.</p>
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion
+            *ngIf="mostrarPaginacion && !loading"
+            [paginaActual]="paginaActual"
+            [totalPaginas]="totalPaginas()"
+            [maxPaginasVisibles]="5"
+            (cambiarPagina)="onCambiarPagina($event)">
+          </app-paginacion>
         </div>
       </div>
-
-      <!-- Paginación -->
-      <app-paginacion
-        *ngIf="mostrarPaginacion && !loading"
-        [paginaActual]="paginaActual"
-        [totalPaginas]="totalPaginas()"
-        [maxPaginasVisibles]="5"
-        (cambiarPagina)="onCambiarPagina($event)">
-      </app-paginacion>
     </main>
   </div>
 

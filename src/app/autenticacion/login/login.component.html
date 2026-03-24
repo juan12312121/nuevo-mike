@@ -1,102 +1,116 @@
 <!-- src/app/login/login.component.html -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <div class="body">
-  <div class="login-container">
-    <div class="logo-container">
-      <div class="logo">
-        <i class="fa-solid fa-calendar-check"></i>
+  <div class="background-overlay"></div>
+  
+  <div class="login-page-wrapper">
+    <!-- Carta Informativa (Lado Izquierdo) -->
+    <div class="info-side">
+      <div class="info-content">
+        <div class="badge">Portal Educativo</div>
+        <h2>Excelencia en Gestión Académica</h2>
+        <p>Optimice la administración escolar con nuestra plataforma integral diseñada para la eficiencia y el control total.</p>
+        
+        <div class="features-list">
+          <div class="feature-item">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <div>
+              <h3>Control de Asistencia</h3>
+              <p>Registro preciso de alumnos y docentes en tiempo real.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-table-columns"></i>
+            <div>
+              <h3>Gestión de Horarios</h3>
+              <p>Organización automatizada de aulas y jornadas.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+              <h3>Acceso Seguro</h3>
+              <p>Protección avanzada de datos personales e institucionales.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="login-header">
-      <h1>Sistema de Asistencia</h1>
-      <p>Ingrese sus credenciales de acceso</p>
+    <!-- Formulario de Login (Lado Derecho) -->
+    <div class="login-side">
+      <div class="login-container">
+        <div class="logo-container">
+          <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+        </div>
+
+        <div class="login-header">
+          <h1>Gestión Escolar</h1>
+          <p>Bienvenido al Sistema</p>
+        </div>
+
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <!-- Mensaje de error general -->
+          <div *ngIf="errorMessage" class="error-message" role="alert">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div class="form-group">
+            <label for="correo">Correo Electrónico</label>
+            <div class="input-group" [class.error-input]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
+              <input 
+                type="email"
+                id="correo"
+                class="form-control"
+                placeholder="ejemplo@escuela.edu"
+                formControlName="correo"
+                (input)="onInputChange()">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <div class="input-group" [class.error-input]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
+              <input 
+                type="password"
+                id="contrasena"
+                class="form-control"
+                placeholder="Ingrese su contraseña"
+                formControlName="contrasena"
+                (input)="onInputChange()">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+          </div>
+
+          <div class="remember-forgot">
+            <div class="remember-me">
+              <input type="checkbox" id="remember">
+              <label for="remember">Mantener sesión</label>
+            </div>
+          </div>
+
+          <button 
+            type="submit"
+            [disabled]="loginForm.invalid || isLoading"
+            class="btn-submit"
+            [class.loading]="isLoading">
+            <span *ngIf="!isLoading">Iniciar Sesión</span>
+            <span *ngIf="isLoading"><i class="fa-solid fa-spinner fa-spin"></i></span>
+          </button>
+        </form>
+
+        <div class="login-footer">
+          <p>&copy; 2026 Gestión Escolar</p>
+        </div>
+      </div>
     </div>
-
-    <!-- Credenciales de Administrador -->
-    <div style="background: #e8f4fd; border: 1px solid #b3d9ff; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: center;">
-      <p style="margin: 0; font-size: 14px; color: #333;">
-        <strong>Credenciales de Admin:</strong><br>
-        <strong>Correo:</strong> admin&#64;admin.com<br>
-        <strong>Contraseña:</strong> admin123
-      </p>
-    </div>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-      <!-- Mensaje de error general -->
-      <div *ngIf="errorMessage" class="error-message" role="alert">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span>{{ errorMessage }}</span>
-      </div>
-
-      <div class="form-group">
-        <label for="correo">Correo Electrónico</label>
-        <div class="input-group" [class.error-input]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
-          <input 
-            type="email"
-            id="correo"
-            class="form-control"
-            placeholder="ejemplo@correo.com"
-            formControlName="correo"
-            (input)="onInputChange()"
-            [class.is-invalid]="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
-          <i class="fa-solid fa-envelope"></i>
-        </div>
-        <!-- Mensajes de error específicos para correo -->
-        <div *ngIf="loginForm.get('correo')?.hasError('required') && loginForm.get('correo')?.touched" class="error">
-          <i class="fa-solid fa-exclamation-triangle"></i>
-          El correo electrónico es obligatorio.
-        </div>
-        <div *ngIf="loginForm.get('correo')?.hasError('email') && loginForm.get('correo')?.touched && !loginForm.get('correo')?.hasError('required')" class="error">
-          <i class="fa-solid fa-exclamation-triangle"></i>
-          Por favor, ingrese un correo electrónico válido.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="contrasena">Contraseña</label>
-        <div class="input-group" [class.error-input]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
-          <input 
-            type="password"
-            id="contrasena"
-            class="form-control"
-            placeholder="Ingrese su contraseña"
-            formControlName="contrasena"
-            (input)="onInputChange()"
-            [class.is-invalid]="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <!-- Mensajes de error específicos para contraseña -->
-        <div *ngIf="loginForm.get('contrasena')?.hasError('required') && loginForm.get('contrasena')?.touched" class="error">
-          <i class="fa-solid fa-exclamation-triangle"></i>
-          La contraseña es obligatoria.
-        </div>
-      </div>
-
-      <div class="remember-forgot">
-        <div class="remember-me">
-          <input type="checkbox" id="remember">
-          <label for="remember">Recordar mi sesión</label>
-        </div>
-      </div>
-
-      <button 
-        type="submit"
-        [disabled]="loginForm.invalid || isLoading"
-        class="btn"
-        [class.loading]="isLoading">
-        <span *ngIf="!isLoading">
-          <i class="fa-solid fa-sign-in-alt"></i>
-          Iniciar Sesión
-        </span>
-        <span *ngIf="isLoading">
-          <i class="fa-solid fa-spinner fa-spin"></i>
-          Iniciando sesión...
-        </span>
-      </button>
-    </form>
-
   </div>
 </div>
 

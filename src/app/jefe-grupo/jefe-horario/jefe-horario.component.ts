@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AsideJefeGrupoComponent } from '../../componentes/aside-jefe-grupo/aside-jefe-grupo.component';
-import { ModalRegistrarTemaAsistenciaComponent, SaveEvent } from '../../componentes/modal-registrar-tema-asistencia/modal-registrar-tema-asistencia.component';
+import { AsideJefeGrupoComponent } from '../aside-jefe-grupo/aside-jefe-grupo.component';
+import { ModalRegistrarTemaAsistenciaComponent, SaveEvent } from '../../checador/modal-registrar-tema-asistencia/modal-registrar-tema-asistencia.component';
 import { Horario, HorariosService } from '../../core/horarios/horarios.service';
 
 @Component({

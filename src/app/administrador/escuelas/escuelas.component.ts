@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 
-import { AsideAdministradorComponent } from '../../componentes/aside-administrador/aside-administrador.component';
-import { ModalEscuelasComponent } from '../../componentes/modal-escuelas/modal-escuelas.component';
+import { AsideAdministradorComponent } from '../aside-administrador/aside-administrador.component';
+import { ModalEscuelasComponent } from './modal-escuelas/modal-escuelas.component';
 import { PaginacionAdministradorComponent } from '../../componentes/paginacion-administrador/paginacion-administrador.component';
 import { EscuelasService } from '../../core/escuelas/escuelas.service';
 

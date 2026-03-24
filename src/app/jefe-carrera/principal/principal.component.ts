@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
-import { AsideJefecarreraComponent } from '../../componentes/aside-jefecarrera/aside-jefecarrera.component';
+import { AsideJefecarreraComponent } from '../aside-jefecarrera/aside-jefecarrera.component';
 import { DashboardGraficasComponent } from '../../componentes/graficas/graficas.component';
 import { PaginacionComponent } from "../../componentes/paginacion/paginacion.component";
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';

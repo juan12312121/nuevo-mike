@@ -1,113 +1,149 @@
-<!-- diseno.component.html -->
-<div id="diseno" class="tab-content" *ngIf="currentTab === 'diseno'">
+<div id="diseno" class="tab-content-premium fade-in-premium" *ngIf="currentTab === 'diseno'">
   <!-- Overlay de carga -->
-  <div class="loading-overlay" *ngIf="loading">
-    <div class="spinner"></div>
-    <p>Cargando datos...</p>
+  <div class="loading-overlay-premium" *ngIf="loading">
+    <div class="spinner-premium"></div>
+    <p>Preparando entorno de diseño...</p>
   </div>
 
-  <!-- Mensaje de error -->
-  <div class="error-message" *ngIf="error">
-    {{ error }}
-    <button class="btn btn-outline-primary btn-sm" (click)="ngOnInit()">Reintentar</button>
-  </div>
-
-  <div class="horario-configuracion" *ngIf="!loading && !error">
-    <!-- Lista de profesores con materias -->
-    <div class="profesores-container">
-      <h3>Profesores y Materias</h3>
-      <p class="drag-instruction">Arrastre una materia al horario para asignarla</p>
-      
-      <div class="profesores-list">
-        <div
-          class="profesor-item"
-          *ngFor="let asignacion of asignaciones"
-          draggable="true"
-          (dragstart)="onDragStart($event, asignacion)"
-          (dragend)="onDragEnd($event)"
-        >
-          <!-- ID del profesor en lista estilizada -->
-          <ul class="profesor-id-list">
-            <li>ID: {{ asignacion.id }}</li>
-          </ul>
-
-          <div class="profesor-nombre">Prof. {{ asignacion.profesorNombre }}</div>
-          <div class="profesor-materias">
-            <!-- ✅ Usar color general en lugar de color por materia -->
-            <span class="materia-tag" [ngStyle]="{'background-color': getColorGeneral()}">
+  <div class="layout-builder-premium" *ngIf="!loading && !error">
+    <!-- Panel Izquierdo: Recursos (Profesores/Materias) -->
+    <aside class="resources-panel-premium">
+      <div class="card-premium h-full">
+        <h3 class="card-title-premium">
+          <i class="fa-solid fa-graduation-cap"></i>
+          Asignaciones
+        </h3>
+        <p class="text-muted text-xs mb-6">Arrastra una materia al tablero para asignarla.</p>
+        
+        <div class="resources-list-premium">
+          <div
+            class="resource-item-premium"
+            *ngFor="let asignacion of asignaciones"
+            draggable="true"
+            (dragstart)="onDragStart($event, asignacion)"
+            (dragend)="onDragEnd($event)"
+          >
+            <div class="resource-header">
+              <span class="resource-id">#{{ asignacion.id }}</span>
+              <span class="resource-teacher">Prof. {{ asignacion.profesorNombre }}</span>
+            </div>
+            <div class="resource-materia" [ngStyle]="{'border-left-color': getColorGeneral()}">
               {{ asignacion.materiaNombre }}
-            </span>
+            </div>
+            <div class="drag-handle-premium">
+              <i class="fa-solid fa-grip-lines"></i>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </aside>
 
-    <!-- Horario editable -->
-    <div class="horario-preview">
-      <div class="horario-header">
-        <h3>
-          Diseño del Horario -
-          <span id="grupo-seleccionado">{{ resumen?.grupo }} (ID: {{ resumen?.grupoId }})</span> -
-          <span id="aula-seleccionada">{{ resumen?.aula }} (ID: {{ resumen?.aulaId }})</span> -
-          <span id="turno-seleccionado">{{ resumen?.turno }}</span>
-        </h3>
-      </div>
-    
-      <table class="horario-table" id="horario-editable">
-        <thead>
-          <tr>
-            <th class="hora-column">Hora</th>
-            <th *ngFor="let dia of diasSeleccionados">{{ dia }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let hora of horas; let i = index">
-            <td class="hora-column">{{ hora }} - {{ getHoraFin(hora) }}</td>
-            <td 
-              *ngFor="let dia of diasSeleccionados"
-              class="celda-horario"
-              [ngClass]="{'conflict': tieneConflicto(dia, hora)}"
-              [attr.data-cell]="dia + '-' + hora"
-              (dragover)="onDragOver($event, dia, hora)"
-              (dragleave)="onDragLeave($event)"
-              (drop)="onDrop($event, dia, hora, getHoraFin(hora))"
-            >
-              <div class="celda-contenido">
-                <ng-container *ngFor="let asignacion of horarioAsignado[dia + '-' + hora] || []; let idx = index">
-                  <div 
-                    class="horario-asignado" 
-                    [ngClass]="{
-                      'new-assignment': asignacion.isNew,
-                      'removing': asignacion.isRemoving
-                    }"
-                    [ngStyle]="{'background-color': getColorGeneral()}"
-                  >
-                    <div class="asignacion-header">
-                      <span class="asignacion-materia">{{ asignacion.materiaNombre }}</span>
-                      <button 
-                        class="btn-remove" 
-                        (click)="eliminarAsignacion(dia, hora, idx)"
-                        title="Eliminar asignación"
-                      >×</button>
-                    </div>
-                    <div class="asignacion-profesor">{{ asignacion.profesorNombre }}</div>
+    <!-- Panel Derecho: Tablero -->
+    <main class="builder-main-premium">
+      <div class="card-premium">
+        <div class="builder-header-premium">
+          <div>
+            <h3 class="card-title-premium mb-1">
+              <i class="fa-solid fa-calendar-week"></i>
+              Tablero de Horarios
+            </h3>
+            <div class="builder-meta-premium">
+              <span class="badge-premium badge-blue">{{ resumen?.grupo }}</span>
+              <span class="badge-premium badge-purple">Aula {{ resumen?.aula }}</span>
+              <span class="badge-premium badge-amber">{{ resumen?.turno }}</span>
+            </div>
+          </div>
+          
+          <div class="builder-actions-premium">
+            <button type="button" class="btn-premium btn-secondary-premium" (click)="navegarTab('anterior')">
+              <i class="fa-solid fa-arrow-left"></i>
+              Regresar
+            </button>
+            <button type="button" class="btn-premium btn-success-premium" (click)="guardarHorario()" [disabled]="loading || isSaving">
+              <i class="fa-solid fa-cloud-arrow-up" *ngIf="!isSaving"></i>
+              <i class="fa-solid fa-spinner fa-spin" *ngIf="isSaving"></i>
+              {{ isSaving ? 'Guardando...' : 'Finalizar y Guardar' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Alertas de estado de guardado -->
+        <div class="alert-premium alert-success" *ngIf="saveSuccess">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>{{ saveMessage }}</span>
+        </div>
+
+        <div class="alert-premium alert-danger" *ngIf="saveError">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>{{ saveMessage }}</span>
+        </div>
+
+        <div class="table-container-premium">
+          <table class="builder-table-premium">
+            <thead>
+              <tr>
+                <th class="time-col-premium">Franja Horaria</th>
+                <th *ngFor="let dia of diasSeleccionados" class="day-col-premium">{{ dia }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let hora of horas; let i = index">
+                <td class="time-cell-premium">
+                  <div class="time-range-display">
+                    <span class="time-start">{{ hora }}</span>
+                    <span class="time-divider"></span>
+                    <span class="time-end">{{ getHoraFin(hora) }}</span>
                   </div>
-                </ng-container>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    
+                </td>
+                <td 
+                  *ngFor="let dia of diasSeleccionados"
+                  class="droppable-cell-premium"
+                  [ngClass]="{'has-conflict': tieneConflicto(dia, hora)}"
+                  (dragover)="onDragOver($event, dia, hora)"
+                  (dragleave)="onDragLeave($event)"
+                  (drop)="onDrop($event, dia, hora, getHoraFin(hora))"
+                >
+                  <div class="cell-content-premium">
+                    <ng-container *ngFor="let asignacion of horarioAsignado[dia + '-' + hora] || []; let idx = index">
+                      <div 
+                        class="assigned-block-premium" 
+                        [ngClass]="{'is-new': asignacion.isNew}"
+                        [ngStyle]="{'background': 'linear-gradient(135deg, white, #f8fafc)', 'border-left': '4px solid ' + getColorGeneral()}"
+                      >
+                        <div class="block-header">
+                          <span class="block-materia">{{ asignacion.materiaNombre }}</span>
+                          <button class="btn-remove-block" (click)="eliminarAsignacion(dia, hora, idx)">
+                            <i class="fa-solid fa-xmark"></i>
+                          </button>
+                        </div>
+                        <div class="block-profesor">
+                          <i class="fa-solid fa-user-tie"></i>
+                          {{ asignacion.profesorNombre }}
+                        </div>
+                      </div>
+                    </ng-container>
+                    
+                    <div class="cell-placeholder-premium" *ngIf="!(horarioAsignado[dia + '-' + hora]?.length)">
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
 
-  <div class="actions-buttons">
-    <button type="button" class="btn btn-secondary" (click)="navegarTab('anterior')">
-      Anterior
-    </button>
-    <button type="button" class="btn btn-success" (click)="guardarHorario()" [disabled]="loading">
-      Guardar Horario
+  <!-- Error State -->
+  <div class="card-premium text-center py-12" *ngIf="error">
+    <i class="fa-solid fa-triangle-exclamation text-danger text-5xl mb-4"></i>
+    <h3 class="text-xl font-bold mb-2">Ocurrió un error</h3>
+    <p class="text-muted mb-6">{{ error }}</p>
+    <button class="btn-premium mx-auto" (click)="ngOnInit()">
+      <i class="fa-solid fa-arrows-rotate"></i>
+      Reintentar cargar datos
     </button>
   </div>
 </div>

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, tap } from 'rxjs';
 import { UsuariosService } from '../autenticacion/usuarios.service';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -36,7 +37,7 @@ export interface Grupo {
 })
 export class GruposService {
 
-private apiUrl = 'https://mi-back-2pbd.onrender.com/api/grupos';
+private apiUrl = `${environment.apiUrl}/grupos`;
 
   constructor(private http: HttpClient, private usuariosService: UsuariosService) { }
 

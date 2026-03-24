@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { AsideJefecarreraComponent } from '../../../componentes/aside-jefecarrera/aside-jefecarrera.component';
+import { AsideJefecarreraComponent } from '../../aside-jefecarrera/aside-jefecarrera.component';
 import { Tab2Component } from '../../../componentes/tab2/tab2.component';
 import { Tab3Component } from '../../../componentes/tab3/tab3.component';
 
@@ -280,7 +280,7 @@ export class CrearHorarioComponent implements OnInit, OnDestroy {
     const turnosData: { [key: string]: { horario: string; descripcion: string } } = {
       Matutino: { horario: '07:00 a 13:00', descripcion: 'Turno de la mañana' },
       Vespertino: { horario: '13:00 a 19:00', descripcion: 'Turno de la tarde' },
-      Nocturno: { horario: '19:00 a 22:00', descripcion: 'Turno de la noche' },
+      Nocturno: { horario: '17:00 a 22:00', descripcion: 'Turno de la noche' },
       Personalizado: {
         horario: `${this.horaInicio} a ${this.horaFin}`,
         descripcion: 'Horario definido por el usuario'

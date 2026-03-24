@@ -1,67 +1,88 @@
-<div id="dias" class="tab-content" *ngIf="currentTab === 'dias'">
+<div id="dias" class="tab-content-premium fade-in-premium" *ngIf="currentTab === 'dias'">
+  <div class="grid-layout-premium">
+    <!-- Izquierda: Selección -->
+    <div class="config-column">
+      <div class="card-premium h-full">
+        <h3 class="card-title-premium">
+          <i class="fa-solid fa-calendar-check"></i>
+          Días de Clase
+        </h3>
+        <p class="text-muted text-sm mb-8">Marca los días en los que el grupo tendrá actividades académicas.</p>
+        
+        <div class="days-grid-premium">
+          <div *ngFor="let dia of diasSemana" class="day-item-premium">
+            <input
+              #chk
+              type="checkbox"
+              [id]="'dia-' + dia"
+              [value]="dia"
+              [checked]="diasSeleccionados.includes(dia)"
+              (change)="onCheckboxChange(dia, chk.checked)"
+              class="hidden-checkbox"
+            />
+            <label [for]="'dia-' + dia" class="day-pill-premium">
+              <span class="checkbox-indicator">
+                <i class="fa-solid fa-check"></i>
+              </span>
+              {{ dia }}
+            </label>
+          </div>
+        </div>
 
-  <div class="form-group">
-    <label>Selecciona los días de clase:</label>
-    <div class="days-selection">
-      <label class="day-checkbox" *ngFor="let dia of diasSemana">
-        <input
-          #chk
-          type="checkbox"
-          [value]="dia"
-          [checked]="diasSeleccionados.includes(dia)"
-          (change)="onCheckboxChange(dia, chk.checked)"
-        />
-        {{ dia }}
-      </label>
+        <div class="divider-premium"></div>
+
+        <div class="resumen-mini-premium">
+          <h4 class="text-xs font-bold text-muted uppercase tracking-wider mb-4">Detalles de Configuración</h4>
+          <div class="resumen-grid-premium">
+            <div class="resumen-stat">
+              <span class="stat-label">Turno Seleccionado</span>
+              <span class="stat-value badge-premium badge-blue">{{ resumen.turno }}</span>
+            </div>
+            <div class="resumen-stat">
+              <span class="stat-label">Duración Clase</span>
+              <span class="stat-value badge-premium badge-purple">{{ resumen.duracionClases }} min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derecha: Listado de seleccionados -->
+    <div class="preview-column">
+      <div class="card-premium h-full flex-column">
+        <h3 class="card-title-premium">
+          <i class="fa-solid fa-clipboard-list"></i>
+          Días Seleccionados
+        </h3>
+        
+        <div class="selected-days-container flex-1">
+          <div *ngIf="diasSeleccionados.length > 0" class="selected-days-grid">
+            <div *ngFor="let d of diasSeleccionados" class="selected-day-mini-card">
+              <div class="day-dot"></div>
+              <span class="day-label">{{ d }}</span>
+              <span class="status-indicator">Activo</span>
+            </div>
+          </div>
+
+          <div class="centered-empty-state" *ngIf="diasSeleccionados.length === 0">
+            <div class="empty-icon-wrapper">
+              <i class="fa-solid fa-calendar-xmark"></i>
+            </div>
+            <p>Selecciona al menos un día de clase</p>
+          </div>
+        </div>
+
+        <div class="premium-actions-footer mt-8">
+          <button type="button" class="btn-prev-premium" (click)="navegarTab('anterior')">
+            <i class="fa-solid fa-arrow-left"></i>
+            Anterior
+          </button>
+          <button type="button" class="btn-next-premium" (click)="navegarTab('siguiente')" [disabled]="diasSeleccionados.length === 0">
+            Generar Tablero
+            <i class="fa-solid fa-table-cells"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-  
-  <!-- Resumen dinámico de lo configurado en Tab 1 -->
-  <div class="horario-resumen">
-    <h4>Resumen de la configuración</h4>
-
-    <div class="resumen-item">
-      <span><strong>Turno:</strong></span>
-      <span>{{ resumen.turno }}</span>
-    </div>
-    <div class="resumen-item">
-      <span><strong>Horario:</strong></span>
-      <span>{{ resumen.horario }}</span>
-    </div>
-    <div class="resumen-item">
-      <span><strong>Tipo de duración:</strong></span>
-      <span>{{ resumen.tipoDuracion }}</span>
-    </div>
-    <div class="resumen-item">
-      <span><strong>Duración de clases:</strong></span>
-      <span>{{ resumen.duracionClases }} minutos</span>
-    </div>
-    <div class="resumen-item">
-      <span><strong>Grupo:</strong></span>
-      <span>{{ resumen.grupo }}</span>
-    </div>
-    <div class="resumen-item">
-      <span><strong>Aula:</strong></span>
-      <span>{{ resumen.aula }}</span>
-    </div>
-
-    <h4>Días seleccionados:</h4>
-    <div class="resumen-dias">
-      <!-- Ahora usamos diasSeleccionados en lugar de resumen.dias -->
-      <span class="resumen-dia" *ngFor="let d of diasSeleccionados">
-        {{ d }}
-      </span>
-    </div>
-  </div>
-
-  <!-- Botones de navegación -->
-  <div class="actions-buttons">
-    <button type="button" class="btn btn-secondary" (click)="navegarTab('anterior')">
-      Anterior
-    </button>
-    <button type="button" class="btn btn-primary" (click)="navegarTab('siguiente')">
-      Siguiente
-    </button>
-  </div>
-
 </div>

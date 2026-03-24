@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AsideJefecarreraComponent } from "../../../componentes/aside-jefecarrera/aside-jefecarrera.component";
+import { AsideJefecarreraComponent } from '../../aside-jefecarrera/aside-jefecarrera.component';
 import { Horario, HorariosService } from '../../../core/horarios/horarios.service';
 
 interface Celda {

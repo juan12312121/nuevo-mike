@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
-import { AsideAdministradorComponent } from "../../componentes/aside-administrador/aside-administrador.component";
-import { ModalJefecarreraComponent } from "../../componentes/modal-jefecarrera/modal-jefecarrera.component";
+import { AsideAdministradorComponent } from '../aside-administrador/aside-administrador.component';
+import { ModalJefecarreraComponent } from './modal-jefecarrera/modal-jefecarrera.component';
 import { PaginacionAdministradorComponent } from "../../componentes/paginacion-administrador/paginacion-administrador.component";
 import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 

@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { AsideAdministradorComponent } from '../../componentes/aside-administrador/aside-administrador.component';
-import { ModalCarrerasComponent } from '../../componentes/modal-carreras/modal-carreras.component';
+import { AsideAdministradorComponent } from '../aside-administrador/aside-administrador.component';
+import { ModalCarrerasComponent } from '../../jefe-carrera/administracion/modal-carreras/modal-carreras.component';
 import { PaginacionAdministradorComponent } from '../../componentes/paginacion-administrador/paginacion-administrador.component';
 import { CarrerasService } from '../../core/carreras/carreras.service';
 

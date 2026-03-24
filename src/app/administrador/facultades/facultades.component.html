@@ -1,121 +1,114 @@
-<div class="body">
-  <div class="layout">
-    <!-- Sidebar Component -->
-    <app-aside-administrador></app-aside-administrador>
+<div class="body-wrapper">
+  <app-aside-administrador></app-aside-administrador>
 
-    <div class="main">
-      <div class="content">
-        <!-- Card Section -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Facultades Registradas</h2>
-            <button class="btn btn-primary" id="btn-nueva-facultad" (click)="openModal()">
-              <i class="fas fa-plus btn-icon"></i> Nueva Facultad
-            </button>
-          </div>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Gestión de Facultades</h1>
+    </header>
 
-          <!-- Filters Section -->
-          <div class="filters">
-            <div class="filter-group">
-              <div class="search-input">
-                <i class="fas fa-search search-icon"></i>
-                <!-- Conecta el input de texto y llama a filterFacultades en cada cambio -->
-                <input type="text" class="search-field" placeholder="Buscar facultad..." [(ngModel)]="searchText"
-                  (input)="filterFacultades()" />
-              </div>
-            </div>
-            <div class="filter-group">
-              <span class="filter-label">Escuela:</span>
-              <!-- Conecta el select y llama a filterFacultades en cada cambio -->
-              <select class="form-select" style="width: 200px;" [(ngModel)]="selectedSchoolId"
-                (change)="filterFacultades()">
-                <!-- Opción para "Todas las escuelas". Usa [ngValue]="null" para que coincida con selectedSchoolId = null -->
-                <option [ngValue]="null">Todas las escuelas</option>
-                <!-- Itera sobre las escuelas cargadas. Usa [ngValue]="escuela.id" -->
-                <option *ngFor="let escuela of escuelas" [ngValue]="escuela.id">{{ escuela.nombre }}</option>
-              </select>
-            </div>
-          </div>
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Unidades Académicas ({{ facultades.length }})</h2>
+        <button class="btn-premium" id="btn-nueva-facultad" (click)="openModal()">
+          <i class="fas fa-plus"></i> Nueva Facultad
+        </button>
+      </div>
 
-          <!-- Loading and Error Messages -->
-          <div *ngIf="cargando" class="loading-message">Cargando facultades...</div>
-          <div *ngIf="error" class="error-message">{{ error }}</div>
+      <div class="search-wrapper-premium" style="display: flex; gap: 16px; align-items: flex-start; max-width: none;">
+        <div style="position: relative; flex: 1; max-width: 600px;">
+          <i class="fas fa-search search-icon-premium"></i>
+          <input 
+            type="text" 
+            class="search-input-premium" 
+            placeholder="Buscar facultad por nombre o descripción..." 
+            [(ngModel)]="searchText"
+            (input)="filterFacultades()" 
+          />
+        </div>
 
-          <!-- Faculties Table Section -->
-          <!-- La tabla itera sobre paginatedFacultades, que ya es la lista filtrada y paginada -->
-          <div *ngIf="!cargando && paginatedFacultades.length > 0" class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre de Facultad</th>
-                  <th>Escuela</th>
-                  <th>Descripción</th>
-                  <th>Email de Contacto</th>
-                  <th>Teléfono de Contacto</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let facultad of paginatedFacultades">
-                  <td>{{ facultad.id }}</td>
-                  <td>{{ facultad.nombre }}</td>
-                  <td>{{ facultad.escuela_nombre }}</td>
-                  <td>{{ facultad.descripcion }}</td>
-                  <td>{{ facultad.email_contacto }}</td>
-                  <td>{{ facultad.telefono_contacto }}</td>
-                  <td>
-                    <div class="table-actions">
-                      <button class="btn-action btn-edit" title="Editar" (click)="editFacultad(facultad)">
-                        <i class="fas fa-pen"></i>
-                      </button>
-                      <button (click)="eliminarFacultad(facultad)" class="btn-action btn-delete" title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="filter-group" *ngIf="escuelas.length > 1">
+          <select class="search-input-premium" style="width: 240px; padding: 12px 16px;" [(ngModel)]="selectedSchoolId" (change)="filterFacultades()">
+            <option [ngValue]="null">Todas las escuelas</option>
+            <option *ngFor="let escuela of escuelas" [ngValue]="escuela.id">{{ escuela.nombre }}</option>
+          </select>
+        </div>
+      </div>
 
-          <!-- No Results Message -->
-          <!-- Modifica este mensaje para ser más genérico ya que hay múltiples filtros -->
-          <div *ngIf="!cargando && facultades.length === 0" class="no-results">
-            <!-- Si originalFacultades está vacía, significa que no hay datos cargados en absoluto -->
-            <ng-container *ngIf="originalFacultades.length === 0; else noMatchingResults">
-              No se encontraron facultades registradas.
-            </ng-container>
-            <!-- Si originalFacultades tiene datos pero facultades está vacía, es que no hay resultados para los filtros -->
-            <ng-template #noMatchingResults>
-              <!-- No Results Message -->
-              <div *ngIf="!cargando && facultades.length === 0" class="no-results">
-                <ng-container *ngIf="originalFacultades.length === 0; else noMatchingResults">
-                  No se encontraron facultades registradas.
-                </ng-container>
-                <ng-template #noMatchingResults>
-                  No se encontraron facultades que coincidan con los criterios de búsqueda/filtro.
-                </ng-template>
-              </div>
-            </ng-template>
-          </div>
+      <!-- Loading and Error States -->
+      <div *ngIf="cargando" class="empty-state-premium">
+        <i class="fa-solid fa-spinner fa-spin empty-state-icon-premium"></i>
+        <p class="empty-state-text-premium">Cargando facultades...</p>
+      </div>
+      <div *ngIf="error" class="empty-state-premium">
+        <i class="fa-solid fa-triangle-exclamation empty-state-icon-premium" style="color: var(--danger);"></i>
+        <p class="empty-state-text-premium">{{ error }}</p>
+      </div>
 
+      <div class="fade-in-premium" *ngIf="!cargando && paginatedFacultades.length > 0">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Escuela</th>
+                <th>Contacto</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let facultad of paginatedFacultades">
+                <td><span class="badge-premium badge-blue">#{{ facultad.id }}</span></td>
+                <td>
+                  <div style="font-weight: 600; color: var(--text-main);">{{ facultad.nombre }}</div>
+                  <div style="font-size: 11px; color: var(--text-muted); max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ facultad.descripcion }}</div>
+                </td>
+                <td>
+                  <span class="badge-premium badge-purple">
+                    <i class="fa-solid fa-school" style="margin-right: 4px;"></i>
+                    {{ facultad.escuela_nombre }}
+                  </span>
+                </td>
+                <td>
+                  <div style="font-size: 13px;">
+                    <div><i class="fa-solid fa-envelope" style="width: 16px; color: var(--primary);"></i> {{ facultad.email_contacto }}</div>
+                    <div><i class="fa-solid fa-phone" style="width: 16px; color: var(--primary);"></i> {{ facultad.telefono_contacto }}</div>
+                  </div>
+                </td>
+                <td><span class="badge-premium badge-green">Activa</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" title="Editar" (click)="editFacultad(facultad)">
+                      <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarFacultad(facultad)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- Pagination Component -->
-          <!-- El componente de paginación debe recibir la lista filtrada completa -->
-          <app-paginacion-administrador [data]="facultades" [pageSize]="pageSize" [dataLabel]="'facultades'"
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion-administrador 
+            [data]="facultades" 
+            [pageSize]="pageSize" 
+            [dataLabel]="'facultades'"
             (pageChanged)="onPageChange($event)">
           </app-paginacion-administrador>
         </div>
       </div>
-    </div>
 
-    <!-- Modal: edición / creación de facultad -->
-    <!-- Si tu modal necesita la lista de escuelas para un select dentro de él, mantén o agrega el binding -->
-    <!-- Asegúrate de que ModalFacultadComponent tiene @Input('escuelas') escuelas: Escuela[] -->
-    <app-modal-facultad [visible]="showModal" [facultadAEditar]="facultadAEditar" (close)="handleClose()"
-      (save)="handleSave($event)">
-    </app-modal-facultad>
-
+      <div *ngIf="!cargando && paginatedFacultades.length === 0" class="empty-state-premium">
+        <i class="fa-solid fa-university empty-state-icon-premium"></i>
+        <p class="empty-state-text-premium">No se encontraron facultades con los filtros seleccionados.</p>
+      </div>
+    </main>
   </div>
+
+  <app-modal-facultad [visible]="showModal" [facultadAEditar]="facultadAEditar" (close)="handleClose()" (save)="handleSave($event)">
+  </app-modal-facultad>
 </div>

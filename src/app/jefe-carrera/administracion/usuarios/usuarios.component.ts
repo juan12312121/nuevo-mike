@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefecarreraComponent } from "../../../componentes/aside-jefecarrera/aside-jefecarrera.component";
-import { ModalUsuariosComponent } from "../../../componentes/modal-usuarios/modal-usuarios.component";
+import { AsideJefecarreraComponent } from '../../aside-jefecarrera/aside-jefecarrera.component';
+import { ModalUsuariosComponent } from '../modal-usuarios/modal-usuarios.component';
 import { PaginacionComponent } from '../../../componentes/paginacion/paginacion.component';
 import { UsuariosService } from '../../../core/autenticacion/usuarios.service';
 

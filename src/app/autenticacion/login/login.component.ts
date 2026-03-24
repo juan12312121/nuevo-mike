@@ -52,6 +52,9 @@ export class LoginComponent {
 
         // Redirección según el rol_id
         switch (usuario.rol_id) {
+          case 6:
+            this.router.navigate(['/super-admin']);
+            break;
           case 5:
             this.router.navigate(['/administrador']);
             break;

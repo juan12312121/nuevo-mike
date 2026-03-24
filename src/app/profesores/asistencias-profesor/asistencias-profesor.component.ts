@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideProfesoresComponent } from '../../componentes/aside-profesores/aside-profesores.component';
+import { AsideProfesoresComponent } from '../aside-profesores/aside-profesores.component';
 import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 import { JustificacionesService } from '../../core/justificaciones/justificaciones.service';
 

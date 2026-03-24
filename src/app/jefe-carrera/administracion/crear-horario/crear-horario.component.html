@@ -1,212 +1,193 @@
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
 
-  <div class="main-content">
-    <div class="header">
+  <main class="main-content-layout">
+    <header class="header-premium">
       <h1>Crear Nuevo Horario</h1>
-    </div>
+    </header>
 
-    <!-- 1) TABS DE NAVEGACIÓN -->
-    <div class="tabs">
-      <button
-        class="tab-btn"
-        [class.active]="currentTab === 'formato'"
-        (click)="selectTab('formato')"
-      >
-        1. Formato del Horario
-      </button>
-      <button
-        class="tab-btn"
-        [class.active]="currentTab === 'dias'"
-        (click)="selectTab('dias')"
-      >
-        2. Días Escolares
-      </button>
-      <button
-        class="tab-btn"
-        [class.active]="currentTab === 'diseno'"
-        (click)="selectTab('diseno')"
-      >
-        3. Diseño del Horario
-      </button>
-    </div>
+    <div class="dashboard-container fade-in-premium">
+      <!-- 1) TABS DE NAVEGACIÓN -->
+      <div class="tabs-premium">
+        <button
+          class="tab-premium"
+          [class.active]="currentTab === 'formato'"
+          (click)="selectTab('formato')"
+        >
+          <i class="fa-solid fa-clock"></i>
+          1. Formato
+        </button>
+        <button
+          class="tab-premium"
+          [class.active]="currentTab === 'dias'"
+          (click)="selectTab('dias')"
+        >
+          <i class="fa-solid fa-calendar-week"></i>
+          2. Días
+        </button>
+        <button
+          class="tab-premium"
+          [class.active]="currentTab === 'diseno'"
+          (click)="selectTab('diseno')"
+        >
+          <i class="fa-solid fa-palette"></i>
+          3. Diseño
+        </button>
+      </div>
 
-    <!-- 2) TAB 1: FORMATO DEL HORARIO -->
-    <div *ngIf="currentTab === 'formato'" class="tab-content" id="formato">
-      <div class="two-column-layout">
-        <!-- Izquierda: Controles de configuración -->
-        <div class="left-column">
-          <div class="card">
-            <h3 class="card-title">Configuración del Horario</h3>
+      <!-- 2) TAB 1: FORMATO DEL HORARIO -->
+      <div *ngIf="currentTab === 'formato'" class="tab-content-premium">
+        <div class="grid-layout-premium">
+          <!-- Izquierda: Controles -->
+          <div class="config-column">
+            <div class="card-premium">
+              <h3 class="card-title-premium">
+                <i class="fa-solid fa-sliders"></i>
+                Configuración
+              </h3>
 
-            <!-- Selección de turno (radio buttons) -->
-            <div class="form-group">
-              <label>Selecciona el turno:</label>
-              <div class="radio-group">
-                <div *ngFor="let turno of turnos" class="radio-option">
-                  <input
-                    type="radio"
-                    [id]="'turno-' + turno"
-                    name="turno"
-                    [value]="turno"
-                    [(ngModel)]="selectedTurno"
-                    (change)="onTurnoChange()"
-                  />
-                  <label [for]="'turno-' + turno">{{ turno }}</label>
+              <div class="form-group-premium">
+                <label class="form-label-premium">Turno del Horario</label>
+                <div class="radio-group-premium">
+                  <div *ngFor="let turno of turnos" class="radio-item-premium">
+                    <input
+                      type="radio"
+                      [id]="'turno-' + turno"
+                      name="turno"
+                      [value]="turno"
+                      [(ngModel)]="selectedTurno"
+                      (change)="onTurnoChange()"
+                    />
+                    <label [for]="'turno-' + turno">{{ turno }}</label>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Información turno estándar -->
-            <div
-              *ngIf="selectedTurno !== 'Personalizado' && getInfoTurno() as info"
-              class="info-turno"
-            >
-              <h4 class="info-titulo">Información del turno</h4>
-              <div class="info-item">
-                <i class="fa-solid fa-clock info-icono"></i>
-                <span><strong>Horario:</strong> {{ info.horario }}</span>
-              </div>
-              <div class="info-item">
-                <i class="fa-solid fa-book-open info-icono"></i>
-                <span><strong>Descripción:</strong> {{ info.descripcion }}</span>
-              </div>
-            </div>
-
-            <!-- Turno Personalizado: horaInicio, horaFin y duración -->
-            <ng-container *ngIf="selectedTurno === 'Personalizado'">
-              <div class="form-group">
-                <label>Rango personalizado:</label>
-                <div class="time-group">
-                  <input
-                    type="time"
-                    class="form-control"
-                    name="horaInicio"
-                    [(ngModel)]="horaInicio"
-                  />
-                  <span>a</span>
-                  <input
-                    type="time"
-                    class="form-control"
-                    name="horaFin"
-                    [(ngModel)]="horaFin"
-                  />
+              <!-- Info turno -->
+              <div *ngIf="selectedTurno !== 'Personalizado' && getInfoTurno() as info" class="info-card-premium">
+                <div class="info-item-premium">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <div>
+                    <span class="info-label">Horario establecido</span>
+                    <p class="info-value">{{ info.horario }}</p>
+                  </div>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="minutosPorClase">Duración cada clase (50–60 min):</label>
-                <input
-                  type="number"
-                  id="minutosPorClase"
-                  name="minutosPorClase"
-                  class="form-control"
-                  min="50"
-                  max="60"
-                  step="5"
-                  [(ngModel)]="minutosPorClase"
-                />
-              </div>
-              <div class="form-group">
-                <button class="btn btn-secondary" (click)="generateCustomSchedule()">
-                  Generar Horario
+
+              <!-- Personalizado -->
+              <div *ngIf="selectedTurno === 'Personalizado'" class="custom-range-premium">
+                <div class="form-row-premium">
+                  <div class="form-group-premium flex-1">
+                    <label class="form-label-premium">Hora Inicio</label>
+                    <input type="time" class="form-input-premium" [(ngModel)]="horaInicio" />
+                  </div>
+                  <div class="form-group-premium flex-1">
+                    <label class="form-label-premium">Hora Fin</label>
+                    <input type="time" class="form-input-premium" [(ngModel)]="horaFin" />
+                  </div>
+                </div>
+                <div class="form-group-premium">
+                  <label class="form-label-premium">Duración (minutos)</label>
+                  <input type="number" class="form-input-premium" [(ngModel)]="minutosPorClase" min="50" max="60" />
+                </div>
+                <button class="btn-premium w-full justify-center" (click)="generateCustomSchedule()">
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  Generar Rangos
                 </button>
               </div>
-            </ng-container>
 
-            <!-- Selección de grupo - CORREGIDO -->
-            <div class="form-group">
-              <label for="grupo_id">Selecciona el grupo:</label>
-              <select
-                id="grupo_id"
-                class="form-control"
-                [(ngModel)]="grupoSeleccionado"
-                name="grupoId"
-                (change)="onGrupoChange($event)"
-              >
-                <option [value]="null" disabled>Selecciona un grupo</option>
-                <option *ngFor="let grupo of grupos" [value]="grupo.id">
-                  {{ grupo.id }} — {{ grupo.nombre }} • {{ grupo.semestre }}
-                </option>
-              </select>
-              <!-- Debug info -->
-              <small *ngIf="grupoSeleccionado" style="color: green;">
-                Grupo seleccionado: {{ grupoSeleccionado }} ({{ getTypeOf(grupoSeleccionado) }})
-              </small>
-            </div>
+              <div class="divider-premium"></div>
 
-            <!-- Selección de aula - CORREGIDO -->
-            <div class="form-group">
-              <label for="aula_id">Aula Principal:</label>
-              <select
-                id="aula_id"
-                class="form-control"
-                [(ngModel)]="aulaSeleccionada"
-                name="aulaId"
-                (change)="onAulaChange($event)"
-              >
-                <option [value]="null" disabled>Selecciona un aula</option>
-                <option *ngFor="let aula of aulas" [value]="aula.id">
-                  {{ aula.id }} — {{ aula.nombre }}
-                </option>
-              </select>
-              <!-- Debug info -->
-              <small *ngIf="aulaSeleccionada" style="color: green;">
-                Aula seleccionada: {{ aulaSeleccionada }} ({{ getTypeOf(aulaSeleccionada) }})
-              </small>
+              <div class="form-group-premium">
+                <label class="form-label-premium" for="grupo_id">Grupo Asignado</label>
+                <select id="grupo_id" class="form-select-premium" [(ngModel)]="grupoSeleccionado" name="grupoId">
+                  <option [value]="null" disabled>Selecciona un grupo</option>
+                  <option *ngFor="let grupo of grupos" [value]="grupo.id">
+                    {{ grupo.nombre }} • {{ grupo.semestre }}° Semestre
+                  </option>
+                </select>
+              </div>
+
+              <div class="form-group-premium">
+                <label class="form-label-premium" for="aula_id">Aula Principal</label>
+                <select id="aula_id" class="form-select-premium" [(ngModel)]="aulaSeleccionada" name="aulaId">
+                  <option [value]="null" disabled>Selecciona un aula</option>
+                  <option *ngFor="let aula of aulas" [value]="aula.id">
+                    Aula {{ aula.id }} — {{ aula.nombre }}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Derecha: Vista previa del horario generado -->
-        <div class="right-column">
-          <div class="card">
-            <h3 class="card-title">Vista Previa del Horario</h3>
-            <div class="horario-vista-previa">
-              <table class="horario-tabla">
-                <thead>
-                  <tr>
-                    <th>Periodo</th>
-                    <th>Hora de inicio</th>
-                    <th>Hora de fin</th>
-                    <th>Duración (min)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let h of horasGeneradas; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ h.horaInicio }}</td>
-                    <td>{{ h.horaFin }}</td>
-                    <td>{{ h.duracion }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="actions-buttons">
-              <button class="btn btn-primary" (click)="nextTab()">Siguiente</button>
+          <!-- Derecha: Vista Previa -->
+          <div class="preview-column">
+            <div class="card-premium h-full display-flex flex-direction-column">
+              <h3 class="card-title-premium">
+                <i class="fa-solid fa-eye"></i>
+                Vista Previa de Horas
+              </h3>
+              
+              <div class="table-wrapper-premium flex-1 overflow-auto">
+                <table class="table-premium">
+                  <thead>
+                    <tr>
+                      <th style="width: 80px">#</th>
+                      <th>Inicio</th>
+                      <th>Fin</th>
+                      <th style="width: 120px">Duración</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let h of horasGeneradas; let i = index">
+                      <td class="font-bold text-primary">{{ i + 1 }}</td>
+                      <td>{{ h.horaInicio }}</td>
+                      <td>{{ h.horaFin }}</td>
+                      <td>
+                        <span class="badge-premium badge-blue">
+                          {{ h.duracion }} min
+                        </span>
+                      </td>
+                    </tr>
+                    <tr *ngIf="horasGeneradas.length === 0">
+                      <td colspan="4" class="text-center py-8 text-muted">
+                        No hay horas generadas para este turno.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="mt-8 flex justify-end">
+                <button class="btn-premium" (click)="nextTab()" [disabled]="horasGeneradas.length === 0">
+                  Siguiente paso
+                  <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- 3) TAB 2: SELECCIÓN DE DÍAS -->
+      <app-tab2
+        *ngIf="diasSemana.length && currentTab === 'dias'"
+        [resumen]="resumen"
+        [currentTab]="currentTab"
+        [diasSeleccionados]="diasSeleccionados"
+        (diasSeleccionadosChange)="onDiasSeleccionadosChange($event)"
+        [diasSemana]="diasSemana"
+        (tabChange)="selectTab($event)"
+      ></app-tab2>
+
+      <!-- 4) TAB 3: DISEÑO FINAL -->
+      <app-tab3
+        *ngIf="currentTab === 'diseno'"
+        [resumen]="resumen"
+        [diasSeleccionados]="diasSeleccionados"
+        (tabChange)="selectTab($event)"
+        [currentTab]="currentTab"
+      ></app-tab3>
     </div>
-
-    <!-- 3) TAB 2: SELECCIÓN DE DÍAS (componente Tab2) -->
-    <app-tab2
-      *ngIf="diasSemana?.length && currentTab === 'dias'"
-      [resumen]="resumen"
-      [currentTab]="currentTab"
-      [diasSeleccionados]="diasSeleccionados"
-      (diasSeleccionadosChange)="onDiasSeleccionadosChange($event)"
-      [diasSemana]="diasSemana"
-      (tabChange)="selectTab($event)"
-    ></app-tab2>
-
-    <!-- 4) TAB 3: DISEÑO FINAL (componente Tab3) -->
-    <app-tab3
-      *ngIf="currentTab === 'diseno'"
-      [resumen]="resumen"
-      [diasSeleccionados]="diasSeleccionados"
-      (tabChange)="selectTab($event)"
-      [currentTab]="currentTab"
-    ></app-tab3>
-  </div>
+  </main>
 </div>

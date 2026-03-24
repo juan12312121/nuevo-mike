@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AsideJefecarreraComponent } from "../../../componentes/aside-jefecarrera/aside-jefecarrera.component";
-import { ModalMateriasComponent } from "../../../componentes/modal-materias/modal-materias.component";
+import { AsideJefecarreraComponent } from '../../aside-jefecarrera/aside-jefecarrera.component';
+import { ModalMateriasComponent } from '../modal-materias/modal-materias.component';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';

@@ -1,84 +1,93 @@
-<div class="body">
-  <div class="layout">
-    <!-- Sidebar administrador -->
-    <app-aside-administrador></app-aside-administrador>
+<div class="body-wrapper">
+  <app-aside-administrador></app-aside-administrador>
 
-    <div class="main">
-      <div class="content">
-        <!-- Tarjeta de Escuelas Registradas -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Escuelas Registradas</h2>
-            <button id="btnAddSchool" class="btn btn-primary" (click)="openModal()">
-              <i class="fas fa-plus btn-icon"></i>
-              Agregar Escuela
-            </button>
-          </div>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Centros Educativos</h1>
+    </header>
 
-          <!-- Filtros de búsqueda -->
-          <div class="filters">
-            <div class="filter-group">
-              <label class="filter-label">Buscar:</label>
-              <div class="search-input">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-field" id="searchInput" [(ngModel)]="searchText"
-                  placeholder="Buscar por nombre o folio..." (input)="searchSchools()" />
-              </div>
-            </div>
-          </div>
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Escuelas Registradas ({{ escuelas.length }})</h2>
+        <button id="btnAddSchool" class="btn-premium" (click)="openModal()">
+          <i class="fas fa-plus"></i> Registrar Escuela
+        </button>
+      </div>
 
-          <!-- Tabla de Escuelas -->
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Folio</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Mostrar las escuelas paginadas -->
-                <tr *ngFor="let escuela of paginatedEscuelas">
-                  <td>{{ escuela.id }}</td>
-                  <td>{{ escuela.nombre }}</td>
-                  <td>{{ escuela.folio }}</td>
-                  <td>
-                    <div class="table-actions">
-                      <button class="btn-action btn-edit" title="Editar" (click)="editEscuela(escuela)">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarEscuela(escuela)">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr *ngIf="paginatedEscuelas.length === 0">
-                  <td colspan="4" class="no-data">No se encontraron escuelas.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="search-wrapper-premium">
+        <i class="fas fa-search search-icon-premium"></i>
+        <input 
+          type="text" 
+          class="search-input-premium" 
+          id="searchInput" 
+          [(ngModel)]="searchText"
+          placeholder="Buscar por nombre o folio..." 
+          (input)="searchSchools()" 
+        />
+      </div>
 
-          <!-- Paginación -->
-    <!-- ► Orden correcto: primero inputs ([data], [pageSize]), luego output (pageChanged) -->
-<app-paginacion-administrador
-  [data]="escuelas"
-  [pageSize]="pageSize"
-  dataLabel="escuelas"
-  (pageChanged)="onPageChange($event)">
-</app-paginacion-administrador>
+      <div class="fade-in-premium">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre de la Institución</th>
+                <th>Folio / Clave</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let escuela of paginatedEscuelas">
+                <td><span class="badge-premium badge-blue">#{{ escuela.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #f1f5f9; color: #1e293b;"><i class="fas fa-school"></i></div>
+                    <span style="font-weight: 600;">{{ escuela.nombre }}</span>
+                  </div>
+                </td>
+                <td><span class="badge-premium badge-purple">{{ escuela.folio }}</span></td>
+                <td><span class="badge-premium badge-green">Activa</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" title="Editar" (click)="editEscuela(escuela)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarEscuela(escuela)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="paginatedEscuelas.length === 0">
+                <td colspan="5">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-school-circle-exclamation empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No se encontraron escuelas registradas.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion-administrador
+            [data]="escuelas"
+            [pageSize]="pageSize"
+            dataLabel="escuelas"
+            (pageChanged)="onPageChange($event)">
+          </app-paginacion-administrador>
         </div>
       </div>
-    </div>
-
-    <!-- Modal de Escuelas -->
-    <app-modal-escuelas [isOpen]="isModalOpen" [escuelaData]="escuelaForm" (close)="closeModal()"
-      (save)="saveEscuela($event)">
-    </app-modal-escuelas>
+    </main>
   </div>
+
+  <app-modal-escuelas 
+    [isOpen]="isModalOpen" 
+    [escuelaData]="escuelaForm" 
+    (close)="closeModal()"
+    (save)="saveEscuela($event)">
+  </app-modal-escuelas>
 </div>

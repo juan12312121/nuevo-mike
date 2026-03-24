@@ -1,0 +1,101 @@
+<aside class="sidebar-premium">
+  <div class="sidebar-inner">
+    <div class="sidebar-header">
+      <div class="logo-wrapper">
+        <div class="logo-box">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <div class="logo-text">
+          <h2>EduControl</h2>
+          <span>Gestión Académica</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-content">
+      <div class="nav-group">
+        <p class="nav-label">Navegación Personal</p>
+        <a routerLink="/jefe-carrera" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-house-chimney"></i></div>
+          <span>Escritorio</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/temas-vistos" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-note-sticky"></i></div>
+          <span>Temas Vistos</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-label">Gestión de Personal</p>
+        <a routerLink="/checadores" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-user-check"></i></div>
+          <span>Checadores</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/jefes-grupo" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <span>Jefes de Grupo</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/profes" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-person-chalkboard"></i></div>
+          <span>Profesores</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/asignaciones" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+          <span>Asignación Académica</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <p class="nav-label">Infraestructura y Oferta</p>
+        <a routerLink="/materias" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-book-open"></i></div>
+          <span>Materias</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/grupos" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-people-roof"></i></div>
+          <span>Grupos</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/aulas" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-landmark"></i></div>
+          <span>Aulas</span>
+          <div class="active-indicator"></div>
+        </a>
+
+        <a routerLink="/horarios" routerLinkActive="active" class="nav-item">
+          <div class="nav-icon"><i class="fa-solid fa-calendar-days"></i></div>
+          <span>Horarios</span>
+          <div class="active-indicator"></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-card-premium">
+        <div class="user-avatar-premium">
+          <i class="fa-solid fa-user-gear"></i>
+        </div>
+        <div class="user-meta">
+          <p class="user-name">{{ usuario?.nombre || 'Jefe Carrera' }}</p>
+          <span class="user-role">Jefe de Carrera</span>
+        </div>
+        <button class="btn-logout-premium" (click)="logout()" title="Cerrar Sesión">
+          <i class="fa-solid fa-power-off"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>

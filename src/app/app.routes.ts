@@ -12,7 +12,9 @@ import { GruposComponent } from './jefe-carrera/administracion/grupos/grupos.com
 import { HorariosComponent } from './jefe-carrera/administracion/horarios/horarios.component';
 import { MateriasComponent } from './jefe-carrera/administracion/materias/materias.component';
 import { ProfesoresComponent } from './jefe-carrera/administracion/profesores/profesores.component';
-import { UsuariosComponent } from './jefe-carrera/administracion/usuarios/usuarios.component';
+import { ChecadoresComponent } from './jefe-carrera/administracion/checadores/checadores.component';
+import { JefesGrupoComponent } from './jefe-carrera/administracion/jefes-grupo/jefes-grupo.component';
+import { AsignacionesComponent } from './jefe-carrera/administracion/asignaciones/asignaciones.component';
 import { AulasComponent } from './jefe-carrera/aulas/aulas.component';
 import { PrincipalComponent } from './jefe-carrera/principal/principal.component';
 import { TemasVistosComponent } from './jefe-carrera/temas-vistos/temas-vistos.component';
@@ -21,19 +23,23 @@ import { JefeHorarioComponent } from './jefe-grupo/jefe-horario/jefe-horario.com
 import { TemasRegistradosComponent } from './jefe-grupo/temas-registrados/temas-registrados.component';
 import { AsistenciasProfesorComponent } from './profesores/asistencias-profesor/asistencias-profesor.component';
 import { MateriasAsignadasProfeComponent } from './profesores/materias-asignadas-profe/materias-asignadas-profe.component';
+import { UsuariosAdminComponent } from './super-admin/usuarios-admin/usuarios-admin.component';
+import { PrincipalSuperAdminComponent } from './super-admin/principal-super-admin/principal-super-admin.component';
 
 export const routes: Routes = [
   { path: '', component: LoginComponent }, // <-- Ruta base
   { path: 'login', component: LoginComponent },
 
   { path: 'jefe-carrera', component: PrincipalComponent },
-  {path: 'usuarios', component:UsuariosComponent},
+  { path: 'checadores', component: ChecadoresComponent },
+  { path: 'jefes-grupo', component: JefesGrupoComponent },
   {path:'profes', component:ProfesoresComponent},
   {path:'materias',component:MateriasComponent},
   {path:'grupos',component:GruposComponent},
   {path:'carreras',component:CarrerasComponent},
   {path:'aulas', component:AulasComponent},
   {path:'horarios',component:HorariosComponent},
+  {path:'asignaciones', component: AsignacionesComponent},
   {path:'crear-horario',component:CrearHorarioComponent},
   {path:'temas-vistos',component:TemasVistosComponent},
 
@@ -50,5 +56,10 @@ export const routes: Routes = [
   {path:'asistencias-profesorm',component:AsistenciasProfesorComponent},
 
   {path:'checador',component:ChecadorComponent},
-  {path:'checador-asistencias',component:AsistenciasRegistradasChecadorComponent}
+  {path:'checador-asistencias',component:AsistenciasRegistradasChecadorComponent},
+
+  // Rutas de Super Administrador (Serán protegidas por guardias luego)
+  {path:'super-admin', component: PrincipalSuperAdminComponent},
+  {path:'super-admin/escuelas', component: EscuelasComponent},
+  {path:'super-admin/admins', component: UsuariosAdminComponent}
 ];

@@ -1,85 +1,86 @@
-<!-- Asegúrate de tener Font Awesome cargado -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- src/app/pages/horarios/horarios.component.html -->
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
 
-  <div class="main-content">
-    <div class="header">
-      <h1><i class="fas fa-calendar-week"></i> Horario Semanal</h1>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Calendario de Clases</h1>
+    </header>
 
-      <div class="actions-container">
-        <!-- Grupo -->
-        <div class="selector">
-          <label for="grupo"><i class="fas fa-users"></i> Grupo:</label>
-          <select id="grupo"
-                  [(ngModel)]="selectedGrupo"
-                  (change)="onFiltroChange()">
-            <option [ngValue]="null"><i class="fas fa-chevron-down"></i> -- Seleccione Grupo --</option>
-            <option *ngFor="let g of gruposList" [ngValue]="g.id">
-              <i class="fas fa-user-graduate"></i> {{ g.nombre }}
-            </option>
-          </select>
+    <main class="dashboard-container">
+      <div class="section-header-premium" style="margin-bottom: 32px;">
+        <div class="header-filters-premium" style="display: flex; gap: 16px; align-items: flex-end;">
+          <div class="filter-group">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px;"><i class="fa-solid fa-users-viewfinder" style="margin-right: 6px;"></i> Grupo Escolar</label>
+            <select class="search-input-premium" style="padding: 10px 16px; width: 220px;" [(ngModel)]="selectedGrupo" (change)="onFiltroChange()">
+              <option [ngValue]="null">-- Seleccionar --</option>
+              <option *ngFor="let g of gruposList" [ngValue]="g.id">{{ g.nombre }}</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label style="display: block; font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 8px;"><i class="fa-solid fa-clock" style="margin-right: 6px;"></i> Turno</label>
+            <select class="search-input-premium" style="padding: 10px 16px; width: 180px;" [(ngModel)]="selectedTurno" (change)="onFiltroChange()">
+              <option [ngValue]="null">-- Seleccionar --</option>
+              <option *ngFor="let t of turnosList" [ngValue]="t">{{ t }}</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Turno -->
-        <div class="selector">
-          <label for="turno"><i class="fas fa-clock"></i> Turno:</label>
-          <select id="turno"
-                  [(ngModel)]="selectedTurno"
-                  (change)="onFiltroChange()">
-            <option [ngValue]="null"><i class="fas fa-chevron-down"></i> -- Seleccione Turno --</option>
-            <option *ngFor="let t of turnosList" [ngValue]="t">
-              <i class="fas fa-business-time"></i> {{ t }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Botón Crear Horario -->
-        <button class="btn-crear" (click)="irACrearHorario()">
-          <i class="fas fa-plus-circle"></i> Crear Horario
+        <button class="btn-premium" (click)="irACrearHorario()">
+          <i class="fas fa-plus-circle"></i> Configurar Horario
         </button>
       </div>
-    </div>
 
-    <!-- Tabla de horario -->
-    <div class="horario-container" *ngIf="franjas.length">
-      <table class="horario-table">
-        <thead>
-          <tr>
-            <th class="sticky-col hora-column">
-              <i class="far fa-clock"></i> Hora
-            </th>
-            <th *ngFor="let dia of diasSemana">
-              <i class="fas fa-calendar-day"></i> {{ dia }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let fila of franjas">
-            <td class="sticky-col hora-column">
-              <i class="fas fa-hourglass-start"></i> {{ fila.hora }} –
-              <i class="fas fa-hourglass-end"></i> {{ fila.fin }}
-            </td>
-            <td *ngFor="let dia of diasSemana">
-              <ng-container *ngIf="fila.datosPorDia[dia] as h; else vacio">
-                <div class="celda-info">
-                  <div>
-                    <i class="fas fa-book"></i> <strong>Materia:</strong> {{ h.materia_nombre }}
-                  </div>
-                  <div>
-                    <i class="fas fa-chalkboard-teacher"></i> <strong>Profesor:</strong> {{ h.profesor_nombre }}
-                  </div>
-                </div>
-              </ng-container>
-              <ng-template #vacio>
-                <span class="celda-vacia"><i class="fas fa-minus"></i> –</span>
-              </ng-template>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- Empty state if no data -->
+      <div *ngIf="!franjas.length" class="empty-state-premium" style="background: white; border-radius: 20px; border: 1px dashed #cbd5e1;">
+        <i class="fa-solid fa-calendar-xmark empty-state-icon-premium"></i>
+        <h3 style="font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">Sin horario definido</h3>
+        <p class="empty-state-text-premium">Seleccione un grupo y turno para visualizar la programación semanal o cree una nueva configuración.</p>
+      </div>
+
+      <!-- Premium Schedule Grid -->
+      <div class="fade-in-premium" *ngIf="franjas.length">
+        <div class="table-wrapper-premium" style="box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);">
+          <table class="table-premium" style="background: white;">
+            <thead>
+              <tr style="background: #f8fafc;">
+                <th style="width: 160px; text-align: center; border-right: 1px solid #e2e8f0; background: #f1f5f9; color: #1e293b; font-weight: 800;">
+                  <i class="fa-solid fa-hourglass-half"></i> Horas
+                </th>
+                <th *ngFor="let dia of diasSemana" style="text-align: center; min-width: 180px;">
+                  <span style="display: block; font-size: 11px; color: #64748b; font-weight: 700; opacity: 0.7;">DÍA</span>
+                  {{ dia }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let fila of franjas">
+                <td style="background: #f8fafc; text-align: center; border-right: 1px solid #e2e8f0; font-weight: 600; color: #475569;">
+                  <div style="font-size: 14px;">{{ fila.hora }}</div>
+                  <div style="font-size: 11px; opacity: 0.5; margin: 4px 0;">a</div>
+                  <div style="font-size: 14px;">{{ fila.fin }}</div>
+                </td>
+                <td *ngFor="let dia of diasSemana" style="padding: 12px;">
+                  <ng-container *ngIf="fila.datosPorDia[dia] as h; else vacio">
+                    <div class="schedule-card-premium" style="background: #f0f7ff; border-left: 4px solid #3b82f6; border-radius: 10px; padding: 12px; height: 100%; min-height: 80px; transition: all 0.3s; cursor: pointer;">
+                      <div style="color: #1e3a8a; font-weight: 700; font-size: 13px; line-height: 1.3; margin-bottom: 6px;">{{ h.materia_nombre }}</div>
+                      <div style="display: flex; align-items: center; gap: 6px; color: #3b82f6; font-size: 12px; font-weight: 500;">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ h.profesor_nombre }}</span>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #vacio>
+                    <div style="height: 100%; min-height: 80px; border: 1px dashed #e2e8f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; opacity: 0.3;">
+                      <i class="fa-solid fa-minus"></i>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
   </div>
 </div>

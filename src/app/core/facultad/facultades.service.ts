@@ -2,6 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Facultad {
   id?: number;
@@ -15,7 +16,7 @@ export interface Facultad {
 
 @Injectable({ providedIn: 'root' })
 export class FacultadesService {
-private apiUrl = 'https://mi-back-2pbd.onrender.com/api/facultades';
+private apiUrl = `${environment.apiUrl}/facultades`;
 
   constructor(private http: HttpClient) {}
 

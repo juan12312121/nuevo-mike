@@ -10,7 +10,8 @@
 .main-content {
   flex: 1;
   padding: 1.5rem;
-  margin-left: 300px;
+  margin-left: 280px;
+  transition: margin-left 0.3s ease;
 }
 
 .header {
@@ -71,6 +72,7 @@
 .horario-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 800px;
 }
 
 .horario-table th,
@@ -103,31 +105,59 @@
 }
 
 .celda-info {
-  padding: 8px;
-  border-radius: 4px;
-  background: #e8f4f8;
-  min-height: 70px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: white;
+  min-height: 80px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  border: 1px solid #b3d9e6;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
 }
 
-.celda-info div {
-  text-align: left;
+.celda-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+}
+
+.celda-materia {
   font-size: 13px;
-  line-height: 1.3;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.celda-info div strong {
-  font-weight: 500;
-  color: #2c3e50;
+.celda-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: auto; /* Empuja el botón hacia abajo */
+}
+
+.celda-profesor, .celda-aula {
+  font-size: 11px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .celda-vacia {
-  color: #999;
-  font-size: 16px;
-  padding: 20px 0;
+  color: #94a3b8;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.5;
 }
 
 /* Colores por materia */
@@ -277,20 +307,28 @@
 
 /* Botones */
 .btn-asistencia-clase {
-  background: #27ae60;
+  background: linear-gradient(135deg, #10b981, #059669);
   color: white;
   border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
+  border-radius: 6px;
+  padding: 6px;
   margin-top: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
   cursor: pointer;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  transition: all 0.2s ease;
 }
 
 .btn-asistencia-clase:hover {
-  background: #219653;
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
 }
 
 .btn-asistencia-grande {
@@ -469,13 +507,15 @@ textarea.form-control {
 }
 
 .toggle-menu {
-  background: none;
-  border: none;
-  color: #2c3e50;
-  font-size: 1.2rem;
-  cursor: pointer;
+  display: none !important; /* El menú lateral ahora es adaptativo automático */
+}
+
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
   display: none;
-  padding: 6px;
 }
 
 /* Responsive */
@@ -500,9 +540,23 @@ textarea.form-control {
 }
 
 @media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+
+  .mobile-schedule-list {
+    margin-top: 1.5rem;
+  }
+
+  .mobile-schedule-list h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+
   .main-content {
     padding: 1rem;
-    margin-left: 0;
+    margin-left: 70px;
   }
   
   .actions-container {
@@ -517,10 +571,6 @@ textarea.form-control {
   .selector select {
     min-width: 0;
     flex: 1;
-  }
-  
-  .toggle-menu {
-    display: block;
   }
 
   .modal-container {

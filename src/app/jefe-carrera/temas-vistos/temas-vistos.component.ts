@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefecarreraComponent } from "../../componentes/aside-jefecarrera/aside-jefecarrera.component";
+import { AsideJefecarreraComponent } from '../aside-jefecarrera/aside-jefecarrera.component';
 import { PaginacionComponent } from "../../componentes/paginacion/paginacion.component";
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
 

@@ -1,41 +1,70 @@
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
   
-  <div class="main-content">
-    <div class="container">
-      <div class="header">
-        <h1>Temas Vistos</h1>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Seguimiento Académico</h1>
+    </header>
+    
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Bitácora de Temas Vistos</h2>
+        <!-- Botón para exportar si es necesario -->
       </div>
-
-      <div class="panel">
-        <div class="table-container">
-          <table #tablaExport id="temasVistosTable">
+      
+      <div class="fade-in-premium">
+        <div class="table-wrapper-premium">
+          <table class="table-premium" id="temasVistosTable">
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Fecha</th>
-                <th>Tema</th>
-                <th>Registrado por</th>
+                <th>Fecha de Registro</th>
+                <th>Tema / Contenido</th>
+                <th>Registrado Por</th>
+                <th>Estado</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let tema of obtenerTemasPaginados()">
-                <td>{{ tema.id }}</td>
-                <td>{{ tema.fecha }}</td>
-                <td>{{ tema.tema }}</td>
-                <td>{{ tema.registrado_por_nombre }}</td>
+                <td><span class="badge-premium badge-blue">#{{ tema.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-regular fa-calendar" style="color: var(--primary);"></i>
+                    <span>{{ tema.fecha }}</span>
+                  </div>
+                </td>
+                <td style="max-width: 400px; white-space: normal;">
+                  <span style="font-weight: 500; color: var(--text-main);">{{ tema.tema }}</span>
+                </td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="avatar-small" style="background: #f1f5f9; color: #64748b; width: 32px; height: 32px; font-size: 14px;"><i class="fa-solid fa-user-pen"></i></div>
+                    <span style="font-size: 14px;">{{ tema.registrado_por_nombre }}</span>
+                  </div>
+                </td>
+                <td><span class="badge-premium badge-green">Validado</span></td>
+              </tr>
+              <tr *ngIf="temasVistos.length === 0">
+                <td colspan="5">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-book-bookmark empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No hay temas registrados en la bitácora todavía.</p>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
 
-        <app-paginacion 
-          [paginaActual]="paginaActual"
-          [totalPaginas]="totalPaginas()"
-          [maxPaginasVisibles]="5"
-          (cambiarPagina)="onCambiarPagina($event)">
-        </app-paginacion>
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion 
+            [paginaActual]="paginaActual"
+            [totalPaginas]="totalPaginas()"
+            [maxPaginasVisibles]="5"
+            (cambiarPagina)="onCambiarPagina($event)">
+          </app-paginacion>
+        </div>
       </div>
-    </div>
+    </main>
   </div>
 </div>

@@ -3,7 +3,10 @@
   <app-aside-jefecarrera></app-aside-jefecarrera>
 
   <div class="main-content">
-    <header class="header"><h1>Gestión de Usuarios</h1></header>
+    <header class="header">
+      <h1>Gestión de Usuarios</h1>
+    </header>
+    
     <main class="dashboard">
       <div class="tabs-container">
         <div class="tabs">
@@ -11,12 +14,16 @@
             class="tab"
             [class.active]="activeTab === 'checadores'"
             (click)="setActiveTab('checadores')"
-          >Checadores</div>
+          >
+            <i class="fa-solid fa-user-check mr-2"></i> Checadores
+          </div>
           <div
             class="tab"
             [class.active]="activeTab === 'jefes-grupo'"
             (click)="setActiveTab('jefes-grupo')"
-          >Jefes de Grupo</div>
+          >
+            <i class="fa-solid fa-user-tie mr-2"></i> Jefes de Grupo
+          </div>
         </div>
 
         <!-- Checadores -->
@@ -24,75 +31,72 @@
           class="tab-content"
           [class.active]="activeTab === 'checadores'"
         >
-          <div class="section-title">
-            <span>Checadores del Sistema ({{ checadoresFiltrados.length }})</span>
-            <button class="add-button" (click)="abrirModal('checador')">
+          <div class="section-header">
+            <div class="section-info">
+              <h2 class="section-title">Checadores del Sistema</h2>
+              <span class="count-badge">{{ checadoresFiltrados.length }} registrados</span>
+            </div>
+            <button class="add-button premium" (click)="abrirModal('checador')">
               <i class="fa-solid fa-plus"></i> Agregar Checador
             </button>
           </div>
           
-          <div class="search-container">
+          <div class="search-bar-premium">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input 
               type="text" 
-              class="search-input" 
+              class="search-input-premium" 
               [(ngModel)]="terminoBusquedaChecadores"
               (input)="buscarChecador($event)"
-              placeholder="Buscar checador por nombre o carrera..." 
+              placeholder="Buscar por nombre o carrera..." 
             />
           </div>
           
-          <div class="users-grid">
-            <div *ngFor="let user of checadoresPaginados; trackBy: trackById" class="user-card">
-              <div class="user-card-avatar"><i class="fa-solid fa-user"></i></div>
-              <div class="user-card-info">
-                <div class="user-card-name">{{ user.nombre }}</div>
-                <div class="user-card-role">Checador</div>
-                <div class="user-card-carrera">Carrera: {{ user.carrera }}</div>
-              </div>
-              <div class="user-card-actions">
-                <button
-                  class="user-card-button"
-                  title="Editar Checador"
-                  (click)="editarUsuario(user)"
-                >
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button
-                  class="user-card-button delete"
-                  title="Eliminar Checador"
-                  (click)="eliminarUsuario(user.id)"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Mensaje cuando no hay checadores después del filtro -->
-            <div *ngIf="checadoresFiltrados.length === 0 && checadores.length > 0" class="no-results">
-              <div class="empty-state">
-                <div class="empty-state-icon">
-                  <i class="fa-solid fa-user-slash"></i>
-                </div>
-                <div class="empty-state-title">No se encontraron checadores</div>
-                <div class="empty-state-text">No hay checadores que coincidan con "{{ terminoBusquedaChecadores }}"</div>
-              </div>
-            </div>
-
-            <!-- Mensaje cuando no hay checadores en absoluto -->
-            <div *ngIf="checadores.length === 0" class="no-data">
-              <div class="empty-state">
-                <div class="empty-state-icon">
-                  <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="empty-state-title">No hay checadores registrados</div>
-                <div class="empty-state-text">Agrega el primer checador para comenzar</div>
-              </div>
-            </div>
+          <div class="table-container shadow-premium">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Rol</th>
+                  <th>Carrera</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of checadoresPaginados; trackBy: trackById">
+                  <td><span class="badge badge-info">#{{ user.id }}</span></td>
+                  <td class="user-cell">
+                    <div class="user-avatar-small"><i class="fa-solid fa-user-check"></i></div>
+                    <span class="user-name">{{ user.nombre }}</span>
+                  </td>
+                  <td><span class="badge badge-primary">Checador</span></td>
+                  <td>{{ user.carrera }}</td>
+                  <td>
+                    <div class="actions-flex">
+                      <button class="action-btn edit-btn" title="Editar" (click)="editarUsuario(user)">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button class="action-btn delete-btn" title="Eliminar" (click)="eliminarUsuario(user.id)">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="checadoresFiltrados.length === 0">
+                  <td colspan="5">
+                    <div class="empty-state">
+                      <i class="fa-solid fa-user-slash empty-icon"></i>
+                      <p>No se encontraron checadores que coincidan con la búsqueda.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <!-- Paginación para Checadores -->
-          <div style="margin-top: 20px;">
+          <div class="pagination-wrapper">
             <app-paginacion
               [paginaActual]="paginaActualChecadores"
               [totalPaginas]="totalPaginasChecadores()"
@@ -107,76 +111,74 @@
           class="tab-content"
           [class.active]="activeTab === 'jefes-grupo'"
         >
-          <div class="section-title">
-            <span>Jefes de Grupo ({{ jefesGrupoFiltrados.length }})</span>
-            <button class="add-button" (click)="abrirModal('jefe')">
+          <div class="section-header">
+            <div class="section-info">
+              <h2 class="section-title">Jefes de Grupo</h2>
+              <span class="count-badge">{{ jefesGrupoFiltrados.length }} registrados</span>
+            </div>
+            <button class="add-button premium group-btn" (click)="abrirModal('jefe')">
               <i class="fa-solid fa-plus"></i> Agregar Jefe de Grupo
             </button>
           </div>
           
-          <div class="search-container">
+          <div class="search-bar-premium">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input 
               type="text" 
-              class="search-input" 
+              class="search-input-premium" 
               [(ngModel)]="terminoBusquedaJefes"
               (input)="buscarJefe($event)"
-              placeholder="Buscar jefe por nombre, carrera o grupo..." 
+              placeholder="Buscar por nombre, carrera o grupo..." 
             />
           </div>
           
-          <div class="users-grid">
-            <div *ngFor="let user of jefesGrupoPaginados; trackBy: trackById" class="user-card">
-              <div class="user-card-avatar"><i class="fa-solid fa-user"></i></div>
-              <div class="user-card-info">
-                <div class="user-card-name">{{ user.nombre }}</div>
-                <div class="user-card-role">
-                  Jefe – {{ user.carrera }} Semestre {{ user.grupo }}
-                </div>
-              </div>
-              <div class="user-card-actions">
-                <button
-                  class="user-card-button"
-                  title="Editar Jefe de Grupo"
-                  (click)="editarUsuario(user)"
-                >
-                  <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button
-                  class="user-card-button delete"
-                  title="Eliminar Jefe de Grupo"
-                  (click)="eliminarUsuario(user.id)"
-                >
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Mensaje cuando no hay jefes después del filtro -->
-            <div *ngIf="jefesGrupoFiltrados.length === 0 && jefesGrupo.length > 0" class="no-results">
-              <div class="empty-state">
-                <div class="empty-state-icon">
-                  <i class="fa-solid fa-user-slash"></i>
-                </div>
-                <div class="empty-state-title">No se encontraron jefes de grupo</div>
-                <div class="empty-state-text">No hay jefes que coincidan con "{{ terminoBusquedaJefes }}"</div>
-              </div>
-            </div>
-
-            <!-- Mensaje cuando no hay jefes en absoluto -->
-            <div *ngIf="jefesGrupo.length === 0" class="no-data">
-              <div class="empty-state">
-                <div class="empty-state-icon">
-                  <i class="fa-solid fa-users"></i>
-                </div>
-                <div class="empty-state-title">No hay jefes de grupo registrados</div>
-                <div class="empty-state-text">Agrega el primer jefe de grupo para comenzar</div>
-              </div>
-            </div>
+          <div class="table-container shadow-premium">
+            <table class="glass-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Rol</th>
+                  <th>Carrera</th>
+                  <th>Semestre</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let user of jefesGrupoPaginados; trackBy: trackById">
+                  <td><span class="badge badge-info">#{{ user.id }}</span></td>
+                  <td class="user-cell">
+                    <div class="user-avatar-small avatar-purple"><i class="fa-solid fa-user-tie"></i></div>
+                    <span class="user-name">{{ user.nombre }}</span>
+                  </td>
+                  <td><span class="badge badge-purple">Jefe de Grupo</span></td>
+                  <td>{{ user.carrera }}</td>
+                  <td><span class="badge badge-warning">Semestre {{ user.grupo }}</span></td>
+                  <td>
+                    <div class="actions-flex">
+                      <button class="action-btn edit-btn" title="Editar" (click)="editarUsuario(user)">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button class="action-btn delete-btn" title="Eliminar" (click)="eliminarUsuario(user.id)">
+                        <i class="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="jefesGrupoFiltrados.length === 0">
+                  <td colspan="6">
+                    <div class="empty-state">
+                      <i class="fa-solid fa-user-slash empty-icon"></i>
+                      <p>No se encontraron jefes de grupo que coincidan con la búsqueda.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <!-- Paginación para Jefes de Grupo -->
-          <div style="margin-top: 20px;">
+          <div class="pagination-wrapper">
             <app-paginacion
               [paginaActual]="paginaActualJefes"
               [totalPaginas]="totalPaginasJefes()"

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AsideProfesoresComponent } from '../../componentes/aside-profesores/aside-profesores.component';
+import { AsideProfesoresComponent } from '../aside-profesores/aside-profesores.component';
 import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 
 interface Horario {
@@ -66,16 +66,24 @@ obtenerHorariosProfesores(): void {
 
   this.usuariosService.obtenerHorariosProfesores(profesorId).subscribe({
     next: (res: any) => {
-      // Verificar si la respuesta tiene la propiedad horariosProfesores
-      if (res && res.horariosProfesores && Array.isArray(res.horariosProfesores)) {
-        this.horariosProfesores = res.horariosProfesores;
+      console.log('📦 [DEBUG] Respuesta del servidor:', res);
+      
+      // La respuesta del backend es { horariosProfesores: [...] }
+      const listaHorarios = res?.horariosProfesores;
+
+      if (listaHorarios && Array.isArray(listaHorarios)) {
+        this.horariosProfesores = listaHorarios;
+        
+        console.log('🧪 [DEBUG] Lista de horarios procesada:');
+        console.table(this.horariosProfesores);
+
         this.actualizarGruposUnicos();
         if (this.gruposUnicos.length > 0) {
           this.grupoSeleccionadoLista = this.gruposUnicos[0];
         }
-        console.log('✅ Horarios obtenidos:', this.horariosProfesores);
       } else {
-        console.warn('⚠️ Formato de respuesta inválido:', res);
+        console.warn('⚠️ No se encontró una lista de horarios válida en la respuesta:', res);
+        this.horariosProfesores = [];
       }
     },
     error: (err) => {

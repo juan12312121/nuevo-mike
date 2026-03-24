@@ -1,99 +1,104 @@
-<div class="body">
-  <div class="layout">
-    <!-- Sidebar Administrador -->
-    <app-aside-administrador></app-aside-administrador>
+<div class="body-wrapper">
+  <app-aside-administrador></app-aside-administrador>
 
-    <div class="main">
-      <div class="content">
-        <!-- Card Principal -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">Carreras Registradas</h2>
-            <!-- Botón para Agregar Carrera -->
-            <button class="btn btn-primary" (click)="abrirModal()">
-              <i class="fas fa-plus btn-icon"></i>
-              Agregar Carrera
-            </button>
-          </div>
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Oferta Educativa</h1>
+    </header>
 
-          <!-- Filtros de Búsqueda -->
-          <div class="filters">
-            <div class="filter-group">
-              <label class="filter-label">Buscar:</label>
-              <div class="search-input">
-                <i class="fas fa-search search-icon"></i>
-                <input
-                  type="text"
-                  class="search-field"
-                  [(ngModel)]="busqueda"
-                  placeholder="Buscar por nombre, facultad o escuela..."
-                  (input)="filtrarCarreras()"
-                />
-              </div>
-            </div>
-          </div>
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <h2 class="section-title-premium">Carreras Registradas ({{ carrerasFiltradas.length }})</h2>
+        <button class="btn-premium" (click)="abrirModal()">
+          <i class="fas fa-plus"></i> Nueva Carrera
+        </button>
+      </div>
 
-          <!-- Tabla de Carreras -->
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Facultad</th>
-                  <th>Escuela</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Reemplazamos carrerasFiltradas por paginatedCarreras -->
-                <tr *ngFor="let carrera of paginatedCarreras">
-                  <td>{{ carrera.carrera_id }}</td>
-                  <td>{{ carrera.carrera_nombre }}</td>
-                  <td>{{ carrera.facultad_nombre }}</td>
-                  <td>{{ carrera.escuela_nombre }}</td>
-                  <td>
-                    <div class="table-actions">
-                      <!-- Botón de Edición -->
-                      <button class="btn-action btn-edit" title="Editar" (click)="abrirModal(carrera)">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <!-- Botón de Eliminación -->
-                      <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarCarrera(carrera)">
-                        <i class="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+      <div class="search-wrapper-premium">
+        <i class="fas fa-search search-icon-premium"></i>
+        <input 
+          type="text" 
+          class="search-input-premium" 
+          [(ngModel)]="busqueda"
+          placeholder="Buscar por nombre, facultad o escuela..." 
+          (input)="filtrarCarreras()" 
+        />
+      </div>
 
-                <!-- Si no hay resultados en la página actual -->
-                <tr *ngIf="paginatedCarreras.length === 0">
-                  <td colspan="5" class="no-data">No se encontraron carreras.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <div class="fade-in-premium">
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre de Carrera</th>
+                <th>Facultad</th>
+                <th>Escuela</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let carrera of paginatedCarreras">
+                <td><span class="badge-premium badge-blue">#{{ carrera.carrera_id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #f0fdf4; color: #16a34a;"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <span style="font-weight: 600;">{{ carrera.carrera_nombre }}</span>
+                  </div>
+                </td>
+                <td>
+                  <span class="badge-premium badge-purple">
+                    <i class="fa-solid fa-building-columns" style="margin-right: 4px;"></i>
+                    {{ carrera.facultad_nombre }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge-premium badge-blue">
+                    <i class="fa-solid fa-school" style="margin-right: 4px;"></i>
+                    {{ carrera.escuela_nombre }}
+                  </span>
+                </td>
+                <td><span class="badge-premium badge-green">Activa</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" title="Editar" (click)="abrirModal(carrera)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-action btn-delete" title="Eliminar" (click)="eliminarCarrera(carrera)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="paginatedCarreras.length === 0">
+                <td colspan="6">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-graduation-cap empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No se encontraron carreras registradas.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <!-- ↓↓↓ Paginación ↓↓↓ -->
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
           <app-paginacion-administrador
             [data]="carrerasFiltradas"
             [pageSize]="pageSize"
             dataLabel="carreras"
-            (pageChanged)="onPageChange($event)"
-          >
+            (pageChanged)="onPageChange($event)">
           </app-paginacion-administrador>
-
         </div>
       </div>
-    </div>
-
-    <!-- Modal para Agregar/Editar Carreras -->
-    <app-modal-carreras
-      *ngIf="mostrarModal"
-      [carreraSeleccionada]="carreraSeleccionada"
-      (cerrarModal)="cerrarModal()"
-      (carreraGuardada)="agregarCarrera()"
-    >
-    </app-modal-carreras>
+    </main>
   </div>
+
+  <app-modal-carreras
+    *ngIf="mostrarModal"
+    [carreraSeleccionada]="carreraSeleccionada"
+    (cerrarModal)="cerrarModal()"
+    (carreraGuardada)="agregarCarrera()"
+  ></app-modal-carreras>
 </div>

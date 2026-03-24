@@ -150,6 +150,13 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
+    min-width: 800px; /* Asegura scroll en móviles */
+}
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 10;
 }
 
 .horario-table th, .horario-table td {
@@ -195,82 +202,85 @@
     background-color: #f1f5f9 !important;
 }
 
-/* Clase para las materias */
-.materia {
-    padding: 16px 12px;
-    border-radius: 12px;
-    font-size: 14px;
-    min-height: 110px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #eff6ff;
-    position: relative;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(59, 130, 246, 0.1);
+/* Clase para las materias tipo Checador */
+.celda-info {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: white;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
 }
 
-.materia:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+.celda-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.06);
 }
 
-/* Colores distintos para tipos de clase */
-.materia.bg-teoria {
-    background-color: #eff6ff;
-    border-top: 3px solid #3b82f6;
+.celda-materia {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
 }
 
-.materia.bg-practica {
-    background-color: #ecfdf5;
-    border-top: 3px solid #10b981;
+.celda-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: auto; /* Empuja el botón hacia abajo */
+  text-align: left;
 }
 
-.materia.bg-laboratorio {
-    background-color: #fff7ed;
-    border-top: 3px solid #f97316;
+.celda-profesor, .celda-aula {
+  font-size: 11px;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.materia.bg-seminario {
-    background-color: #f5f3ff;
-    border-top: 3px solid #8b5cf6;
+.celda-vacia {
+  color: #94a3b8;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.5;
 }
 
-.materia-nombre {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 15px;
-    color: #1e293b;
+.btn-asistencia-clase {
+  width: 100%;
+  padding: 6px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.materia-nombre i {
-    margin-right: 6px;
-    color: #3b82f6;
-}
-
-.materia-profesor {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 14px;
-}
-
-.materia-profesor i {
-    margin-right: 6px;
-    font-size: 12px;
-    color: #94a3b8;
-}
-
-.vacio {
-    background-color: #f8fafc;
-    height: 110px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #cbd5e1;
-    font-size: 18px;
-    border-radius: 12px;
-    transition: all 0.2s ease;
+.btn-asistencia-clase:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
 /* Badges para asistencia y tema */
@@ -434,10 +444,50 @@
     color: #64748b;
 }
 
+/* Desktop & Mobile visibility toggle */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
+/* Grid and Card styles for the mobile list */
+.clases-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.clase-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.clase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.clase-header h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.mobile-schedule-list h2 {
+    font-size: 18px;
+    color: #1e293b;
+    margin-bottom: 12px;
+}
+
 /* Responsive adjustments */
 @media (max-width: 1024px) {
     .main-content {
-        margin-left: 0;
+        margin-left: 80px;
         padding: 24px;
     }
     
@@ -453,30 +503,14 @@
 }
 
 @media (max-width: 768px) {
-    .horario-table {
-        font-size: 13px;
-    }
-    
-    .materia {
-        padding: 12px 8px;
-        min-height: 100px;
-    }
-    
-    .materia-nombre {
-        font-size: 14px;
-    }
-    
-    .materia-profesor {
-        font-size: 12px;
-    }
-    
-    .btn-action {
-        font-size: 11px;
-        padding: 6px 8px;
+    .desktop-only { display: none !important; }
+    .mobile-only { display: block !important; }
+
+    .main-content {
+        margin-left: 70px;
+        padding: 16px;
     }
 }
-
-/* jefe-horario.component.css */
 
 /* El span del ID: tamaño mínimo y color transparente */
 .horario-id {
@@ -486,53 +520,4 @@
     top: 4px; 
     left: 4px;                /* opcional: en la esquina superior izquierda */
     pointer-events: none;      /* no interfiere con clicks */
-  }
-  
-  /* El contenedor de materia con fondo muy tenue */
-  .materia {
-    position: relative;        /* necesario para posicionar el span */
-    background-color: rgba(200, 200, 200, 0.03); /* gris clarísimo, 3% opacidad */
-    border-radius: 4px;
-    padding: 4px;
-  }
-  
-
-
-  .btn-open-modal {
-    display: inline-flexbox;
-    align-items: center;
-    gap: 6px;
-    margin-left: 55px;
-    padding: 8px 12px;
-    font-size: 13px;
-    
-    font-weight: 600;
-    border: none;
-    border-radius: 8px;
-    background-color: #3b82f6;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
-  }
-  
-  .btn-open-modal i {
-    font-size: 14px;
-  }
-  
-  /* Hover / active */
-  .btn-open-modal:hover {
-    background-color: #2563eb;
-    transform: translateY(-1px);
-  }
-  
-  .btn-open-modal:active {
-    background-color: #1e40af;
-    transform: translateY(0);
-  }
-  
-  /* Disabled state (si lo necesitas) */
-  .btn-open-modal:disabled {
-    background-color: #93c5fd;
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
+  }

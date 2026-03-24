@@ -1,0 +1,6 @@
+/* Componente-specific styles for Checadores */
+/* La mayoría de los estilos son ahora globales en styles.css */
+
+.avatar-small i {
+    font-size: 18px;
+}

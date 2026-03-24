@@ -3,6 +3,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, map, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Horario {
   id: number;
@@ -75,7 +76,7 @@ export interface EnumsResponse {
   providedIn: 'root'
 })
 export class HorariosService {
-private API_URL = 'https://mi-back-2pbd.onrender.com/api/horarios';
+private API_URL = `${environment.apiUrl}/horarios`;
 
   constructor(private http: HttpClient) { }
 

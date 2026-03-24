@@ -3,7 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AsideChecadorComponent } from '../../componentes/aside-checador/aside-checador.component';
+import { AsideChecadorComponent } from '../aside-checador/aside-checador.component';
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
 
 interface JwtPayload {

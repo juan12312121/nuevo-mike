@@ -1,188 +1,85 @@
-<div class="body">
+<div class="body-wrapper">
   <app-aside-jefecarrera></app-aside-jefecarrera>
-  <div class="main-content">
-    <header class="header">
-      <h1>Gestión Académica</h1>
+  
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Gestión Académica</h1>
     </header>
     
-    <!-- Tabs Navigation -->
-    <div class="tabs-container">
-      <div class="tab" [class.active]="activeTab === 'profesores'" (click)="cambiarTab('profesores')">
-        <i class="fa-solid fa-users"></i>
-        <span>Profesores</span>
-      </div>
-      <div class="tab" [class.active]="activeTab === 'asignaciones'" (click)="cambiarTab('asignaciones')">
-        <i class="fa-solid fa-book"></i>
-        <span>Asignación de Materias</span>
-      </div>
-    </div>
-
-    <!-- Tab Content: Profesores -->
-    <main class="dashboard" *ngIf="activeTab === 'profesores'">
-      <div class="section-title">
-        <span>Profesores ({{ profesoresFiltrados.length }})</span>
-        <button class="add-button" (click)="abrirModal()">
-          <i class="fa-solid fa-plus"></i> Agregar Profesor
-        </button>
-      </div>
-      
-      <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input
-          type="text"
-          class="search-input"
-          [(ngModel)]="terminoBusquedaProfesores"
-          (input)="buscarProfesor($event)"
-          placeholder="Buscar profesor por nombre, correo o carrera..."
-        />
-      </div>
-      
-      <div class="professors-grid fade-in-up">
-        <div
-          *ngFor="let profesor of profesoresPaginados; trackBy: trackById"
-          class="professor-card"
-        >
-          <div class="professor-id">{{ profesor.id }}</div>
-          <div class="professor-card-avatar">
-            <i class="fa-solid fa-user"></i>
-          </div>
-          <div class="professor-card-info">
-            <div class="professor-card-name">{{ profesor.nombre }}</div>
-            <div class="professor-card-email">{{ profesor.correo }}</div>
-            <div class="professor-card-career">
-              {{ profesor.rol_nombre || 'Sin asignar' }}
-            </div>
-          </div>
-          <div class="professor-card-actions">
-            <!-- Editar -->
-            <button class="professor-card-button" (click)="editarProfesor(profesor)">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <!-- Eliminar -->
-            <button class="professor-card-button delete" (click)="eliminarProfesor(profesor.id)">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
+    <main class="dashboard-container">
+      <!-- Content: Profesores -->
+      <div class="fade-in-premium">
+        <div class="section-header-premium">
+          <h2 class="section-title-premium">Listado de Docentes ({{ profesoresFiltrados.length }})</h2>
+          <button class="btn-premium" (click)="abrirModal()">
+            <i class="fa-solid fa-plus"></i> Registrar Profesor
+          </button>
+        </div>
+        
+        <div class="search-wrapper-premium">
+          <i class="fa-solid fa-magnifying-glass search-icon-premium"></i>
+          <input
+            type="text"
+            class="search-input-premium"
+            [(ngModel)]="terminoBusquedaProfesores"
+            (input)="buscarProfesor($event)"
+            placeholder="Buscar docente por nombre o correo..."
+          />
+        </div>
+        
+        <div class="table-wrapper-premium">
+          <table class="table-premium">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Correo Electrónico</th>
+                <th>Rol / Cargo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prof of profesoresPaginados; trackBy: trackById">
+                <td><span class="badge-premium badge-blue">#{{ prof.id }}</span></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="avatar-small" style="background: #f1f5f9; color: #3b82f6;"><i class="fa-solid fa-user-tie"></i></div>
+                    <span style="font-weight: 600;">{{ prof.nombre }}</span>
+                  </div>
+                </td>
+                <td>{{ prof.correo }}</td>
+                <td><span class="badge-premium badge-purple">{{ prof.rol_nombre || 'Docente' }}</span></td>
+                <td>
+                  <div class="action-buttons-premium">
+                    <button class="btn-action btn-edit" (click)="editarProfesor(prof)"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="btn-action btn-delete" (click)="eliminarProfesor(prof.id)"><i class="fa-solid fa-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="profesoresFiltrados.length === 0">
+                <td colspan="5">
+                  <div class="empty-state-premium">
+                    <i class="fa-solid fa-user-slash empty-state-icon-premium"></i>
+                    <p class="empty-state-text-premium">No hay docentes registrados.</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        <!-- Mensaje cuando no hay profesores después del filtro -->
-        <div *ngIf="profesoresFiltrados.length === 0 && profesores.length > 0" class="no-results">
-          <div class="empty-state">
-            <div class="empty-state-icon">
-              <i class="fa-solid fa-user-slash"></i>
-            </div>
-            <div class="empty-state-title">No se encontraron profesores</div>
-            <div class="empty-state-text">No hay profesores que coincidan con "{{ terminoBusquedaProfesores }}"</div>
-          </div>
+        <div style="margin-top: 32px; display: flex; justify-content: center;">
+          <app-paginacion
+            [paginaActual]="paginaActualProfesores"
+            [totalPaginas]="totalPaginasProfesores()"
+            [maxPaginasVisibles]="5"
+            (cambiarPagina)="onCambiarPaginaProfesores($event)">
+          </app-paginacion>
         </div>
-
-        <!-- Mensaje cuando no hay profesores en absoluto -->
-        <div *ngIf="profesores.length === 0" class="no-data">
-          <div class="empty-state">
-            <div class="empty-state-icon">
-              <i class="fa-solid fa-users"></i>
-            </div>
-            <div class="empty-state-title">No hay profesores registrados</div>
-            <div class="empty-state-text">Agrega el primer profesor para comenzar</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Paginación para Profesores - Siempre visible -->
-      <div style="margin-top: 20px;">
-        <app-paginacion
-          [paginaActual]="paginaActualProfesores"
-          [totalPaginas]="totalPaginasProfesores()"
-          [maxPaginasVisibles]="5"
-          (cambiarPagina)="onCambiarPaginaProfesores($event)">
-        </app-paginacion>
-      </div>
-    </main>
-
-    <!-- Tab Content: Asignación de Materias -->
-    <main class="dashboard" *ngIf="activeTab === 'asignaciones'">
-      <div class="section-title">
-        <span>Asignación de Materias ({{ asignacionesFiltradas.length }})</span>
-        <button class="add-button" (click)="abrirModalAsignacion()">
-          <i class="fa-solid fa-plus"></i> Asignar Materia
-        </button>
-      </div>
-    
-      <div class="search-container">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input
-          type="text"
-          class="search-input"
-          [(ngModel)]="terminoBusquedaAsignaciones"
-          (input)="buscarAsignacion($event)"
-          placeholder="Buscar por nombre de profesor o materia..."
-        />
-      </div>
-    
-      <!-- Grid de asignaciones - Solo mostrar si hay datos -->
-      <div class="groups-grid fade-in-up" *ngIf="asignacionesFiltradas.length > 0">
-        <div 
-          class="group-card"
-          *ngFor="let asignacion of asignacionesPaginadas; trackBy: trackById"
-        >
-          <div class="group-card-icon">
-            <i class="fa-solid fa-book"></i>
-          </div>
-          <div class="group-card-info">
-            <div class="group-card-teacher">
-              <i class="fa-solid fa-user"></i> 
-              {{ asignacion.profesorNombre }} (ID: {{ asignacion.id }})
-            </div>
-            <div class="group-card-name">
-              {{ asignacion.materiaNombre }}
-            </div>
-          </div>
-          <div class="group-card-actions">
-            <button class="group-card-button" (click)="editarAsignacion(asignacion)" title="Editar asignación">
-              <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            
-            <button class="group-card-button delete" (click)="eliminarAsignacion(asignacion.id)" title="Eliminar asignación">
-              <i class="fa-solid fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mensaje cuando no hay asignaciones después del filtro -->
-      <div *ngIf="asignacionesFiltradas.length === 0 && asignaciones.length > 0" 
-           class="empty-state">
-        <div class="empty-state-icon">
-          <i class="fa-solid fa-search"></i>
-        </div>
-        <div class="empty-state-title">No se encontraron asignaciones</div>
-        <div class="empty-state-text">
-          No hay asignaciones que coincidan con "{{ terminoBusquedaAsignaciones }}"
-        </div>
-      </div>
-
-      <!-- Mensaje cuando no hay asignaciones en absoluto -->
-      <div *ngIf="asignaciones.length === 0" class="empty-state">
-        <div class="empty-state-icon">
-          <i class="fa-solid fa-book-open"></i>
-        </div>
-        <div class="empty-state-title">No hay materias asignadas</div>
-        <div class="empty-state-text">Agrega una nueva asignación para comenzar</div>
-      </div>
-    
-      <!-- Paginación para Asignaciones - Siempre visible -->
-      <div style="margin-top: 20px;">
-        <app-paginacion
-          [paginaActual]="paginaActualAsignaciones"
-          [totalPaginas]="totalPaginasAsignaciones()"
-          [maxPaginasVisibles]="5"
-          (cambiarPagina)="onCambiarPaginaAsignaciones($event)">
-        </app-paginacion>
       </div>
     </main>
   </div>
   
-  <!-- Modal de Profesores -->
   <app-modalprofesores
     *ngIf="modalVisible"
     [modalVisible]="modalVisible"
@@ -190,12 +87,4 @@
     (cerrarModal)="cerrarModal()"
     (registroExitoso)="actualizarListaProfesor($event)"
   ></app-modalprofesores>
-
-  <!-- Modal de Asignación de Materias -->
-  <app-modal-asignar-materias
-    [(visible)]="showAsignModal"
-    [asignacion]="asignacionToEdit"
-  (asignar)="crearAsignacion($event.profesor_id, $event.materia_id)"
-      (editar)="actualizarAsignacion($event.profesor_id, $event.materia_id)"
-  ></app-modal-asignar-materias>
 </div>

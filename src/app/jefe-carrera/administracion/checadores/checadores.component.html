@@ -1,0 +1,93 @@
+<div class="body-wrapper">
+  <app-aside-jefecarrera></app-aside-jefecarrera>
+
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Panel de Checadores</h1>
+    </header>
+    
+    <main class="dashboard-container">
+      <div class="section-header-premium">
+        <div class="section-info">
+          <h2 class="section-title-premium">Personal de Seguimiento ({{ checadoresFiltrados.length }})</h2>
+        </div>
+        <button class="btn-premium" (click)="abrirModal()">
+          <i class="fa-solid fa-plus"></i> Registrar Checador
+        </button>
+      </div>
+          
+      <div class="search-wrapper-premium">
+        <i class="fa-solid fa-magnifying-glass search-icon-premium"></i>
+        <input 
+          type="text" 
+          class="search-input-premium" 
+          [(ngModel)]="terminoBusqueda"
+          (input)="buscar($event)"
+          placeholder="Buscar checador por nombre o correo..." 
+        />
+      </div>
+          
+      <div class="table-wrapper-premium">
+        <table class="table-premium">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre del Checador</th>
+              <th>Correo Institucional</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of checadoresPaginados; trackBy: trackById">
+              <td><span class="badge-premium badge-blue">#{{ user.id }}</span></td>
+              <td>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <div class="avatar-small" style="background: #eff6ff; color: #3b82f6;"><i class="fa-solid fa-user-check"></i></div>
+                  <span style="font-weight: 600;">{{ user.nombre }}</span>
+                </div>
+              </td>
+              <td>{{ user.correo }}</td>
+              <td><span class="badge-premium badge-green">Activo</span></td>
+              <td>
+                <div class="action-buttons-premium">
+                  <button class="btn-action btn-edit" title="Editar" (click)="editar(user)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button class="btn-action btn-delete" title="Eliminar" (click)="eliminar(user.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="checadoresFiltrados.length === 0">
+              <td colspan="5">
+                <div class="empty-state-premium">
+                  <i class="fa-solid fa-user-slash empty-state-icon-premium"></i>
+                  <p class="empty-state-text-premium">No se encontraron checadores.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 32px; display: flex; justify-content: center;">
+        <app-paginacion
+          [paginaActual]="paginaActual"
+          [totalPaginas]="totalPaginas()"
+          [maxPaginasVisibles]="5"
+          (cambiarPagina)="onCambiarPagina($event)">
+        </app-paginacion>
+      </div>
+    </main>
+
+    <app-modal-usuarios
+      [visible]="modalVisible"
+      [tipo]="'checador'"
+      [usuarioId]="usuarioIdParaEditar"
+      (modalClose)="onModalClosed()"
+      (usuarioGuardado)="onModalClosed()"
+    ></app-modal-usuarios>
+  </div>
+</div>

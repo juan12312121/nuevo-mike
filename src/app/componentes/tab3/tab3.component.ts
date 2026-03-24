@@ -45,6 +45,12 @@ export class Tab3Component implements OnInit {
   // Para mantener registro de la celda actualmente en hover durante el arrastre
   activeCellKey: string | null = null;
 
+  // Estados de guardado
+  isSaving = false;
+  saveSuccess = false;
+  saveError = false;
+  saveMessage = '';
+
   // ✅ Color general para todas las asignaciones
   private colorGeneral = '#2E7D32'; // Verde bosque profesional
 
@@ -249,6 +255,11 @@ export class Tab3Component implements OnInit {
   }
 
   guardarHorario() {
+    this.isSaving = true;
+    this.saveSuccess = false;
+    this.saveError = false;
+    this.saveMessage = '';
+
     // 0) Loguear IDs de asignaciones, turno, grupo y aula
     const placedIds = new Set<number>();
     for (const clave in this.horarioAsignado) {
@@ -277,6 +288,10 @@ export class Tab3Component implements OnInit {
   
     if (entradas.length === 0) {
       console.warn('No hay asignaciones para guardar.');
+      this.isSaving = false;
+      this.saveError = true;
+      this.saveMessage = 'No hay materias asignadas en el tablero para guardar.';
+      setTimeout(() => { this.saveError = false; }, 4000);
       return;
     }
   
@@ -287,19 +302,36 @@ export class Tab3Component implements OnInit {
       this.horariosService.createHorario(entry).subscribe({
         next: () => {
           exitos++;
-          if (exitos + errores === entradas.length) {
-            console.log(`Guardado completado: ${exitos} éxitos, ${errores} errores.`);
-          }
+          this.checkSaveCompletion(exitos, errores, entradas.length);
         },
         error: (err) => {
           errores++;
           console.error(`Error guardando entrada #${idx}:`, err);
-          if (exitos + errores === entradas.length) {
-            console.log(`Guardado completado: ${exitos} éxitos, ${errores} errores.`);
-          }
+          this.checkSaveCompletion(exitos, errores, entradas.length);
         }
       });
     });
+  }
+
+  private checkSaveCompletion(exitos: number, errores: number, total: number) {
+    if (exitos + errores === total) {
+      this.isSaving = false;
+      if (errores === 0) {
+        this.saveSuccess = true;
+        this.saveMessage = '¡El horario se ha guardado correctamente!';
+      } else if (exitos === 0) {
+        this.saveError = true;
+        this.saveMessage = 'Ocurrió un error al guardar el horario.';
+      } else {
+        this.saveError = true;
+        this.saveMessage = `Se guardó parcialmente con ${errores} errores.`;
+      }
+      
+      setTimeout(() => {
+        this.saveSuccess = false;
+        this.saveError = false;
+      }, 5000);
+    }
   }
 
   // ✅ MÉTODO SIMPLIFICADO: Color general para todas las asignaciones

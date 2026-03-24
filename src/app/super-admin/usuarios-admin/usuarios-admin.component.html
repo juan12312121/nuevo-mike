@@ -1,0 +1,73 @@
+<div class="body">
+    <app-aside-administrador></app-aside-administrador>
+    
+    <div class="main-content">
+        <div class="header">
+            <h1>Gestión de Administradores de Escuela</h1>
+            <p class="subtitle">Super Administrador | Control Global</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Formulario de Creación -->
+            <div class="card glass-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-user-plus"></i> Registrar Nuevo Administrador</h3>
+                </div>
+                <div class="card-body">
+                    <form (ngSubmit)="registrarAdmin()" #adminForm="ngForm">
+                        <div class="form-group">
+                            <label>Nombre Completo</label>
+                            <input type="text" name="nombre" [(ngModel)]="nuevoAdmin.nombre" required placeholder="Ej. Juan Pérez">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>
+                            <input type="email" name="correo" [(ngModel)]="nuevoAdmin.correo" required placeholder="admin@escuela.edu">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" name="contrasena" [(ngModel)]="nuevoAdmin.contrasena" required placeholder="********">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Asignar Escuela</label>
+                            <select name="escuela_id" [(ngModel)]="nuevoAdmin.escuela_id" required>
+                                <option value="0" disabled>Selecciona una institución</option>
+                                <option *ngFor="let escuela of escuelas" [value]="escuela.id">
+                                    {{ escuela.nombre }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-primary" [disabled]="!adminForm.valid || cargando">
+                            <span *ngIf="!cargando">Crear Administrador</span>
+                            <span *ngIf="cargando">Procesando...</span>
+                        </button>
+
+                        <p class="feedback-msg" *ngIf="mensaje">{{ mensaje }}</p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Información Informativa -->
+            <div class="card info-card">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-info-circle"></i> Roles y Permisos</h3>
+                </div>
+                <div class="card-body">
+                    <p>Al crear un Administrador de Escuela:</p>
+                    <ul>
+                        <li>Tendrá control total sobre Facultades y Carreras de su institución.</li>
+                        <li>Podrá gestionar Jefes de Carrera y Profesores.</li>
+                        <li><strong>No</strong> podrá ver información de otras escuelas.</li>
+                    </ul>
+                    <div class="alert-box">
+                        <i class="fas fa-shield-alt"></i>
+                        Asegúrese de que el correo sea único en toda la plataforma.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

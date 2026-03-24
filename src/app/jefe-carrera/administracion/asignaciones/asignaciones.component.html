@@ -1,0 +1,104 @@
+<div class="body-wrapper">
+  <app-aside-jefecarrera></app-aside-jefecarrera>
+  
+  <div class="main-content-layout">
+    <header class="header-premium">
+      <h1>Asignación Académica</h1>
+    </header>
+    
+    <main class="dashboard-container fade-in-premium">
+      <div class="section-header-premium">
+        <div>
+          <h2 class="section-title-premium">Docentes y Materias ({{ asignacionesFiltradas.length }})</h2>
+          <p class="text-muted text-sm">Vincula profesores con las materias que impartirán este ciclo.</p>
+        </div>
+        <button class="btn-premium" style="background: linear-gradient(135deg, #6366f1, #4f46e5); box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);" (click)="abrirModalAsignacion()">
+          <i class="fa-solid fa-link"></i> Nueva Asignación
+        </button>
+      </div>
+
+      <div class="search-wrapper-premium">
+        <i class="fa-solid fa-magnifying-glass search-icon-premium"></i>
+        <input
+          type="text"
+          class="search-input-premium"
+          [(ngModel)]="terminoBusquedaAsignaciones"
+          (input)="buscarAsignacion($event)"
+          placeholder="Buscar por nombre de docente o materia..."
+        />
+      </div>
+
+      <div class="table-wrapper-premium">
+        <table class="table-premium">
+          <thead>
+            <tr>
+              <th style="width: 100px;">ID</th>
+              <th>Docente</th>
+              <th>Materia Asignada</th>
+              <th>Estatus</th>
+              <th style="width: 140px; text-align: center;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let asig of asignacionesPaginadas; trackBy: trackById">
+              <td><span class="badge-premium badge-amber">#{{ asig.id }}</span></td>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar-small"><i class="fa-solid fa-user-tie"></i></div>
+                  <div>
+                    <div style="font-weight: 700; color: var(--text-main);">{{ asig.profesorNombre }}</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Docente Activo</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="materia-tag-premium">
+                  <i class="fa-solid fa-book"></i>
+                  <span>{{ asig.materiaNombre }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="badge-premium badge-green">Vigente</span>
+              </td>
+              <td>
+                <div class="action-buttons-premium justify-center">
+                  <button class="btn-action btn-edit" title="Editar asignación" (click)="editarAsignacion(asig)">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button class="btn-action btn-delete" title="Eliminar asignación" (click)="eliminarAsignacion(asig.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="asignacionesFiltradas.length === 0">
+              <td colspan="5">
+                <div class="empty-state-card-premium">
+                  <i class="fa-solid fa-link-slash"></i>
+                  <h3>Sin asignaciones encontradas</h3>
+                  <p>No se encontraron registros que coincidan con tu búsqueda o aún no hay datos registrados.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination-footer-premium" *ngIf="mostrarPaginacionAsignaciones">
+        <app-paginacion
+          [paginaActual]="paginaActualAsignaciones"
+          [totalPaginas]="totalPaginasAsignaciones()"
+          [maxPaginasVisibles]="5"
+          (cambiarPagina)="onCambiarPaginaAsignaciones($event)">
+        </app-paginacion>
+      </div>
+    </main>
+  </div>
+
+  <app-modal-asignar-materias
+    [(visible)]="showAsignModal"
+    [asignacion]="asignacionToEdit"
+    (asignar)="crearAsignacion($event.profesor_id, $event.materia_id)"
+    (editar)="actualizarAsignacion($event.profesor_id, $event.materia_id)"
+  ></app-modal-asignar-materias>
+</div>

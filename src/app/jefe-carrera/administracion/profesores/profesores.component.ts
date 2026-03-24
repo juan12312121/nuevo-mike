@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefecarreraComponent } from '../../../componentes/aside-jefecarrera/aside-jefecarrera.component';
-import { ModalAsignarMateriasComponent } from '../../../componentes/modal-asignar-materias/modal-asignar-materias.component';
-import { ModalprofesoresComponent } from '../../../componentes/modalprofesores/modalprofesores.component';
+import { AsideJefecarreraComponent } from '../../aside-jefecarrera/aside-jefecarrera.component';
+import { ModalAsignarMateriasComponent } from '../modal-asignar-materias/modal-asignar-materias.component';
+import { ModalprofesoresComponent } from '../modalprofesores/modalprofesores.component';
 import { PaginacionComponent } from '../../../componentes/paginacion/paginacion.component';
 import { AsignacionMateriasService } from '../../../core/asignaciones/asignacion-materias.service';
 import { UsuariosService } from '../../../core/autenticacion/usuarios.service';

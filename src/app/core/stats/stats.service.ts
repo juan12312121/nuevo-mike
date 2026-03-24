@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Estadisticas {
   escuelas: number;
@@ -14,11 +15,13 @@ export interface Estadisticas {
 })
 export class StatsService {
 
-private apiUrl = 'https://mi-back-2pbd.onrender.com/api/estadisticas';
+private apiUrl = `${environment.apiUrl}/estadisticas`;
 
   constructor(private http: HttpClient) { }
 
   getEstadisticas(): Observable<Estadisticas> {
-    return this.http.get<Estadisticas>(this.apiUrl);
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<Estadisticas>(this.apiUrl, { headers });
   }
 }

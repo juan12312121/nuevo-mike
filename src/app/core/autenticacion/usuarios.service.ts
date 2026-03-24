@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 interface LoginResponse {
   usuario: any;
@@ -11,9 +12,10 @@ export interface Usuario {
   id: number;
   nombre: string;
   correo: string;
-  rol_id: number;       // ← agrégalo
-  carrera_id: number;   // ← ya lo tenías
+  rol_id: number;
+  carrera_id: number | null;
   grupo_id: number | null;
+  escuela_id: number | null; // Nuevo campo
 }
 
 
@@ -21,7 +23,7 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class UsuariosService {
-private baseUrl = 'https://mi-back-2pbd.onrender.com/api/usuarios';
+private baseUrl = `${environment.apiUrl}/usuarios`;
 
   constructor(private http: HttpClient) { }
 
@@ -51,17 +53,24 @@ private baseUrl = 'https://mi-back-2pbd.onrender.com/api/usuarios';
 
   logout(): void {
     console.log('Cerrando sesión y eliminando token y usuario de localStorage');
-    if (localStorage.getItem('token')) {
-      console.log('Token encontrado:', localStorage.getItem('token'));
-    }
-    if (localStorage.getItem('usuario')) {
-      console.log('Usuario encontrado:', localStorage.getItem('usuario'));
-    }
-
-    // Eliminar los datos
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
     console.log('Sesión cerrada');
+  }
+
+  getUsuario(): Usuario | null {
+    const userJson = localStorage.getItem('usuario');
+    return userJson ? JSON.parse(userJson) : null;
+  }
+
+  isSuperAdmin(): boolean {
+    const user = this.getUsuario();
+    return user?.rol_id === 6;
+  }
+
+  isSchoolAdmin(): boolean {
+    const user = this.getUsuario();
+    return user?.rol_id === 5;
   }
 
 
@@ -410,6 +419,12 @@ obtenerAsistenciasProfesor(profesor_id: number): Observable<any> {
           }
         })
       );
+  }
+
+  registrarAdminEscuela(datos: { nombre: string; correo: string; contrasena: string; escuela_id: number }): Observable<any> {
+    const token = this.getToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.post(`${this.baseUrl}/crear-admin-escuela`, datos, { headers });
   }
 }
 

@@ -1,13 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsignacionMateriasService {
 
-private apiUrl = 'https://mi-back-2pbd.onrender.com/api/asignaciones';
+private apiUrl = `${environment.apiUrl}/asignaciones`;
 
   constructor(private http: HttpClient) { }
 

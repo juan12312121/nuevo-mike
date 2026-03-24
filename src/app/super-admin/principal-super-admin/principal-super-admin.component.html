@@ -1,0 +1,131 @@
+<div class="body">
+    <app-aside-administrador></app-aside-administrador>
+    
+    <div class="main-content">
+        <!-- Floating Header -->
+        <header class="header-glass">
+            <div class="welcome-section">
+                <h1>Panel de Control Global</h1>
+                <p>Bienvenido, <span class="highlight-name">{{ usuariosService.getUsuario()?.nombre }}</span> | Administrador Total</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-glow" routerLink="/super-admin/escuelas">
+                    <i class="fas fa-plus"></i> Gestionar Escuelas
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Grid with Glassmorphism -->
+        <div class="stats-grid" *ngIf="estadisticas">
+            <div class="stat-card glass-panel primary-glow">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon"><i class="fas fa-school"></i></div>
+                </div>
+                <div class="stat-info">
+                    <h3 class="counter">{{ estadisticas.escuelas }}</h3>
+                    <p>Instituciones Totales</p>
+                </div>
+                <div class="stat-bg-icon"><i class="fas fa-school"></i></div>
+            </div>
+
+            <div class="stat-card glass-panel secondary-glow">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon info-icon"><i class="fas fa-university"></i></div>
+                </div>
+                <div class="stat-info">
+                    <h3 class="counter">{{ estadisticas.facultades }}</h3>
+                    <p>Facultades en Red</p>
+                </div>
+                <div class="stat-bg-icon"><i class="fas fa-university"></i></div>
+            </div>
+
+            <div class="stat-card glass-panel accent-glow">
+                <div class="stat-icon-wrapper">
+                    <div class="stat-icon success-icon"><i class="fas fa-user-shield"></i></div>
+                </div>
+                <div class="stat-info">
+                    <h3 class="counter">{{ escuelas.length }}</h3>
+                    <p>Escuelas Operativas</p>
+                </div>
+                <div class="stat-bg-icon"><i class="fas fa-user-shield"></i></div>
+            </div>
+        </div>
+
+        <div class="dashboard-body">
+            <!-- Main Content Area -->
+            <div class="main-dashboard">
+                <div class="card glass-panel table-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <div class="icon-bulb"><i class="fas fa-list"></i></div>
+                            <h3>Directorio de Instituciones</h3>
+                        </div>
+                        <button class="btn-text" routerLink="/super-admin/escuelas">Ver todas <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Folio</th>
+                                    <th>Nombre Institución</th>
+                                    <th>Estado de Operación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let escuela of escuelas; let i = index" class="table-row-animate" [ngStyle]="{'animation-delay': (i * 0.1) + 's'}">
+                                    <td><span class="folio-badge">{{ escuela.folio }}</span></td>
+                                    <td class="school-name">{{ escuela.nombre }}</td>
+                                    <td><span class="status-badge active"><i class="fas fa-circle"></i> Activa</span></td>
+                                </tr>
+                                <tr *ngIf="escuelas.length === 0">
+                                    <td colspan="3" class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-folder-open"></i></div>
+                                        <p>Aún no hay instituciones registradas en la plataforma.</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Side Sidebar inside Dashboard -->
+            <div class="side-dashboard">
+                <div class="card glass-panel chart-card">
+                    <div class="card-header">
+                        <div class="header-title">
+                            <div class="icon-bulb"><i class="fas fa-chart-pie"></i></div>
+                            <h3>Distribución de Recursos</h3>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="globalStatsChart"></canvas>
+                        <div class="chart-overlay" *ngIf="!estadisticas || (estadisticas.facultades === 0 && estadisticas.jefes === 0 && estadisticas.carreras === 0)">
+                            <p>Sin datos suficientes para graficar</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card gradient-panel tips-card">
+                    <div class="decorative-circle top-right"></div>
+                    <div class="decorative-circle bottom-left"></div>
+                    
+                    <h3><i class="fas fa-bolt"></i> Sistema Activo</h3>
+                    <div class="tip-content">
+                        <div class="tip-item">
+                            <div class="tip-check"><i class="fas fa-check"></i></div>
+                            <p>Plataforma Multi-Escuela inicializada correctamente.</p>
+                        </div>
+                        <div class="tip-item">
+                            <div class="tip-check"><i class="fas fa-check"></i></div>
+                            <p>Aislamiento de datos encriptado y funcional.</p>
+                        </div>
+                        <div class="action-link" routerLink="/super-admin/admins">
+                            Delegar Administración <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

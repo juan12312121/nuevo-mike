@@ -6,12 +6,44 @@
         }
 
 .contenedor {
-            padding: 20px;
-            width: 1500px;
-            margin-top: 20px;
-            font-family: 'Roboto', Arial, sans-serif;
-            margin-left: 360px;
-        }
+    padding: 32px;
+    margin-left: 280px;
+    font-family: 'Outfit', 'Roboto', Arial, sans-serif;
+    transition: margin-left 0.3s ease;
+    max-width: 1200px; /* Limita crecimiento infinito oscuro */
+}
+
+/* Responsividad general para acoplarse al menú global */
+@media (max-width: 1024px) {
+    .contenedor {
+        margin-left: 80px;
+        padding: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contenedor {
+        margin-left: 70px;
+        padding: 16px;
+    }
+    
+    .titulo {
+        font-size: 1.5rem;
+    }
+
+    .tabla-container {
+        overflow-x: auto;
+    }
+    
+    .tabla-asistencias {
+        min-width: 700px; /* Fuerza el scroll horizontal y evita que se aplaste */
+    }
+
+    .filtros {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
         
         .titulo {
             color: #2c3e50;

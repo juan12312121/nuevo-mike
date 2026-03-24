@@ -2,8 +2,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefecarreraComponent } from "../../componentes/aside-jefecarrera/aside-jefecarrera.component";
-import { ModalaulasComponent } from "../../componentes/modalaulas/modalaulas.component";
+import { AsideJefecarreraComponent } from '../aside-jefecarrera/aside-jefecarrera.component';
+import { ModalaulasComponent } from './modalaulas/modalaulas.component';
 import { PaginacionComponent } from "../../componentes/paginacion/paginacion.component";
 import { AulasService } from '../../core/aulas/aulas.service';
 

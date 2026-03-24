@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideJefeGrupoComponent } from '../../componentes/aside-jefe-grupo/aside-jefe-grupo.component';
+import { AsideJefeGrupoComponent } from '../aside-jefe-grupo/aside-jefe-grupo.component';
 import { AsistenciaTemaService } from '../../core/asistencia-tema/asistencia-tema.service';
 
 @Component({

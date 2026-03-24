@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface Escuela {
   id: number;
@@ -12,7 +13,7 @@ export interface Escuela {
   providedIn: 'root'
 })
 export class EscuelasService {
-private baseUrl = 'https://mi-back-2pbd.onrender.com/api/escuelas';
+private baseUrl = `${environment.apiUrl}/escuelas`;
 
   constructor(private http: HttpClient) { }
 

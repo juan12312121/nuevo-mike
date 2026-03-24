@@ -1,0 +1,68 @@
+<div class="modal-overlay" [class.active]="show">
+  <div class="modal" [class.active]="show">
+    <div class="modal-header">
+      <h3 class="modal-title">
+        <i class="fas fa-book"></i>
+        {{ materiaEditando ? 'Editar Materia' : 'Agregar Nueva Materia' }}
+      </h3>
+      <button class="modal-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <form (ngSubmit)="guardarMateria()">
+      <div class="modal-body">
+        <div class="success-message" *ngIf="showSuccessMessage">
+          <i class="fas fa-check-circle"></i>
+          {{ materiaEditando ? 'Materia actualizada correctamente' : 'Materia creada correctamente' }}
+        </div>
+        <div class="error-message" *ngIf="showErrorMessage">
+          <i class="fas fa-exclamation-circle"></i>
+          Error al {{ materiaEditando ? 'actualizar' : 'crear' }} la materia. Intente de nuevo.
+        </div>
+
+        <div class="form-group">
+          <label for="materiaName" class="form-label">
+            Nombre de la Materia
+            <i class="fas fa-info-circle" title="Ingrese el nombre completo de la materia"></i>
+          </label>
+          <input
+            id="materiaName"
+            name="nombre"
+            type="text"
+            class="form-input"
+            [(ngModel)]="materia.nombre"
+            placeholder="Ej: Matemáticas Discretas"
+            required
+          />
+          <i class="fas fa-book input-icon"></i>
+        </div>
+
+        <div class="form-group" *ngIf="!esJefeCarrera">
+          <label for="materia-carrera">Carrera:</label>
+          <select id="materia-carrera" name="carrera" [(ngModel)]="materia.carrera" required class="form-select">
+            <option [ngValue]="null" disabled>-- Selecciona --</option>
+            <option *ngFor="let carrera of carreras" [ngValue]="carrera">
+              {{ carrera.carrera_nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="button button-secondary" (click)="close()">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          class="button button-primary"
+          [disabled]="!materia.nombre || !materia.carrera"
+        >
+          <i class="fas fa-save"></i>
+          {{ materiaEditando ? 'Actualizar' : 'Guardar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -21,47 +21,68 @@
       </div>
         
       <!-- Horario -->
-      <div class="horario-container" *ngIf="franjas.length > 0; else emptyState">
-        <table class="horario-table" id="horario-table">
-          <thead>
-            <tr>
-              <th class="hora-column"><i class="fas fa-clock"></i> Hora</th>
-              <th *ngFor="let dia of dias">
-                <i class="fas fa-calendar-day"></i> {{ dia }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let hora of franjas">
-              <td class="hora-column">{{ hora }}</td>
-              <td *ngFor="let dia of dias">
-                <ng-container *ngIf="schedule[hora]?.[dia]; else vacio">
-                  <div class="materia bg-teoria">
-                    <!-- Span con el ID, casi invisible -->
-                    <span class="horario-id">{{ schedule[hora][dia].id }}</span>
+      <div class="horario-container desktop-only" *ngIf="franjas.length > 0; else emptyState">
+        <div class="table-responsive-wrapper" style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
+          <table class="horario-table" id="horario-table">
+            <thead>
+              <tr>
+                <th class="hora-column sticky-col"><i class="fas fa-clock"></i> Hora</th>
+                <th *ngFor="let dia of dias">
+                  <i class="fas fa-calendar-day"></i> {{ dia }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let hora of franjas">
+                <td class="hora-column sticky-col">{{ hora }}</td>
+                <td *ngFor="let dia of dias">
+                  <ng-container *ngIf="schedule[hora]?.[dia]; else vacio">
+                    <div class="celda-info" style="position: relative;">
+                      <span class="horario-id" style="position: absolute; top: 4px; right: 4px; font-size: 9px; color: transparent;">{{ schedule[hora][dia].id }}</span>
 
-                    <div class="materia-nombre">
-                      <i class="fas fa-book"></i> {{ schedule[hora][dia].materia_nombre }}
+                      <div class="celda-materia" title="{{ schedule[hora][dia].materia_nombre }}">
+                        <i class="fas fa-book"></i> {{ schedule[hora][dia].materia_nombre }}
+                      </div>
+                      <div class="celda-detalles">
+                        <span class="celda-profesor" title="Profesor"><i class="fas fa-user-tie"></i> {{ schedule[hora][dia].profesor_nombre }}</span>
+                      </div>
+                      
+                      <button class="btn-asistencia-clase" (click)="openModal(schedule[hora][dia])" title="Registrar Asistencia y Tema">
+                        <i class="fas fa-user-check"></i> Asist / Tema
+                      </button>
                     </div>
-                    <div class="materia-profesor">
-                      <i class="fas fa-user"></i> {{ schedule[hora][dia].profesor_nombre }}
-                    </div>
-                    <div class="class-actions">
-<!-- jefe-horario.component.html -->
-<button class="btn-open-modal" (click)="openModal(schedule[hora][dia])">
-  <i class="fas fa-user-check"></i> Asistencia
-</button>
-                    </div>
-                  </div>
-                </ng-container>
-                <ng-template #vacio>
-                  <div class="vacio">—</div>
-                </ng-template>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  </ng-container>
+                  <ng-template #vacio>
+                    <div class="celda-vacia">--</div>
+                  </ng-template>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
+      <!-- VISTA LISTA MÓVIL -->
+      <div class="mobile-schedule-list mobile-only" *ngIf="rawHorarios.length > 0">
+        <h2><i class="fas fa-calendar-week"></i> Todas las Clases</h2>
+        <div class="clases-grid">
+          <div *ngFor="let clase of rawHorarios" class="clase-card">
+            <div class="clase-header">
+              <h3><i class="fas fa-book"></i> {{ clase.materia_nombre }}</h3>
+              <span class="dia-badge" style="background: #3b82f6; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px;">
+                {{ clase.dia_semana }} | {{ clase.hora_inicio | slice:0:5 }}
+              </span>
+            </div>
+            <div class="clase-details">
+              <p style="margin: 5px 0; color: #555; font-size: 13px;"><i class="fas fa-user-tie"></i> {{ clase.profesor_nombre }}</p>
+            </div>
+            <button class="btn-asistencia-clase" (click)="openModal(clase)" title="Registrar Asistencia y Tema" style="margin-top: 10px;">
+              <i class="fas fa-user-check"></i> Asist / Tema
+            </button>
+          </div>
+        </div>
+      </div>
+
         
       <ng-template #emptyState>
         <div class="empty-state">

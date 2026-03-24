@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
-import { AsideAdministradorComponent } from '../../componentes/aside-administrador/aside-administrador.component';
+import { AsideAdministradorComponent } from '../aside-administrador/aside-administrador.component';
 import { Estadisticas, StatsService } from '../../core/stats/stats.service';
+import { UsuariosService } from '../../core/autenticacion/usuarios.service';
 
 @Component({
   selector: 'app-principal-administrador',
@@ -15,7 +16,10 @@ export class PrincipalAdministradorComponent implements AfterViewInit, OnDestroy
   estadisticas!: Estadisticas;
   private charts: Chart[] = [];
 
-  constructor(private statsService: StatsService) {
+  constructor(
+    private statsService: StatsService,
+    public usuariosService: UsuariosService
+  ) {
     Chart.register(...registerables);
   }
 
@@ -52,22 +56,14 @@ export class PrincipalAdministradorComponent implements AfterViewInit, OnDestroy
   const chart = new Chart(ctx.getContext('2d')!, {
     type: 'bar',
     data: {
-      labels: [
-        'Escuelas', 
-        'Facultades', 
-        'Jefes de Carrera', 
-        'Carreras',
-        
-      ],
+      labels: this.usuariosService.isSuperAdmin() 
+        ? ['Escuelas', 'Facultades', 'Jefes de Carrera', 'Carreras']
+        : ['Facultades', 'Jefes de Carrera', 'Carreras'],
       datasets: [{
         label: 'Estadísticas Generales',
-        data: [
-          this.estadisticas.escuelas, 
-          this.estadisticas.facultades, 
-          this.estadisticas.jefes, 
-          this.estadisticas.carreras,
-    
-        ],
+        data: this.usuariosService.isSuperAdmin()
+          ? [this.estadisticas.escuelas, this.estadisticas.facultades, this.estadisticas.jefes, this.estadisticas.carreras]
+          : [this.estadisticas.facultades, this.estadisticas.jefes, this.estadisticas.carreras],
         backgroundColor: [
           'rgba(59, 130, 246, 0.8)', // Azul
           'rgba(76, 175, 80, 0.8)',  // Verde

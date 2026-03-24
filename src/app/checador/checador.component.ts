@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AsideChecadorComponent } from '../componentes/aside-checador/aside-checador.component';
+import { AsideChecadorComponent } from './aside-checador/aside-checador.component';
 import { AsistenciaTemaService } from '../core/asistencia-tema/asistencia-tema.service';
 import { GrupoHorarios, HorariosService } from '../core/horarios/horarios.service';
 
@@ -42,6 +42,7 @@ export class ChecadorComponent implements OnInit {
   // Nuevas propiedades para mostrar datos filtrados
   clasesFiltradasPorDia: any[] = [];
   clasesFiltradasPorHora: any[] = [];
+  todasLasClases: any[] = []; // NUEVO: Para lista móvil global
 
   // Opciones de tipo de asistencia
   asistenciaTipos: RegistroTipo[] = ['Asistió', 'No Asistió', 'Justificado'];
@@ -102,6 +103,8 @@ export class ChecadorComponent implements OnInit {
         });
     });
     console.log('Array "todos" completo:', todos);
+    
+    this.todasLasClases = todos; // Guardar todas las clases para vista en lista móvil
 
     // Construir horariosPorDia
     this.horariosPorDia = {};
